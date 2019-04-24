@@ -1,95 +1,201 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Color;
 
 public class Board extends JPanel{
 	private int[][] squares;
 	private Square[][] newSquares;
+	MyMouseListener listener;
+	
+	private GameState gameState;
+	private Square selectedSquare;
+	private Arbiter arbiter;
 	
 	Board() {
-		this.squares = new int[25][25];
 		this.newSquares = new Square[25][25];
+		listener = new MyMouseListener();
+		this.addMouseMotionListener(listener);
+		this.addMouseListener(listener);
+		
+		this.arbiter = new Arbiter(newSquares);
+		
+	}
+	
+	public void terminateMove() {
+		newSquares[selectedSquare.boardLocation.rowValue]
+				[selectedSquare.boardLocation.columnValue].setSelected(false);					
+		gameState = GameState.STATE_IDLE;
+		arbiter.registerMove();
+	}
+	
+	public void handleHovers(int i, int j) {
+		switch (gameState) {
+		case STATE_IDLE: {
+			if (newSquares[i][j].containsCoordinates(listener.getPos()) && 
+					arbiter.approvesSelection(i, j)) {
+				
+					newSquares[i][j].setHovered(true);   							
+					
+			} else {
+				newSquares[i][j].setHovered(false); 
+			}
+		}
+		break;
+		case STATE_PIECE_SELECTED: {
+			if (newSquares[i][j].containsCoordinates(listener.getPos()) && 
+					arbiter.approvesMove(selectedSquare, i, j)) {
+				
+				newSquares[i][j].setHovered(true);   							
+				
+			} else {
+				newSquares[i][j].setHovered(false);  
+			}
+		}
+		break;
+		    					
+		}
+	}
+	
+	public void handleClicks(int i, int j) {
+		
+		if (newSquares[i][j].containsCoordinates(listener.getClick())) {
+			switch (gameState) {
+			case STATE_IDLE: {
+				if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
+						arbiter.approvesSelection(i, j)) {
+					
+						listener.clickHandled();
+					
+						newSquares[i][j].setSelected(true);  
+						selectedSquare = newSquares[i][j];
+						
+						gameState = GameState.STATE_PIECE_SELECTED;
+						
+				} 
+			
+			}
+			break;
+			case STATE_PIECE_SELECTED: {
+				if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
+						arbiter.approvesMove(selectedSquare,i, j)) {
+					
+						listener.clickHandled();
+									
+						movePiece(selectedSquare,new ArrayCoordinate(i,j));
+						
+						if (arbiter.isChainMoveInProgress()) {
+							
+						} else {
+							this.terminateMove();
+						}
+						
+				} else if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
+						newSquares[i][j].piece != null) {
+					
+						listener.clickHandled();
+					
+						newSquares[selectedSquare.boardLocation.rowValue]
+								[selectedSquare.boardLocation.columnValue].setSelected(false);
+						
+						newSquares[i][j].setSelected(true);
+						selectedSquare = newSquares[i][j];
+				}
+			}
+			break;
+			case STATE_CHAIN_MOVE: {
+				
+			}
+			break;
+			}
+		}
 	}
 	
     public void paintComponent(Graphics g) {
-    	for (int i = 0; i < squares.length; i++) {
+    	System.out.println("graphics running");
+    	System.out.println(gameState);
+    	super.paintComponent(g);
+    	g.setColor(Color.black);
+    	
+    	int currentMouseX = listener.getX();
+		System.out.println(currentMouseX);
+		int currentMouseY = listener.getY();
+		System.out.println(currentMouseY);
+		
+
+    	
+    	for (int i = 0; i < newSquares.length; i++) {
     		for (int j = 0; j <= i; j++) {
-    			int calculatedX = 500 - 15*i + 30*j;
-    			int calculatedY = 20 + 30*i;
-    			if (/* this.squares[i][j] == -1 &&  */ this.newSquares[i][j] == null) {
-    				g.setColor(Color.BLACK);
-    			} else if (/*squareOccupied(new Coordinate(i,j)) && */ this.newSquares[i][j].piece != null) {
-    				g.setColor(Color.red);
-    			}  else {
-    				g.setColor(Color.blue);
-    			}
-    			
-    			g.fillOval(calculatedX,calculatedY , 20, 20);
-    		}
-    	}
-    }
-    
-    public void configureInitialSetup() {
-    	for (int i = 0; i < squares.length; i++) {
-    		for (int j = 0; j < squares.length; j++) {
-    			squares[i][j] = -1;
+    			if (newSquares[i][j] != null) {
+    				
+    				this.handleHovers(i,j);
+    				if (listener.clickPending()) {
+    					this.handleClicks(i,j);
+    				}
+    				
+    				
+    				newSquares[i][j].draw(g);
+    				
+    			}    			
     		}
     	}
     	
+    	//repaint();
+    }
+    
+    public void configureInitialSetup() {
+    	
     	for (int i = 7; i < (7 + 14); i++) {
     		for (int j = 0; j < (i - 7); j++) {
-    			squares[i][j + 4] = 0;
-    			newSquares[i][j + 4] = new Square();
+    			newSquares[i][j + 4] = new Square(i,j + 4);
     		}
     	}
     	
     	for (int i = 12; i < 25; i++) {
     		for (int j = 0; j < (25 - i); j++) {
-    			squares[i][j + (i - 12)] = 0;
-    			newSquares[i][j + (i - 12)] = new Square();
+    			newSquares[i][j + (i - 12)] = new Square(i,j + (i - 12));
     		}
-    	}
+    	}  
     	
-//    	for (int i = 0; i < 8; i++) {
-//    		for (int j = 0; j <= i; j++) {
-//    			squares[i][j] = -1;
-//    		}
-//    	}
-//    	
-//    	for (int i = 8; i < 12; i++) {
-//    		for (int j = 0; j < 4; j++) {
-//    			squares[i][j] = -1;
-//    			squares[i][j + 4 + (i - 7)] = -1;
-//    		}
-//    	}
-//    	
-//    	for (int i = 13; i < 17; i++) {
-//    		for (int j = 0; j <= (i - 13); j++) {
-//    			squares[i][j] = -1;
-//    			squares[i][j + 13] = -1;
-//    		}
-//    	}
-//    	
-//    	for (int i = 17; i < 21; i++) {
-//    		for (int j = 0; j < 4; j++) {
-//    			squares[i][j] = -1;
-//    			squares[i][j + 14 + (i - 17)] = -1;
-//    		}
-//    	}
+    	Piece teamOnePiece = new Piece();
+    	teamOnePiece.color = Color.red;
+    	teamOnePiece.team = "one";
+    	
+    	for (int i = 7; i < (7 + 5); i++) {
+    		for (int j = 0; j < (i - 7); j++) {
+    			System.out.println(i + " " + j);
+    			newSquares[i][j + 4].placePiece(teamOnePiece);
+    		}
+    	} 
+    	
+    	Piece teamTwoPiece = new Piece();
+    	teamTwoPiece.color = Color.blue;
+    	teamTwoPiece.team = "two";
+    	
+    	for (int i = 24; i > (24 - 4); i--) {
+    		for (int j = 0; j < (25 - i); j++) {
+    			System.out.println(i + " " + j);
+    			newSquares[i][j + (i - 12)].placePiece(teamTwoPiece);
+    		}
+    	}    
+    	
+    	gameState = GameState.STATE_IDLE;
     }
     
-    public boolean squareOccupied(Coordinate target) {
-    	return (squares[target.xValue][target.yValue] == 1);
+    public boolean squareOccupied(ArrayCoordinate target) {
+    	return (newSquares[target.rowValue][target.columnValue].piece != null);
     }
     
-    public boolean movePiece(Coordinate pieceLocation, Coordinate targetLocation) {
-    	if (squares[pieceLocation.xValue][pieceLocation.yValue] == 1) {
-    		squares[pieceLocation.xValue][pieceLocation.yValue] = 0;
-    		squares[targetLocation.xValue][targetLocation.yValue] = 1;
-    		return true;
-    	}    	
+    public boolean movePiece(Square selected, ArrayCoordinate targetLocation) {
+    	int clearRow = selected.boardLocation.rowValue;
+    	int clearColumn = selected.boardLocation.columnValue;
     	
-    	return false;
+    	selected.boardLocation = targetLocation;
+    	newSquares[targetLocation.rowValue][targetLocation.columnValue] = selected;
+    	
+    	newSquares[clearRow][clearColumn] = new Square(clearRow,clearColumn);
+    	
+    	return true;
     }
    
 }

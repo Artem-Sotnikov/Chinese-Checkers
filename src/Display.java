@@ -7,11 +7,11 @@ public class Display extends JFrame{
 	
 	Display() {
 		this.setSize(1000, 1000);
-		this.setVisible(true);
+
 		gameArea = new Board();
 		gameArea.configureInitialSetup();
-		//gameArea.getIgnoreRepaint();
-		this.add(gameArea);
+		this.add(gameArea);		
+		this.setVisible(true);
 		
 	}
 	
