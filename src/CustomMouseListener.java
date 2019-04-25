@@ -10,9 +10,9 @@ import javax.swing.event.MouseInputListener;
  * MyMouseListener: This class will handle mouse events.
  * 
  * @author Artem
- * @author Anthony
+ * @author Anthony Chen, from a previous project
  */
-public class MyMouseListener implements MouseInputListener, MouseMotionListener, MouseWheelListener {
+public class CustomMouseListener implements MouseInputListener, MouseMotionListener, MouseWheelListener {
 	private int x;
 	private int y;
 	private int clickX;
@@ -24,6 +24,13 @@ public class MyMouseListener implements MouseInputListener, MouseMotionListener,
 	private boolean isDragging = false;
 	private boolean isScrolling = false;
 
+	
+	CustomMouseListener() {
+		clickHandled = true;
+		clickX = -1;
+		clickY = -1;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

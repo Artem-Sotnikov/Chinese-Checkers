@@ -4,7 +4,7 @@ import java.awt.Point;
 
 public class Square {
 	public ArrayCoordinate boardLocation;
-	public Piece piece;	
+	public PieceType piece;	
 	private int calculatedX, calculatedY;
 	
 	private boolean isSelected, isHovered;
@@ -38,7 +38,7 @@ public class Square {
 
 	
 	public void draw(Graphics g) {
-		calculatedX = 500 - 15*boardLocation.rowValue + 30*boardLocation.columnValue;
+		calculatedX = 300 - 15*boardLocation.rowValue + 30*boardLocation.columnValue;
 	    calculatedY = 20 + 30*boardLocation.rowValue;
 		if (this.isSelected) {
 			g.setColor(Color.YELLOW);
@@ -59,12 +59,15 @@ public class Square {
 		if (this.isHovered) {
 			g.setColor(Color.YELLOW);
 			g.fillOval(calculatedX + 4, calculatedY + 4, 12, 12);
+			
 		}
 		
 		
+		
+				
 	}
 	
-	public void placePiece(Piece newPiece) {
+	public void placePiece(PieceType newPiece) {
 		this.piece = newPiece;		
 	}
 	

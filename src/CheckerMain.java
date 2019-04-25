@@ -4,7 +4,7 @@ public class CheckerMain {
 		Display disp = new Display();
 		disp.refresh();
 		System.out.println("executed");
-		while (true) {
+		while (!disp.exitFlag) {
 			disp.refresh();
 		}
 	}
