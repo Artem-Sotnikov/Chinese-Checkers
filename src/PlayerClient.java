@@ -153,16 +153,15 @@ public class PlayerClient implements Runnable {
     }
 
     public void convertInstructions(String instructions) {
-        instructions = instructions.substring(6);
+        instructions = instructions.substring(10);
         String[] splitIntegers = instructions.replaceAll("[(),]", "").split(" ");
-        int numPlayers = Integer.parseInt(splitIntegers[1]) + Integer.parseInt(splitIntegers[2]);
-        ArrayCoordinate[] coordinates = new ArrayCoordinate[numPlayers * 10];
+        ArrayCoordinate[] coordinates = new ArrayCoordinate[splitIntegers.length];
         for (int i = 0; i < coordinates.length; i++) {
-            coordinates[i] = new ArrayCoordinate(Integer.parseInt(splitIntegers[2 + i]), Integer.parseInt(splitIntegers[3 + i]));
+            coordinates[i] = new ArrayCoordinate(Integer.parseInt(splitIntegers[i]), Integer.parseInt(splitIntegers[i + 1]));
         }
-        for (int k = 0; k < coordinates.length; k++) {
-            coordinates[k].displayCoordinate();
-        }
+//        for (int k = 0; k < coordinates.length; k++) {
+//            coordinates[k].displayCoordinate();
+//        }
     }
 
     public void sendMovesToServer() {
