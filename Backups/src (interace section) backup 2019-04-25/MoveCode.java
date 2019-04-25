@@ -9,9 +9,4 @@ public class MoveCode {
 		this.startPosition = new ArrayCoordinate(a,b);
 		this.targetPosition = new ArrayCoordinate(p,q);
 	}
-	
-	MoveCode(ArrayCoordinate start, ArrayCoordinate end) {
-		this.startPosition = start;
-		this.targetPosition = end;
-	}
 }

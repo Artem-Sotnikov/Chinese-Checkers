@@ -91,54 +91,6 @@ public class Arbiter {
 		return false;
 	}
 	
-	public boolean approvesMove(MoveCode move, boolean executionActive) {
-		if (gameWinner != null) {
-			return false;
-		}
-		
-		int targetRow = move.targetPosition.rowValue;
-		int targetColumn = move.targetPosition.columnValue;
-		
-		
-		if (squares[targetRow][targetColumn].piece != null) {
-			return false;
-		}
-		
-		int pastRow = move.startPosition.rowValue;
-		int pastColumn = move.startPosition.columnValue;		
-		
-		int deltaRow = (pastRow - targetRow);
-		int deltaColumn = (pastColumn - targetColumn);
-		int deltaSum = deltaRow + deltaColumn;
-				
-		
-		if (deltaRow < 2 && deltaRow > -2 && 
-				deltaColumn < 2 && deltaColumn > -2 && 	
-				(deltaSum) != 0) {
-			if (chainMoveInProgress) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		
-		
-			
-		if (deltaRow < 3 && deltaRow > -3 && 
-				deltaColumn < 3 && deltaColumn > -3 && 	
-				deltaSum != 0 && deltaSum != 3 && deltaSum != -3) {
-			 if (squares[pastRow - deltaRow/2][pastColumn  - deltaColumn/2].piece != null) {
-				 if (executionActive) {
-					 chainMoveInProgress = true;
-				 }
-				 return true;
-			 }
-		}
-		
-		return false;
-	}
-	
 	public void registerMove() {
 		this.teamToMove++;
 		chainMoveInProgress = false;		

@@ -5,16 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 public class BoardPanel extends JPanel{
-	private Square[][] squares;
+	private Square[][] newSquares;
 	CustomMouseListener listener;
 	private ArrayCoordinate[][] regions;
 	
 	private GameState gameState;
-	
-	private ArrayCoordinate selectedCoordinates;
-
-	
-	
+	private Square selectedSquare;
 	private Arbiter arbiter;
 	private PieceManager manager;
 	
@@ -26,12 +22,12 @@ public class BoardPanel extends JPanel{
 		this.setPreferredSize(boardSize);
 		this.setOpaque(false);
 		
-		this.squares = new Square[25][25];
+		this.newSquares = new Square[25][25];
 		listener = new CustomMouseListener();
 		this.addMouseMotionListener(listener);
 		this.addMouseListener(listener);
 		
-		this.arbiter = new Arbiter(squares);
+		this.arbiter = new Arbiter(newSquares);
 		this.manager = new PieceManager();
 		
 		regions = new ArrayCoordinate[6][10];
@@ -106,8 +102,9 @@ public class BoardPanel extends JPanel{
 		
 	}
 	
-	public void terminateMove() {	
-		squares[selectedCoordinates.rowValue][selectedCoordinates.columnValue].setSelected(false);;
+	public void terminateMove() {
+		newSquares[selectedSquare.boardLocation.rowValue]
+				[selectedSquare.boardLocation.columnValue].setSelected(false);					
 		gameState = GameState.STATE_IDLE;
 		arbiter.determineGameResult(regions);
 		if (arbiter.gameWinner != null) {
@@ -119,55 +116,55 @@ public class BoardPanel extends JPanel{
 	
 	public void handleHovers(int i, int j, Graphics g) {
 		
-		if (squares[i][j].containsCoordinates(listener.getPos())) {
+		if (newSquares[i][j].containsCoordinates(listener.getPos())) {
 			
 			g.setColor(Color.BLACK);
-			g.drawString(squares[i][j].boardLocation.rowValue + " " + squares[i][j].boardLocation.columnValue, 40, 40);
+			g.drawString(newSquares[i][j].boardLocation.rowValue + " " + newSquares[i][j].boardLocation.columnValue, 40, 40);
 			
 			
 			
 			switch (gameState) {
 			case STATE_IDLE: {
-				if (squares[i][j].containsCoordinates(listener.getPos()) && 
+				if (newSquares[i][j].containsCoordinates(listener.getPos()) && 
 						arbiter.approvesSelection(i, j)) {
 					
-						squares[i][j].setHovered(true);   							
+						newSquares[i][j].setHovered(true);   							
 						
 				} else {
-					squares[i][j].setHovered(false);
+					newSquares[i][j].setHovered(false);
 				}
 			}
 			break;
 			case STATE_PIECE_SELECTED: {
-				if (squares[i][j].containsCoordinates(listener.getPos()) && 
-						arbiter.approvesMove(new MoveCode(selectedCoordinates, new ArrayCoordinate(i,j)), false)) {
+				if (newSquares[i][j].containsCoordinates(listener.getPos()) && 
+						arbiter.approvesMove(selectedSquare, i, j, false)) {
 					
-					squares[i][j].setHovered(true);   							
+					newSquares[i][j].setHovered(true);   							
 					
 				} else {
-					squares[i][j].setHovered(false);
+					newSquares[i][j].setHovered(false);
 				} 
 			}
 			break;
 			    					
 			}
 		} else {
-			squares[i][j].setHovered(false);
+			newSquares[i][j].setHovered(false);
 		}	
 	}
 	
 	public void handleClicks(int i, int j) {
 		
-		if (squares[i][j].containsCoordinates(listener.getClick())) {
+		if (newSquares[i][j].containsCoordinates(listener.getClick())) {
 			switch (gameState) {
 			case STATE_IDLE: {
-				if (squares[i][j].containsCoordinates(listener.getClick()) && 
+				if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
 						arbiter.approvesSelection(i, j)) {
 					
 						listener.clickHandled();
 					
-						squares[i][j].setSelected(true);  
-						selectedCoordinates = new ArrayCoordinate(i,j);
+						newSquares[i][j].setSelected(true);  
+						selectedSquare = newSquares[i][j];
 						
 						gameState = GameState.STATE_PIECE_SELECTED;
 						
@@ -176,28 +173,27 @@ public class BoardPanel extends JPanel{
 			}
 			break;
 			case STATE_PIECE_SELECTED: {
-				if (squares[i][j].containsCoordinates(listener.getClick()) && 
-						arbiter.approvesMove(new MoveCode(selectedCoordinates, new ArrayCoordinate(i,j)), true)) {
+				if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
+						arbiter.approvesMove(selectedSquare,i, j, true)) {
 					
 						listener.clickHandled();
-						
-						MoveCode move = new MoveCode(selectedCoordinates,new ArrayCoordinate(i,j));
-						movePiece(move);
+									
+						movePiece(selectedSquare,new ArrayCoordinate(i,j));
 						
 						if (!arbiter.isChainMoveInProgress()) {
 							this.terminateMove();
 						} 
 						
-				} else if (squares[i][j].containsCoordinates(listener.getClick()) && 
+				} else if (newSquares[i][j].containsCoordinates(listener.getClick()) && 
 						arbiter.approvesSelection(i, j)) {
 										
 						listener.clickHandled();
 					
-						squares[selectedCoordinates.rowValue]
-								[selectedCoordinates.columnValue].setSelected(false);
+						newSquares[selectedSquare.boardLocation.rowValue]
+								[selectedSquare.boardLocation.columnValue].setSelected(false);
 						
-						squares[i][j].setSelected(true);
-						selectedCoordinates = new ArrayCoordinate(i,j);
+						newSquares[i][j].setSelected(true);
+						selectedSquare = newSquares[i][j];
 				}
 			}
 			break;
@@ -219,9 +215,9 @@ public class BoardPanel extends JPanel{
 		
 
     	
-    	for (int i = 0; i < squares.length; i++) {
+    	for (int i = 0; i < newSquares.length; i++) {
     		for (int j = 0; j <= i; j++) {
-    			if (squares[i][j] != null) {
+    			if (newSquares[i][j] != null) {
     				
     				this.handleHovers(i,j,g);
     				if (listener.clickPending()) {
@@ -229,7 +225,7 @@ public class BoardPanel extends JPanel{
     				}
     				
     				
-    				squares[i][j].draw(g);
+    				newSquares[i][j].draw(g);
     				
     			}    			
     		}
@@ -249,13 +245,13 @@ public class BoardPanel extends JPanel{
     	
     	for (int i = 7; i < (7 + 14); i++) {
     		for (int j = 0; j < (i - 7); j++) {
-    			squares[i][j + 4] = new Square(i,j + 4);
+    			newSquares[i][j + 4] = new Square(i,j + 4);
     		}
     	}
     	
     	for (int i = 12; i < 25; i++) {
     		for (int j = 0; j < (25 - i); j++) {
-    			squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+    			newSquares[i][j + (i - 12)] = new Square(i,j + (i - 12));
     		}
     	}  
     	
@@ -269,52 +265,50 @@ public class BoardPanel extends JPanel{
     	
     	
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[0][i].rowValue][regions[0][i].columnValue].placePiece(Constants.teamZeroPiece);
-    		manager.pieceStorage[0][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[0][i].rowValue][regions[0][i].columnValue].placePiece(Constants.teamZeroPiece);
+    		manager.pieceStorage[0][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}    
     	
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[1][i].rowValue][regions[1][i].columnValue].placePiece(Constants.teamOnePiece);
-    		manager.pieceStorage[1][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[1][i].rowValue][regions[1][i].columnValue].placePiece(Constants.teamOnePiece);
+    		manager.pieceStorage[1][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}
     	
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[2][i].rowValue][regions[2][i].columnValue].placePiece(Constants.teamTwoPiece);
-    		manager.pieceStorage[2][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[2][i].rowValue][regions[2][i].columnValue].placePiece(Constants.teamTwoPiece);
+    		manager.pieceStorage[2][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}
     	    
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[3][i].rowValue][regions[3][i].columnValue].placePiece(Constants.teamThreePiece);
-    		manager.pieceStorage[3][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[3][i].rowValue][regions[3][i].columnValue].placePiece(Constants.teamThreePiece);
+    		manager.pieceStorage[3][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}
     	
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[4][i].rowValue][regions[4][i].columnValue].placePiece(Constants.teamFourPiece);
-    		manager.pieceStorage[4][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[4][i].rowValue][regions[4][i].columnValue].placePiece(Constants.teamFourPiece);
+    		manager.pieceStorage[4][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}
     	
     	for (int i = 0; i < regions[0].length; i++) {
-    		squares[regions[5][i].rowValue][regions[5][i].columnValue].placePiece(Constants.teamFivePiece);
-    		manager.pieceStorage[5][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+    		newSquares[regions[5][i].rowValue][regions[5][i].columnValue].placePiece(Constants.teamFivePiece);
+    		manager.pieceStorage[5][i] = newSquares[regions[0][i].rowValue][regions[0][i].columnValue];
     	}
     	
     	gameState = GameState.STATE_IDLE;
     }
     
     public boolean squareOccupied(ArrayCoordinate target) {
-    	return (squares[target.rowValue][target.columnValue].piece != null);
+    	return (newSquares[target.rowValue][target.columnValue].piece != null);
     }
     
-    public boolean movePiece(MoveCode move) {
-    	Square selected = squares[move.startPosition.rowValue][move.startPosition.columnValue];
-    	selected.updateLocation(move.targetPosition);
-    	    	
-    	squares[move.targetPosition.rowValue][move.targetPosition.columnValue] = selected;
+    public boolean movePiece(Square selected, ArrayCoordinate targetLocation) {
+    	int clearRow = selected.boardLocation.rowValue;
+    	int clearColumn = selected.boardLocation.columnValue;
     	
-    	squares[move.startPosition.rowValue][move.startPosition.columnValue] 
-    			= new Square(move.startPosition.rowValue,move.startPosition.columnValue);
+    	selected.boardLocation = targetLocation;
+    	newSquares[targetLocation.rowValue][targetLocation.columnValue] = selected;
     	
-    	selectedCoordinates = move.targetPosition;
+    	newSquares[clearRow][clearColumn] = new Square(clearRow,clearColumn);
     	
     	return true;
     }

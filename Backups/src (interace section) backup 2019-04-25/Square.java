@@ -24,16 +24,6 @@ public class Square {
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
-	
-	public void updateLocation(int row, int col) {
-		this.boardLocation.rowValue = row;
-		this.boardLocation.columnValue = col;
-	}
-	
-	public void updateLocation(ArrayCoordinate update) {
-		this.boardLocation.rowValue = update.rowValue;
-		this.boardLocation.columnValue = update.columnValue;
-	}
 
 	Square() {};
 	
