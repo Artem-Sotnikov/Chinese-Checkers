@@ -24,15 +24,18 @@ public class PlayerClient implements Runnable {
     private static Socket mySocket;
     private static BufferedReader input;
     private static PrintWriter output;
-    private static boolean running;
+    private static boolean running, connected;
 
     PlayerClient() {
         running = true;
+        connected = false;
     }
 
     public void run() {
         createGUI();
-        readMessagesFromServer();
+//            while (connected) {
+//                readMessagesFromServer();
+//            }
     }
 
     public void createGUI(){
@@ -55,13 +58,10 @@ public class PlayerClient implements Runnable {
                     if ((!userName.equals(""))&&(!addressIP.equals(""))&&(!roomName.equals(""))){
                         //do something
                         System.out.print(userName+" "+addressIP+" "+roomName);
-                        output.println("JOINROOM " + roomName);
-                        output.flush();
-                        output.println("JOIN " + userName);
-                        output.flush();
                         userNameField.setText("");
                         addressField.setText("");
                         roomNameField.setText("");
+                        connect(addressIP, 6666, userName, roomName);
                     }
 //          } else { //if some fields are left blank
 //            warningBox.setSize(100,200);
@@ -104,11 +104,11 @@ public class PlayerClient implements Runnable {
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
 
-        connect("10.242.162.18", 6666);
+       // connect(addressIP, 6666, userName, roomName);
     }//end of createGUI
 
 
-    public Socket connect(String ip, int port) {
+    public Socket connect(String ip, int port, String userName, String roomName) {
         System.out.println("Attempting to make a connection..");
 
         try {
@@ -118,11 +118,19 @@ public class PlayerClient implements Runnable {
             input = new BufferedReader(stream1);
             output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
 
+            output.println("JOINROOM " + roomName);
+            output.flush();
+            output.println("JOIN " + userName);
+            output.flush();
+
+            connected = true;
+
         } catch (IOException e) {  //connection error occured
             System.out.println("Connection to Server Failed");
             e.printStackTrace();
         }
         System.out.println("Connection made.");
+        readMessagesFromServer();
         return mySocket;
     }//end of connect
 
@@ -154,10 +162,14 @@ public class PlayerClient implements Runnable {
 
     public void convertInstructions(String instructions) {
         instructions = instructions.substring(10);
-        String[] splitIntegers = instructions.replaceAll("[(),]", "").split(" ");
+        String[] splitString = instructions.replaceAll("[(),]", "").split(" ");
+        int[] splitIntegers = new int[splitString.length];
         ArrayCoordinate[] coordinates = new ArrayCoordinate[splitIntegers.length/2];
-        for (int i = 0; i < coordinates.length; i++) {
-            coordinates[i] = new ArrayCoordinate(Integer.parseInt(splitIntegers[i]), Integer.parseInt(splitIntegers[i + 1]));
+        for (int o = 0; o < splitString.length; o++) {
+            splitIntegers[o] = Integer.parseInt(splitString[o]);
+        }
+        for (int i = 0; i < coordinates.length; i ++) {
+            coordinates[i] = new ArrayCoordinate(splitIntegers[2 * i], splitIntegers[(2 * i) + 1]);
         }
         for (int k = 0; k < coordinates.length; k++) {
             coordinates[k].displayCoordinate();

@@ -89,6 +89,7 @@ class ChatServer {
             while(running) {  // loop unit a message is received
                 try {
                     if (input.ready()) { //check for an incoming messge
+                        System.out.println(input.readLine());
                         output.println("BOARD 6 0 (14, 8) (15, 5) (17, 7) (19, 14) (20, 6) (22, 12)"); //echo the message back to the client ** This needs changing for multiple clients
                         output.flush();
                     }
