@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -33,3 +34,8 @@ public class OptimalMoveFinder {
         originalPosition.getRowValue();
     }
 }
+=======
+class OptimalMoveFinder{
+
+}
+>>>>>>> 0aba34413d8229b589b36959c57b2253d653f556

@@ -24,15 +24,25 @@ public class PlayerClient implements Runnable {
     private static Socket mySocket;
     private static BufferedReader input;
     private static PrintWriter output;
-    private static boolean running;
+    private static boolean running, connected;
 
     PlayerClient() {
         running = true;
+        connected = false;
     }
 
     public void run() {
         createGUI();
-        readMessagesFromServer();
+        do {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+
+            }
+            if (connected) {
+                readMessagesFromServer();
+            }
+        } while (!connected);
     }
 
     public void createGUI(){
@@ -43,54 +53,20 @@ public class PlayerClient implements Runnable {
         mainPanel.setSize(500, 300);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
+        ActionListener listener = new ButtonListener();
         joinGameButton = new JButton("Join Game");
 
-        joinGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    userName = userNameField.getText();
-                    addressIP = addressField.getText();
-                    roomName = roomNameField.getText();
-                    if ((!userName.equals(""))&&(!addressIP.equals(""))&&(!roomName.equals(""))){
-                        //do something
-                        System.out.print(userName+" "+addressIP+" "+roomName);
-                        output.println("JOINROOM " + roomName);
-                        output.flush();
-                        output.println("JOIN " + userName);
-                        output.flush();
-                        userNameField.setText("");
-                        addressField.setText("");
-                        roomNameField.setText("");
-                    }
-//          } else { //if some fields are left blank
-//            warningBox.setSize(100,200);
-//            JOptionPane.showMessageDialog(warningBox, "Not all of the fields were filled!", "Error!", JOptionPane.ERROR_MESSAGE);
-//          }
-                } catch (NumberFormatException e) { //warning for improper data entry
-//            warningBox.setSize(100, 200);
-//            JOptionPane.showMessageDialog(warningBox, "Numbers were not entered properly!", "Error!", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        joinGameButton.addActionListener(listener);
 
         exitButton = new JButton("Exit");
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
-            }
-        });
+        exitButton.addActionListener(listener);
 
         userNameLabel = new JLabel("Please enter your username");
         userNameField = new JTextField();
-        //userNameLabel.setLabelFor(userNameField);
         addressLabel = new JLabel("Please enter your IP adress");
         addressField = new JTextField();
-        //addressLabel.setLabelFor(addressField);
         roomNameLabel = new JLabel("Please enter the room name");
         roomNameField = new JTextField();
-        //portNumLabel.setLabelFor(portNumLabel);
 
         mainPanel.add(userNameLabel);
         mainPanel.add(userNameField);
@@ -104,11 +80,11 @@ public class PlayerClient implements Runnable {
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
 
-        connect("10.242.162.18", 6666);
+       // connect(addressIP, 6666, userName, roomName);
     }//end of createGUI
 
 
-    public Socket connect(String ip, int port) {
+    public Socket connect(String ip, int port, String userName, String roomName) {
         System.out.println("Attempting to make a connection..");
 
         try {
@@ -117,6 +93,24 @@ public class PlayerClient implements Runnable {
             InputStreamReader stream1= new InputStreamReader(mySocket.getInputStream()); //Stream for network input
             input = new BufferedReader(stream1);
             output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
+
+            output.println("JOINROOM " + roomName);
+            output.flush();
+            output.println("CHOOSENAME " + userName);
+            output.flush();
+
+            boolean retry = false;
+
+//            while (!connected && retry) {
+//                if (input.ready()) {
+//                    String connectionVerification = input.readLine();
+//                    if (connectionVerification.contains("OK")) {
+                        connected = true;
+//                    } else {
+//                        retry = true;
+//                    }
+//                }
+//            }
 
         } catch (IOException e) {  //connection error occured
             System.out.println("Connection to Server Failed");
@@ -128,19 +122,21 @@ public class PlayerClient implements Runnable {
 
     public void readMessagesFromServer() {
 
+
         while(running) {  // loop unit a message is received
-            try {
+                try {
 
-                if (input.ready()) { //check for an incoming messge
-                    String instructions;
-                    instructions = input.readLine(); //read the message
-                    convertInstructions(instructions);
+                    if (input.ready()) { //check for an incoming messge
+                        System.out.println("found message");
+                        String instructions;
+                        instructions = input.readLine(); //read the message
+                        convertInstructions(instructions);
+                    }
+
+                } catch (IOException e) {
+                    System.out.println("Failed to receive msg from the server");
+                    e.printStackTrace();
                 }
-
-            }catch (IOException e) {
-                System.out.println("Failed to receive msg from the server");
-                e.printStackTrace();
-            }
         }
         try {  //after leaving the main loop we need to close all the sockets
             input.close();
@@ -153,12 +149,15 @@ public class PlayerClient implements Runnable {
     }
 
     public void convertInstructions(String instructions) {
-        instructions = instructions.substring(6);
-        String[] splitIntegers = instructions.replaceAll("[(),]", "").split(" ");
-        int numPlayers = Integer.parseInt(splitIntegers[1]) + Integer.parseInt(splitIntegers[2]);
-        ArrayCoordinate[] coordinates = new ArrayCoordinate[numPlayers * 10];
-        for (int i = 0; i < coordinates.length; i++) {
-            coordinates[i] = new ArrayCoordinate(Integer.parseInt(splitIntegers[2 + i]), Integer.parseInt(splitIntegers[3 + i]));
+        instructions = instructions.substring(10);
+        String[] splitString = instructions.replaceAll("[(),]", "").split(" ");
+        int[] splitIntegers = new int[splitString.length];
+        ArrayCoordinate[] coordinates = new ArrayCoordinate[splitIntegers.length/2];
+        for (int o = 0; o < splitString.length; o++) {
+            splitIntegers[o] = Integer.parseInt(splitString[o]);
+        }
+        for (int i = 0; i < coordinates.length; i ++) {
+            coordinates[i] = new ArrayCoordinate(splitIntegers[2 * i], splitIntegers[(2 * i) + 1]);
         }
         for (int k = 0; k < coordinates.length; k++) {
             coordinates[k].displayCoordinate();
@@ -167,5 +166,33 @@ public class PlayerClient implements Runnable {
 
     public void sendMovesToServer() {
 
+    }
+
+    private class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent press) {
+            if (press.getSource() == joinGameButton) {
+                    userName = userNameField.getText();
+                    addressIP = addressField.getText();
+                    roomName = roomNameField.getText();
+                    if ((!userName.equals(""))&&(!addressIP.equals(""))&&(!roomName.equals(""))){
+                        //do something
+                        System.out.print(userName+" "+addressIP+" "+roomName);
+                        userNameField.setText("");
+                        addressField.setText("");
+                        roomNameField.setText("");
+                        connect(addressIP, 6666, userName, roomName);
+                    }
+//          } else { //if some fields are left blank
+//            warningBox.setSize(100,200);
+//            JOptionPane.showMessageDialog(warningBox, "Not all of the fields were filled!", "Error!", JOptionPane.ERROR_MESSAGE);
+//          }
+                } catch (NumberFormatException e) { //warning for improper data entry
+//            warningBox.setSize(100, 200);
+//            JOptionPane.showMessageDialog(warningBox, "Numbers were not entered properly!", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (press.getSource() == exitButton) {
+                System.exit(0);
+            }
+        }
     }
 }//end of PlayerClient
