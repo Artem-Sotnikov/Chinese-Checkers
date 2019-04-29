@@ -1,16 +1,16 @@
 
 public class ArrayCoordinate {
- public int rowValue;
- public int columnValue;
+ private int row;
+ private int column;
  private double priority;
  
  public ArrayCoordinate(int a, int b) {
-  this.rowValue = a;
-  this.columnValue = b;
+  this.row = a;
+  this.column = b;
  }
  
  public void displayCoordinate() {
-  System.out.println(rowValue + ", " + columnValue);
+  System.out.println(row + ", " + column);
  }
 
  public void setPriority(int priority){
@@ -18,5 +18,13 @@ public class ArrayCoordinate {
  }
  public double getPriority(){
   return this.priority;
+ }
+
+ public int getRowValue() {
+  return this.row;
+ }
+
+ public int getColumnValue() {
+     return this.column;
  }
 }
