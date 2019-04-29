@@ -24,11 +24,11 @@ public class ArrayCoordinate {
   return this.priority;
  }
 
- public int getRowValue() {
+ public int getRow() {
   return this.row;
  }
 
- public int getColumnValue() {
+ public int getColumn() {
      return this.column;
  }
 }
