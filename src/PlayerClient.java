@@ -129,7 +129,7 @@ public class PlayerClient implements Runnable {
                     if (input.ready()) { //check for an incoming messge
                         System.out.println("found message");
                         String instructions;
-                        instructions = input.readLine(); //read the message
+                        instructions = input.readLine().trim(); //read the message
                         convertInstructions(instructions);
                     }
 

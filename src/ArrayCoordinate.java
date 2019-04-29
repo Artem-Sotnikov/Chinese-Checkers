@@ -7,6 +7,7 @@ public class ArrayCoordinate {
  public ArrayCoordinate(int a, int b) {
   this.row = a;
   this.column = b;
+  this.priority = 0;
  }
  
  public void displayCoordinate() {
@@ -14,7 +15,10 @@ public class ArrayCoordinate {
  }
 
  public void setPriority(int priority){
-  this.priority = priority;
+  this.priority += priority;
+ }
+ public void multiplyPriority(int priority) {
+     this.priority *= priority;
  }
  public double getPriority(){
   return this.priority;
