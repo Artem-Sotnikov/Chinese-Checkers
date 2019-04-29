@@ -171,6 +171,7 @@ public class PlayerClient implements Runnable {
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent press) {
             if (press.getSource() == joinGameButton) {
+                try {
                     userName = userNameField.getText();
                     addressIP = addressField.getText();
                     roomName = roomNameField.getText();
