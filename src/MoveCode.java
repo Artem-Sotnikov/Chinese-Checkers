@@ -1,7 +1,7 @@
-
 public class MoveCode {
 	public ArrayCoordinate startPosition;
 	public ArrayCoordinate targetPosition;
+	public int priority;
 	
 	MoveCode(){};
 	
@@ -14,4 +14,14 @@ public class MoveCode {
 		this.startPosition = start;
 		this.targetPosition = end;
 	}
+
+    public void setPriority(int priority){
+        this.priority += priority;
+    }
+    public void multiplyPriority(int priority) {
+        this.priority *= priority;
+    }
+    public double getPriority(){
+        return this.priority;
+    }
 }
