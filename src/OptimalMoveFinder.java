@@ -23,36 +23,40 @@ public class OptimalMoveFinder {
     }
 
     void latitudeChecker(MoveCode possibleMove) {
-      int moveLength = possibleMove.targetPosition.getRow() - possibleMove.startPosition.getRow();
+      int moveLength = possibleMove.targetPosition.row - possibleMove.startPosition.row;
       possibleMove.setPriority(moveLength);
     }
 
     void enemyTerritoryChecker(MoveCode possibleMove) {
-        if ((possibleMove.targetPosition.getRow() > 11) && (possibleMove.targetPosition.getRow()) < 16 && (possibleMove.targetPosition.getColumn() < 4)) {
+        if ((possibleMove.targetPosition.row > 11) && (possibleMove.targetPosition.row) < 16 && (possibleMove.targetPosition.column < 4)) {
             possibleMove.setPriority(-2);
-        } else if (possibleMove.targetPosition.getRow() > 16 && possibleMove.targetPosition.getRow() < 21 && possibleMove.targetPosition.getColumn() > 12) {
+        } else if (possibleMove.targetPosition.row > 16 && possibleMove.targetPosition.row < 21 && possibleMove.targetPosition.column > 12) {
             possibleMove.setPriority(-1);
-        } else if (possibleMove.targetPosition.getRow() == 12 && possibleMove.targetPosition.getColumn() > 8) {
+        } else if (possibleMove.targetPosition.row == 12 && possibleMove.targetPosition.column > 8) {
             possibleMove.setPriority(-2);
-        } else if (possibleMove.targetPosition.getRow() == 13 && possibleMove.targetPosition.getColumn() > 9) {
+        } else if (possibleMove.targetPosition.row == 13 && possibleMove.targetPosition.column > 9) {
             possibleMove.setPriority(-2);
-        } else if (possibleMove.targetPosition.getRow() == 14 && possibleMove.targetPosition.getColumn() > 10) {
+        } else if (possibleMove.targetPosition.row == 14 && possibleMove.targetPosition.column > 10) {
             possibleMove.setPriority(-2);
-        } else if (possibleMove.targetPosition.getRow() == 15 && possibleMove.targetPosition.getColumn() > 11) {
+        } else if (possibleMove.targetPosition.row == 15 && possibleMove.targetPosition.column > 11) {
             possibleMove.setPriority(-2);
-        } else if (possibleMove.targetPosition.getRow() == 17 && possibleMove.targetPosition.getColumn() < 5) {
+        } else if (possibleMove.targetPosition.row == 17 && possibleMove.targetPosition.column < 5) {
             possibleMove.setPriority(-1);
-        } else if (possibleMove.targetPosition.getRow() == 18 && possibleMove.targetPosition.getColumn() < 6) {
+        } else if (possibleMove.targetPosition.row == 18 && possibleMove.targetPosition.column < 6) {
             possibleMove.setPriority(-1);
-        } else if (possibleMove.targetPosition.getRow() == 19 && possibleMove.targetPosition.getColumn() < 7) {
+        } else if (possibleMove.targetPosition.row == 19 && possibleMove.targetPosition.column < 7) {
             possibleMove.setPriority(-1);
-        } else if (possibleMove.targetPosition.getRow() == 20 && possibleMove.targetPosition.getColumn() < 8) {
+        } else if (possibleMove.targetPosition.row == 20 && possibleMove.targetPosition.column < 8) {
             possibleMove.setPriority(-1);
         }
     }
 
     void moveToCenter(MoveCode possibleMove) {
-
+        if (possibleMove.startPosition.column > possibleMove.targetPosition.column && possibleMove.targetPosition.column > (possibleMove.targetPosition.row / 2) ) {
+            possibleMove.setPriority(1);
+        } else if (possibleMove.startPosition.column < possibleMove.targetPosition.column && possibleMove.targetPosition.column < (possibleMove.targetPosition.row / 2)) {
+            possibleMove.setPriority(1);
+        }
     }
 
 //    void nearbyPieceChecker(MoveCode possibleMove) {
@@ -68,7 +72,7 @@ public class OptimalMoveFinder {
 
     void prioritizeBack(MoveCode possibleMove) {
         int multiplier;
-        multiplier = (24 - possibleMove.startPosition.getRow()) * 5;
+        multiplier = (24 - possibleMove.startPosition.row) * 5;
         possibleMove.multiplyPriority(multiplier);
     }
 }

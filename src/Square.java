@@ -34,13 +34,13 @@ public class Square {
 	}
 	
 	public void updateLocation(int row, int col) {
-		this.boardLocation.rowValue = row;
-		this.boardLocation.columnValue = col;
+		this.boardLocation.row = row;
+		this.boardLocation.column = col;
 	}
 	
 	public void updateLocation(ArrayCoordinate update) {
-		this.boardLocation.rowValue = update.rowValue;
-		this.boardLocation.columnValue = update.columnValue;
+		this.boardLocation.row = update.row;
+		this.boardLocation.column = update.column;
 	}
 
 	Square() {};
@@ -56,8 +56,8 @@ public class Square {
 
 	
 	public void draw(Graphics g) {
-		calculatedX = 300 - 15*boardLocation.rowValue + 30*boardLocation.columnValue;
-	    calculatedY = 20 + 30*boardLocation.rowValue;
+		calculatedX = 300 - 15*boardLocation.row + 30*boardLocation.column;
+	    calculatedY = 20 + 30*boardLocation.row;
 		if (this.isSelected) {
 			g.setColor(Color.YELLOW);
 			g.fillOval(calculatedX - 3, calculatedY - 3, 26, 26);
