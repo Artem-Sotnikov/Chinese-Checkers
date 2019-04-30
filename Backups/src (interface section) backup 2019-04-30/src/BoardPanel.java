@@ -219,6 +219,8 @@ public class BoardPanel extends JPanel{
 	}
 	
     public void paintComponent(Graphics g) {
+    	//System.out.println("graphics running");
+    	//System.out.println(gameState);
     	super.paintComponent(g);
     	setDoubleBuffered(true);
     	g.setColor(Color.black);
