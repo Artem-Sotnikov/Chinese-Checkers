@@ -45,16 +45,16 @@ public class PieceManager {
 	}
 	
 	public MoveNode generateMoves(ArrayCoordinate position, boolean isFirstMove) {
-		int sRow = position.rowValue;
-		int sCol = position.columnValue;
+		int sRow = position.row;
+		int sCol = position.column;
 		
 		MoveNode rootPosition = new MoveNode(position);
 		if (isFirstMove) {
 			rootPosition.isRoot = true;
 		}
 		
-		if (overallBoard[position.rowValue][position.columnValue].piece == null) {
-			overallBoard[position.rowValue][position.columnValue].piece = buffer;
+		if (overallBoard[position.row][position.column].piece == null) {
+			overallBoard[position.row][position.column].piece = buffer;
 			bufferCoords.add(position);
 		}
 		
@@ -88,14 +88,14 @@ public class PieceManager {
 		
 		
 		for (int idx = 0; idx < 6; idx++) {
-			if (sRow + deltaOpts[idx].rowValue >= 0 && sCol + deltaOpts[idx].columnValue >= 0 && sRow + deltaOpts[idx].rowValue < 25 && sCol + deltaOpts[idx].columnValue < 25) {
-				if (overallBoard[sRow + deltaOpts[idx].rowValue][sCol + deltaOpts[idx].columnValue] != null &&
-						overallBoard[sRow + (deltaOpts[idx].rowValue)/2][sCol + (deltaOpts[idx].columnValue)/2] != null) {
-					if (overallBoard[sRow + deltaOpts[idx].rowValue][sCol + deltaOpts[idx].columnValue].piece == null &&
-							overallBoard[sRow + (deltaOpts[idx].rowValue)/2][sCol + (deltaOpts[idx].columnValue)/2].piece != null) {
-							 if (overallBoard[sRow + (deltaOpts[idx].rowValue)/2][sCol + (deltaOpts[idx].columnValue)/2].piece.team != null) {
+			if (sRow + deltaOpts[idx].row >= 0 && sCol + deltaOpts[idx].column >= 0 && sRow + deltaOpts[idx].row < 25 && sCol + deltaOpts[idx].column < 25) {
+				if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column] != null &&
+						overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2] != null) {
+					if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column].piece == null &&
+							overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece != null) {
+							 if (overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece.team != null) {
 								 rootPosition.branches.add(generateMoves(new ArrayCoordinate(
-										 sRow + deltaOpts[idx].rowValue, sCol + deltaOpts[idx].columnValue), false));
+										 sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column), false));
 							 }
 					} 
 				}
@@ -109,7 +109,7 @@ public class PieceManager {
 	
 	private void clearBuffer() {
 		for (int i = 0; i < bufferCoords.size(); i++) {
-			overallBoard[bufferCoords.get(i).rowValue][bufferCoords.get(i).columnValue].piece = null;
+			overallBoard[bufferCoords.get(i).row][bufferCoords.get(i).column].piece = null;
 		}
 		bufferCoords.clear();
 	}

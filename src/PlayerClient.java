@@ -157,10 +157,21 @@ public class PlayerClient implements Runnable {
             splitIntegers[o] = Integer.parseInt(splitString[o]);
         }
         for (int i = 0; i < coordinates.length; i ++) {
-            coordinates[i] = new ArrayCoordinate(splitIntegers[2 * i], splitIntegers[(2 * i) + 1]);
+            coordinates[i] = new ArrayCoordinate((splitIntegers[2 * i] - 1), (splitIntegers[(2 * i) + 1] - 1));
         }
         for (int k = 0; k < coordinates.length; k++) {
             coordinates[k].displayCoordinate();
+        }
+
+        findBestMove();
+    }
+
+    public void findBestMove(){
+        Display disp = new Display();
+        disp.refresh();
+        System.out.println("executed");
+        while (!disp.exitFlag) {
+            disp.refresh();
         }
     }
 

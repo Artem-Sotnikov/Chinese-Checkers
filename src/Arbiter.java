@@ -59,8 +59,8 @@ public class Arbiter {
    return false;
   }
   
-  int pastRow = selected.boardLocation.rowValue;
-  int pastColumn = selected.boardLocation.columnValue;
+  int pastRow = selected.boardLocation.row;
+  int pastColumn = selected.boardLocation.column;
   
   int deltaRow = (pastRow - targetRow);
   int deltaColumn = (pastColumn - targetColumn);
@@ -99,16 +99,16 @@ public class Arbiter {
    return false;
   }
   
-  int targetRow = move.targetPosition.rowValue;
-  int targetColumn = move.targetPosition.columnValue;
+  int targetRow = move.targetPosition.row;
+  int targetColumn = move.targetPosition.column;
   
   
   if (squares[targetRow][targetColumn].piece != null) {
    return false;
   }
   
-  int pastRow = move.startPosition.rowValue;
-  int pastColumn = move.startPosition.columnValue;  
+  int pastRow = move.startPosition.row;
+  int pastColumn = move.startPosition.column;  
   
   int deltaRow = (pastRow - targetRow);
   int deltaColumn = (pastColumn - targetColumn);
@@ -161,7 +161,7 @@ public class Arbiter {
   int checkRegion = moveOrder[teamToMove].targetRegion;  
   for (int j = 0; j < 10; j++) {
    ArrayCoordinate checkCoordinate = regions[checkRegion][j];
-   if (squares[checkCoordinate.rowValue][checkCoordinate.columnValue].piece != moveOrder[teamToMove]) {
+   if (squares[checkCoordinate.row][checkCoordinate.column].piece != moveOrder[teamToMove]) {
     gameWinner = null;
     j = 10;
    }

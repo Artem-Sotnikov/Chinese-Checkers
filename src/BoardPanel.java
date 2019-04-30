@@ -118,7 +118,7 @@ public class BoardPanel extends JPanel{
  
  public void terminateMove() {
   if (selectedCoordinates != null) {
-   squares[selectedCoordinates.rowValue][selectedCoordinates.columnValue].setSelected(false);
+   squares[selectedCoordinates.row][selectedCoordinates.column].setSelected(false);
   }
   gameState = GameState.STATE_IDLE;
   arbiter.determineGameResult(regions);
@@ -128,7 +128,7 @@ public class BoardPanel extends JPanel{
   
   for (int idx = 0; idx < notedSquares.size(); idx++) {
    ArrayCoordinate notedPosition = notedSquares.get(idx);
-   squares[notedPosition.rowValue][notedPosition.columnValue].setNoted(false);
+   squares[notedPosition.row][notedPosition.column].setNoted(false);
   }
   
   arbiter.registerMove();    
@@ -143,8 +143,9 @@ public class BoardPanel extends JPanel{
    g.drawRect(10, 60, 360, 50);
    g.setFont(new Font("TrilliumWeb",Font.PLAIN, 15));
    g.drawString("Hovered Coordinates are: (Row " + squares[i][j].boardLocation.rowValue +
-		   ", Column " + squares[i][j].boardLocation.columnValue + " )", 40, 90);
+     ", Column " + squares[i][j].boardLocation.columnValue + " )", 40, 90);
    g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
+
    
    
    switch (gameState) {
@@ -211,8 +212,8 @@ public class BoardPanel extends JPanel{
           
       listener.clickHandled();
      
-      squares[selectedCoordinates.rowValue]
-        [selectedCoordinates.columnValue].setSelected(false);
+      squares[selectedCoordinates.row]
+        [selectedCoordinates.column].setSelected(false);
       
       squares[i][j].setSelected(true);
       selectedCoordinates = new ArrayCoordinate(i,j);
@@ -229,11 +230,11 @@ public class BoardPanel extends JPanel{
      
      
      if (true) {
-    	Graphics2D g2 = (Graphics2D) g;
-     	 
-		g2.scale(Constants.scaleFactor, Constants.scaleFactor);
-     	 
-     	this.graphicSetupComplete = true;
+     Graphics2D g2 = (Graphics2D) g;
+       
+  g2.scale(Constants.scaleFactor, Constants.scaleFactor);
+       
+      this.graphicSetupComplete = true;
      }
      
      g.setColor(Color.black);
@@ -291,33 +292,33 @@ public class BoardPanel extends JPanel{
      */
           
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[0][i].rowValue][regions[0][i].columnValue].placePiece(Constants.teamZeroPiece);
-      manager.piecePositionStorage[0][i] = squares[regions[0][i].rowValue][regions[0][i].columnValue];
+      squares[regions[0][i].row][regions[0][i].column].placePiece(Constants.teamZeroPiece);
+      manager.piecePositionStorage[0][i] = squares[regions[0][i].row][regions[0][i].column];
      }    
      
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[1][i].rowValue][regions[1][i].columnValue].placePiece(Constants.teamOnePiece);
-      manager.piecePositionStorage[1][i] = squares[regions[1][i].rowValue][regions[1][i].columnValue];
+      squares[regions[1][i].row][regions[1][i].column].placePiece(Constants.teamOnePiece);
+      manager.piecePositionStorage[1][i] = squares[regions[1][i].row][regions[1][i].column];
      }
      
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[2][i].rowValue][regions[2][i].columnValue].placePiece(Constants.teamTwoPiece);
-      manager.piecePositionStorage[2][i] = squares[regions[2][i].rowValue][regions[2][i].columnValue];
+      squares[regions[2][i].row][regions[2][i].column].placePiece(Constants.teamTwoPiece);
+      manager.piecePositionStorage[2][i] = squares[regions[2][i].row][regions[2][i].column];
      }
          
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[3][i].rowValue][regions[3][i].columnValue].placePiece(Constants.teamThreePiece);
-      manager.piecePositionStorage[3][i] = squares[regions[3][i].rowValue][regions[3][i].columnValue];
+      squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamThreePiece);
+      manager.piecePositionStorage[3][i] = squares[regions[3][i].row][regions[3][i].column];
      }
      
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[4][i].rowValue][regions[4][i].columnValue].placePiece(Constants.teamFourPiece);
-      manager.piecePositionStorage[4][i] = squares[regions[4][i].rowValue][regions[4][i].columnValue];
+      squares[regions[4][i].row][regions[4][i].column].placePiece(Constants.teamFourPiece);
+      manager.piecePositionStorage[4][i] = squares[regions[4][i].row][regions[4][i].column];
      }
      
      for (int i = 0; i < regions[0].length; i++) {
-      squares[regions[5][i].rowValue][regions[5][i].columnValue].placePiece(Constants.teamFivePiece);
-      manager.piecePositionStorage[5][i] = squares[regions[5][i].rowValue][regions[5][i].columnValue];
+      squares[regions[5][i].row][regions[5][i].column].placePiece(Constants.teamFivePiece);
+      manager.piecePositionStorage[5][i] = squares[regions[5][i].row][regions[5][i].column];
      }
      
      gameState = GameState.STATE_IDLE;
@@ -325,18 +326,18 @@ public class BoardPanel extends JPanel{
     }
     
     public boolean squareOccupied(ArrayCoordinate target) {
-     return (squares[target.rowValue][target.columnValue].piece != null);
+     return (squares[target.row][target.column].piece != null);
     }
     
     public boolean movePiece(MoveCode move) {
-     Square selected = squares[move.startPosition.rowValue][move.startPosition.columnValue];         
+     Square selected = squares[move.startPosition.row][move.startPosition.column];
      
-     int damnRow = move.startPosition.rowValue;
-     int damnCol = move.startPosition.columnValue;
+     int damnRow = move.startPosition.row;
+     int damnCol = move.startPosition.column;
      
      selected.updateLocation(move.targetPosition);
           
-     squares[move.targetPosition.rowValue][move.targetPosition.columnValue] = selected;
+     squares[move.targetPosition.row][move.targetPosition.column] = selected;
      
      squares[damnRow][damnCol] 
        = new Square(damnRow,damnCol);
@@ -352,7 +353,7 @@ public class BoardPanel extends JPanel{
       ArrayList<ArrayCoordinate> possibilityArray =  moves[idx].returnAsArray();
       for (int idx2 = 0; idx2 < possibilityArray.size(); idx2++) {
        ArrayCoordinate notedPosition = possibilityArray.get(idx2);
-       squares[notedPosition.rowValue][notedPosition.columnValue].setNoted(true);
+       squares[notedPosition.row][notedPosition.column].setNoted(true);
        notedSquares.add(notedPosition);
       }
      }
@@ -367,12 +368,20 @@ public class BoardPanel extends JPanel{
     }
     
     public void displayEvaluation(Graphics g) {
-    	double eval = 0;
-    	PieceType currentTeam = arbiter.returnCurrentTeam();
-    	
-    	eval = engine.evaluate(manager.piecePositionStorage[currentTeam.teamCode], regions[currentTeam.targetRegion][0]);
-    	
-    	//g.drawString(, 40, 40);
+     double eval = 0;
+     PieceType currentTeam = arbiter.returnCurrentTeam();
+     
+     eval = engine.evaluate(manager.piecePositionStorage[currentTeam.teamCode], regions[currentTeam.targetRegion][0]);
+     
+     //g.drawString(, 40, 40);
+}
+
+    public void executeBestMove() {
+        ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        OptimalMoveFinder finder = new OptimalMoveFinder();
+        movePiece(finder.findBestMove(possibleMoves));
+        terminateMove();
+
     }
    
 }
