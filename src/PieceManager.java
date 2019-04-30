@@ -80,7 +80,7 @@ public class PieceManager {
 			}
 			
 			if (sCol + 1 <= 0 && sCol + 1 < 25) {
-				if (overallBoard[sRow][sCol + 1] != null && overallBoard[sRow][sCol + 1].piece != null) {
+				if (overallBoard[sRow][sCol + 1] != null && overallBoard[sRow][sCol + 1].piece == null) {
 					rootPosition.branches.add(new MoveNode(sRow,sCol + 1));
 				}
 			}

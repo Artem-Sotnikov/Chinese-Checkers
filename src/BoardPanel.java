@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.awt.Color;
@@ -15,19 +16,22 @@ public class BoardPanel extends JPanel{
  private GameState gameState;
  
  private ArrayCoordinate selectedCoordinates;
-
  
  
  private Arbiter arbiter;
  private PieceManager manager;
+ private EvaluationEngine engine;
  
  public boolean gameFinished;
  public String gameWinner;
+ 
+ private boolean graphicSetupComplete;
  
  BoardPanel() {
   Dimension boardSize = new Dimension (500,Toolkit.getDefaultToolkit().getScreenSize().height);
   this.setPreferredSize(boardSize);
   this.setOpaque(false);   
+  graphicSetupComplete = false;
   
   this.squares = new Square[25][25];
   listener = new CustomMouseListener();
@@ -52,10 +56,10 @@ public class BoardPanel extends JPanel{
   regions[0][8] = new ArrayCoordinate(11,6);
   regions[0][9] = new ArrayCoordinate(11,7);
   
-  regions[1][0] = new ArrayCoordinate(12,9);
+  regions[1][0] = new ArrayCoordinate(12,12);  
   regions[1][1] = new ArrayCoordinate(12,10);
   regions[1][2] = new ArrayCoordinate(12,11);
-  regions[1][3] = new ArrayCoordinate(12,12);
+  regions[1][3] = new ArrayCoordinate(12,9);
   regions[1][4] = new ArrayCoordinate(13,10);
   regions[1][5] = new ArrayCoordinate(13,11);
   regions[1][6] = new ArrayCoordinate(13,12);
@@ -63,7 +67,7 @@ public class BoardPanel extends JPanel{
   regions[1][8] = new ArrayCoordinate(14,12);
   regions[1][9] = new ArrayCoordinate(15,12);
   
-  regions[2][0] = new ArrayCoordinate(17,13);
+  regions[2][0] = new ArrayCoordinate(20,16);  
   regions[2][1] = new ArrayCoordinate(18,13);
   regions[2][2] = new ArrayCoordinate(18,14);
   regions[2][3] = new ArrayCoordinate(19,13);
@@ -72,9 +76,9 @@ public class BoardPanel extends JPanel{
   regions[2][6] = new ArrayCoordinate(20,13);
   regions[2][7] = new ArrayCoordinate(20,14);
   regions[2][8] = new ArrayCoordinate(20,15);
-  regions[2][9] = new ArrayCoordinate(20,16);
+  regions[2][9] = new ArrayCoordinate(17,13);
   
-  regions[3][0] = new ArrayCoordinate(21,9);
+  regions[3][0] = new ArrayCoordinate(24,12);
   regions[3][1] = new ArrayCoordinate(21,10);
   regions[3][2] = new ArrayCoordinate(21,11);
   regions[3][3] = new ArrayCoordinate(21,12);
@@ -83,15 +87,16 @@ public class BoardPanel extends JPanel{
   regions[3][6] = new ArrayCoordinate(22,12);
   regions[3][7] = new ArrayCoordinate(23,11);
   regions[3][8] = new ArrayCoordinate(23,12);
-  regions[3][9] = new ArrayCoordinate(24,12);
+  regions[3][9] = new ArrayCoordinate(21,9);
   
-  regions[4][0] = new ArrayCoordinate(17,4);
+  
+  regions[4][0] = new ArrayCoordinate(20,4);
   regions[4][1] = new ArrayCoordinate(18,4);
   regions[4][2] = new ArrayCoordinate(18,5);
   regions[4][3] = new ArrayCoordinate(19,4);
   regions[4][4] = new ArrayCoordinate(19,5);
   regions[4][5] = new ArrayCoordinate(19,6);
-  regions[4][6] = new ArrayCoordinate(20,4);
+  regions[4][6] = new ArrayCoordinate(17,4);
   regions[4][7] = new ArrayCoordinate(20,5);
   regions[4][8] = new ArrayCoordinate(20,6);
   regions[4][9] = new ArrayCoordinate(20,7);
@@ -132,16 +137,19 @@ public class BoardPanel extends JPanel{
  
  public void handleHovers(int i, int j, Graphics g) {
   
-  if (squares[i][j].containsCoordinates(listener.getPos())) {
+  if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {
    
    g.setColor(Color.BLACK);
-   g.drawString(squares[i][j].boardLocation.rowValue + " " + squares[i][j].boardLocation.columnValue, 40, 40);
-   
+   g.drawRect(10, 60, 360, 50);
+   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 15));
+   g.drawString("Hovered Coordinates are: (Row " + squares[i][j].boardLocation.rowValue +
+		   ", Column " + squares[i][j].boardLocation.columnValue + " )", 40, 90);
+   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
    
    
    switch (gameState) {
    case STATE_IDLE: {
-    if (squares[i][j].containsCoordinates(listener.getPos()) && 
+    if (squares[i][j].containsCoordinates(listener.getRectifiedPos()) && 
       arbiter.approvesSelection(i, j)) {
      
       squares[i][j].setHovered(true);          
@@ -152,7 +160,7 @@ public class BoardPanel extends JPanel{
    }
    break;
    case STATE_PIECE_SELECTED: {
-    if (squares[i][j].containsCoordinates(listener.getPos()) && 
+    if (squares[i][j].containsCoordinates(listener.getRectifiedPos()) && 
       arbiter.approvesMove(new MoveCode(selectedCoordinates, new ArrayCoordinate(i,j)), false)) {
      
      squares[i][j].setHovered(true);          
@@ -171,11 +179,10 @@ public class BoardPanel extends JPanel{
  
  public void handleClicks(int i, int j) {
   
-  if (squares[i][j].containsCoordinates(listener.getClick())) {
+  if (squares[i][j].containsCoordinates(listener.getRectifiedClick())) {
    switch (gameState) {
    case STATE_IDLE: {
-    if (squares[i][j].containsCoordinates(listener.getClick()) && 
-      arbiter.approvesSelection(i, j)) {
+    if (arbiter.approvesSelection(i, j)) {
      
       listener.clickHandled();
      
@@ -189,8 +196,7 @@ public class BoardPanel extends JPanel{
    }
    break;
    case STATE_PIECE_SELECTED: {
-    if (squares[i][j].containsCoordinates(listener.getClick()) && 
-      arbiter.approvesMove(new MoveCode(selectedCoordinates, new ArrayCoordinate(i,j)), true)) {
+    if (arbiter.approvesMove(new MoveCode(selectedCoordinates, new ArrayCoordinate(i,j)), true)) {
      
       listener.clickHandled();
       
@@ -201,8 +207,7 @@ public class BoardPanel extends JPanel{
        this.terminateMove();
       } 
       
-    } else if (squares[i][j].containsCoordinates(listener.getClick()) && 
-      arbiter.approvesSelection(i, j)) {
+    } else if (arbiter.approvesSelection(i, j)) {
           
       listener.clickHandled();
      
@@ -221,11 +226,21 @@ public class BoardPanel extends JPanel{
     public void paintComponent(Graphics g) {
      super.paintComponent(g);
      setDoubleBuffered(true);
+     
+     
+     if (true) {
+    	Graphics2D g2 = (Graphics2D) g;
+     	 
+		g2.scale(Constants.scaleFactor, Constants.scaleFactor);
+     	 
+     	this.graphicSetupComplete = true;
+     }
+     
      g.setColor(Color.black);
      g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
  
   
-  arbiter.displayTeamToMove(g);  
+     arbiter.displayTeamToMove(g);  
      
      for (int i = 0; i < squares.length; i++) {
       for (int j = 0; j <= i; j++) {
@@ -349,6 +364,15 @@ public class BoardPanel extends JPanel{
      
      movePiece(randomMove);
      terminateMove();
+    }
+    
+    public void displayEvaluation(Graphics g) {
+    	double eval = 0;
+    	PieceType currentTeam = arbiter.returnCurrentTeam();
+    	
+    	eval = engine.evaluate(manager.piecePositionStorage[currentTeam.teamCode], regions[currentTeam.targetRegion][0]);
+    	
+    	//g.drawString(, 40, 40);
     }
    
 }

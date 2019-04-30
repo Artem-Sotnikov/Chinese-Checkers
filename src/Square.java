@@ -57,7 +57,7 @@ public class Square {
 	
 	public void draw(Graphics g) {
 		calculatedX = 300 - 15*boardLocation.rowValue + 30*boardLocation.columnValue;
-	    calculatedY = 20 + 30*boardLocation.rowValue;
+	    calculatedY = 100 + 30*boardLocation.rowValue;
 		if (this.isSelected) {
 			g.setColor(Color.YELLOW);
 			g.fillOval(calculatedX - 3, calculatedY - 3, 26, 26);

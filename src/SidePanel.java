@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 
@@ -37,6 +38,9 @@ public class SidePanel extends JPanel {
 		super.paintComponent(g);
 		setDoubleBuffered(true);
 		
+		Graphics2D g2 = (Graphics2D) g;
+	    g2.scale(Constants.scaleFactor, Constants.scaleFactor);
+		
 		g.setFont(new Font("TrilliumWeb", Font.BOLD, 16));
 		
 		g.setColor(Color.YELLOW);
@@ -66,19 +70,19 @@ public class SidePanel extends JPanel {
 			listener2.clickHandled();
 			
 			
-			if (endTurnButton.contains(listener2.getClick())) {
+			if (endTurnButton.contains(listener2.getRectifiedClick())) {
 				terminationPending = true;
 			}
 			
-			if (exitButton.contains(listener2.getClick())) {
+			if (exitButton.contains(listener2.getRectifiedClick())) {
 				exitPending = true;
 			}
 			
-			if (showButton.contains(listener2.getClick())) {
+			if (showButton.contains(listener2.getRectifiedClick())) {
 				showPending = true;
 			}
 			
-			if (executeButton.contains(listener2.getClick())) {
+			if (executeButton.contains(listener2.getRectifiedClick())) {
 				executionPending = true;
 			}
 		}

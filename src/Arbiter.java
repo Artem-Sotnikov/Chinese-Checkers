@@ -172,12 +172,16 @@ public class Arbiter {
   return this.teamToMove;
  }
  
+ public PieceType returnCurrentTeam() {
+	 return this.moveOrder[teamToMove];
+ }
+ 
  public void displayTeamToMove(Graphics g) {
   g.setColor(Color.WHITE);
-  g.fillRect(100,100,300,100);
+  g.fillRect(300 - 150,150,300,100);
   g.setColor(moveOrder[teamToMove].color);
-  g.drawRect(110, 110, 280, 80);
-  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 140, 150);  
+  g.drawRect(310 - 150, 160, 280, 80);
+  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);  
  }
 }
 

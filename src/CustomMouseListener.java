@@ -19,7 +19,7 @@ public class CustomMouseListener implements MouseInputListener, MouseMotionListe
 	private int clickY;
 	private int releaseX;
 	private int releaseY;
-	private double zoomScale = 1;
+	private double zoomScale = Constants.scaleFactor;
 	private boolean clickHandled;
 	private boolean isDragging = false;
 	private boolean isScrolling = false;
@@ -145,12 +145,26 @@ public class CustomMouseListener implements MouseInputListener, MouseMotionListe
 	public Point getPos() {
 		return new Point(x, y);
 	}
+	
+	public Point getRectifiedPos() {
+		int rectifiedX = (int) (x/zoomScale);
+		int rectifiedY = (int) (y/zoomScale);
+		
+		return new Point(rectifiedX,rectifiedY);
+	}
 
 	/**
 	 * @return Point
 	 */
 	public Point getClick() {
 		return new Point(clickX, clickY);
+	}
+	
+	public Point getRectifiedClick() {
+		int rectifiedX = (int) (clickX/zoomScale);
+		int rectifiedY = (int) (clickY/zoomScale);
+		
+		return new Point(rectifiedX,rectifiedY);
 	}
 
 	/**
@@ -298,5 +312,5 @@ public class CustomMouseListener implements MouseInputListener, MouseMotionListe
 	 */
 	public boolean clickPending() {
 		return (!this.clickHandled);
-	}
+	}	
 }
