@@ -16,11 +16,16 @@ public class SidePanel extends JPanel {
  private final Rectangle exitButton = new Rectangle(0,1000 - 100, 100, 100);
  private final Rectangle showButton = new Rectangle(0,100,100,100);
  private final Rectangle executeButton = new Rectangle(0,200,100,100);
+ private final Rectangle bestButton = new Rectangle(0,300,100,100);
+ private final Rectangle byEvalButton = new Rectangle(0,400,100,100);
  
  public boolean terminationPending;
  public boolean exitPending;
  public boolean executionPending;
  public boolean showPending;
+ public boolean bestPending;
+ public boolean byEvalPending;
+
   
  SidePanel() {
   listener2 = new CustomMouseListener();
@@ -46,7 +51,8 @@ public class SidePanel extends JPanel {
   g.setColor(Color.YELLOW);
   g.fillRect(5, 5, 90, 90);
   g.setColor(Color.BLACK);
-  g.drawString("End Turn",18,40);
+  g.drawString("End",20,40);
+  g.drawString("Turn", 20, 55);  
   
   g.setColor(Color.ORANGE);
   g.fillRect(5, 1000 - 105, 90, 90);
@@ -57,21 +63,29 @@ public class SidePanel extends JPanel {
   g.fillRect(5,105,90,90);
   g.setColor(Color.black);
   g.drawString("Display", 20, 145);
-  g.drawString("Moves", 22, 160);
+  g.drawString("Moves", 20, 160);
   
   g.setColor(Color.CYAN);
   g.fillRect(5, 205, 90, 90);
   g.setColor(Color.BLACK);
   g.drawString("Execute", 20, 245);
   g.drawString("Random", 20, 260);
-  g.drawString("Move", 23, 275);  
+  g.drawString("Move", 20, 275);  
   
   g.setColor(Color.PINK);
-        g.fillRect(5, 305, 90, 90);
-        g.setColor(Color.BLACK);
-        g.drawString("Execute", 20, 345);
-        g.drawString("Best", 20, 360);
-        g.drawString("Move", 23, 375);
+    g.fillRect(5, 305, 90, 90);
+    g.setColor(Color.BLACK);
+    g.drawString("Execute", 20, 345);
+    g.drawString("Best", 20, 360);
+    g.drawString("Move", 20, 375);
+    
+  g.setColor(Color.MAGENTA);
+  g.fillRect(5, 405, 90, 90);
+  g.setColor(Color.BLACK);
+  g.drawString("Execute", 20, 445);
+  g.drawString("By", 20, 460);
+  g.drawString("Eval", 20, 475);  
+  
   
   if (listener2.clickPending()) {
    listener2.clickHandled();
@@ -92,6 +106,14 @@ public class SidePanel extends JPanel {
    if (executeButton.contains(listener2.getRectifiedClick())) {
     executionPending = true;
    }
+   
+   if (bestButton.contains(listener2.getRectifiedClick())) {
+	   bestPending = true;
+   }
+   
+   if (byEvalButton.contains(listener2.getRectifiedClick())) {
+	   byEvalPending = true;
+   }
   }
   
  }
@@ -107,6 +129,17 @@ public class SidePanel extends JPanel {
  public void showHandled() {
   this.showPending = false;
  } 
+ 
+ public void bestHandled() {
+	 this.bestPending = false;
+ }
+ 
+ public void byEvalHandled() {
+	 this.byEvalPending = false;
+ }
+ 
+ 
+}
  
  
  

@@ -177,7 +177,7 @@ public class Arbiter {
  }
  
  public void displayTeamToMove(Graphics g) {
-  g.setColor(Color.WHITE);
+  g.setColor(Color.BLACK);
   g.fillRect(300 - 150,150,300,100);
   g.setColor(moveOrder[teamToMove].color);
   g.drawRect(310 - 150, 160, 280, 80);

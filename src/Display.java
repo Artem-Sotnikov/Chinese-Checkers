@@ -55,6 +55,12 @@ public class Display extends JFrame {
             gameArea.executeBestMove();
             System.out.println("Best Execution Done");
         }
+        
+        if (sidePanel.byEvalPending) {
+        	sidePanel.byEvalHandled();
+        	gameArea.executeByEval();
+        	System.out.println("By eval execution done");
+        }
 
         gameArea.repaint();
 
