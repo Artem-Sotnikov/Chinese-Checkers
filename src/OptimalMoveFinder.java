@@ -29,25 +29,25 @@ public class OptimalMoveFinder {
 
     void enemyTerritoryChecker(MoveCode possibleMove) {
         if ((possibleMove.targetPosition.row > 11) && (possibleMove.targetPosition.row) < 16 && (possibleMove.targetPosition.column < 4)) {
-            possibleMove.setPriority(-2);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row > 16 && possibleMove.targetPosition.row < 21 && possibleMove.targetPosition.column > 12) {
-            possibleMove.setPriority(-1);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 12 && possibleMove.targetPosition.column > 8) {
-            possibleMove.setPriority(-2);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 13 && possibleMove.targetPosition.column > 9) {
-            possibleMove.setPriority(-2);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 14 && possibleMove.targetPosition.column > 10) {
-            possibleMove.setPriority(-2);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 15 && possibleMove.targetPosition.column > 11) {
-            possibleMove.setPriority(-2);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 17 && possibleMove.targetPosition.column < 5) {
-            possibleMove.setPriority(-1);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 18 && possibleMove.targetPosition.column < 6) {
-            possibleMove.setPriority(-1);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 19 && possibleMove.targetPosition.column < 7) {
-            possibleMove.setPriority(-1);
+            possibleMove.setPriority(-50000);
         } else if (possibleMove.targetPosition.row == 20 && possibleMove.targetPosition.column < 8) {
-            possibleMove.setPriority(-1);
+            possibleMove.setPriority(-50000);
         }
     }
 
