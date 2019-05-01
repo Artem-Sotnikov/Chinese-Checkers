@@ -59,16 +59,74 @@ public class OptimalMoveFinder {
         }
     }
 
-//    void nearbyPieceChecker(MoveCode possibleMove) {
-//      if/*(one in front, next one empty)*/(){
-//        possibleMove.setPriority(possibleMove.getPriority() + 1);
-//      }else if(two or more block it in front){
-//        possibleMove.setPriority(possibleMove.getPriority() - 1);
-//      }else if(empty){
-//        possibleMove.setPriority(possibleMove.getPriority() - 2);
-//      }
-//
-//    }
+    void nearbyPieceChecker(MoveCode possibleMove, ArrayCoordinate[] occupiedSpaces, Square[][] squares) {
+        for (int i=0;i<25;i++){
+            for (int j=0;j<25;j++){
+                if (((possibleMove.targetPosition.row != 8) && (possibleMove.targetPosition.column != 4)) && ((possibleMove.targetPosition.row != 24) && (possibleMove.targetPosition.column != 12))){
+                    if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] != null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column + 1));
+                        ArrayCoordinate nextC3 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] != null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] == null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column));
+                        ArrayCoordinate nextC3 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] == null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] == null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row - 1), (possibleMove.targetPosition.column));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] != null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column + 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] == null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] == null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] == null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        if ((contains(occupiedSpaces, nextC1))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] == null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] != null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column + 1));
+                        ArrayCoordinate nextC3 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] == null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column));
+                        ArrayCoordinate nextC3 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3)))){
+                            possibleMove.setPriority(1);
+                        }
+                    } else if ((squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column-1] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column] != null) && (squares[possibleMove.targetPosition.row+1][possibleMove.targetPosition.column+1] != null) && (squares[possibleMove.targetPosition.row][possibleMove.targetPosition.column+1] != null)){
+                        ArrayCoordinate nextC1 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column - 1));
+                        ArrayCoordinate nextC2 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column));
+                        ArrayCoordinate nextC3 = new ArrayCoordinate((possibleMove.targetPosition.row + 1), (possibleMove.targetPosition.column + 1));
+                        ArrayCoordinate nextC4 = new ArrayCoordinate((possibleMove.targetPosition.row), (possibleMove.targetPosition.column + 1));
+                        if ((contains(occupiedSpaces, nextC1)) || ((contains(occupiedSpaces, nextC2))) || ((contains(occupiedSpaces, nextC3))) || ((contains(occupiedSpaces, nextC4)))){
+                            possibleMove.setPriority(1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     void prioritizeBack(MoveCode possibleMove) {
         int multiplier;
