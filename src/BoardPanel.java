@@ -421,8 +421,8 @@ public class BoardPanel extends JPanel{
 
     public void executeBestMove() {
         ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-//        OptimalMoveFinder finder = new OptimalMoveFinder();
-//        movePiece(finder.findBestMove(possibleMoves));
+        OptimalMoveFinder finder = new OptimalMoveFinder();
+        movePiece(finder.findBestMove(possibleMoves));
         terminateMove();
 
     }              

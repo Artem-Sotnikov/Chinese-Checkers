@@ -99,18 +99,20 @@ public class PlayerClient implements Runnable {
             output.println("CHOOSENAME " + userName);
             output.flush();
 
-            boolean retry = false;
+            boolean retry = true;
 
-//            while (!connected && retry) {
-//                if (input.ready()) {
-//                    String connectionVerification = input.readLine();
-//                    if (connectionVerification.contains("OK")) {
+
+            while (!connected && retry) {
+                if (input.ready()) {
+                    String connectionVerification = input.readLine();
+                    if (connectionVerification.contains("OK")) {
                         connected = true;
-//                    } else {
-//                        retry = true;
-//                    }
-//                }
-//            }
+                        retry = false;
+                    } else {
+                        retry = true;
+                    }
+                }
+            }
 
         } catch (IOException e) {  //connection error occured
             System.out.println("Connection to Server Failed");
@@ -176,7 +178,8 @@ public class PlayerClient implements Runnable {
     }
 
     public void sendMovesToServer() {
-
+        output.println("MOVE (" + "," + ") (" + "," + ")");
+        output.flush();
     }
 
     private class ButtonListener implements ActionListener {
