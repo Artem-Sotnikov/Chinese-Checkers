@@ -31,11 +31,12 @@ public class SidePanel extends JPanel {
   listener2 = new CustomMouseListener();
   this.addMouseListener(listener2);
   
-  Dimension sideBarSize = new Dimension (100,SCREEN_SIZE.height);
+  Dimension sideBarSize = new Dimension ((int) (100*Constants.scaleFactor),SCREEN_SIZE.height);
   this.setPreferredSize(sideBarSize);
+  this.setMaximumSize(sideBarSize);
   this.setBackground(Color.BLUE);
   this.setOpaque(true);
-  terminationPending = false;
+  terminationPending = false;    
   
  }
  
