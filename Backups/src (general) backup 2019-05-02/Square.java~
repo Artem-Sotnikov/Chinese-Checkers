@@ -1,0 +1,121 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+
+public class Square {
+	public ArrayCoordinate boardLocation;
+	public PieceType piece;	
+	private int calculatedX, calculatedY;
+	
+	private boolean isSelected, isHovered, isNoted;
+	
+	public boolean isNoted() {
+		return isNoted;
+	}
+
+	public void setNoted(boolean isNoted) {
+		this.isNoted = isNoted;
+	}
+
+	public boolean isHovered() {
+		return isHovered;
+	}
+
+	public void setHovered(boolean isHovered) {
+		this.isHovered = isHovered;
+	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+	
+	public void updateLocation(int row, int col) {
+		this.boardLocation.row = row;
+		this.boardLocation.column = col;
+	}
+	
+	public void updateLocation(ArrayCoordinate update) {
+		this.boardLocation.row = update.row;
+		this.boardLocation.column = update.column;
+	}
+
+	Square() {};
+	
+	Square(int i, int j) {
+		this.boardLocation = new ArrayCoordinate(i,j);
+		this.piece = null;
+		isSelected = false;
+		isHovered = false;
+	    
+	}
+	
+
+	
+	public void draw(Graphics g) {
+<<<<<<< HEAD
+		calculatedX = 300 - 15*boardLocation.rowValue + 30*boardLocation.columnValue;
+	    calculatedY = 100 + 30*boardLocation.rowValue;
+=======
+		calculatedX = 300 - 15*boardLocation.row + 30*boardLocation.column;
+	    calculatedY = 20 + 30*boardLocation.row;
+>>>>>>> 75f04b5519c014f5e80c1973c7c79da801b5b30e
+		if (this.isSelected) {
+			g.setColor(Color.YELLOW);
+			g.fillOval(calculatedX - 3, calculatedY - 3, 26, 26);
+		}
+		
+		if (this.piece != null) {
+			g.setColor(this.piece.color);
+		} else {
+			g.setColor(Color.black);
+		}
+		
+//		g.setColor(Color.black);
+			
+		//System.out.println("drawing executed");
+		g.fillOval(calculatedX, calculatedY, 20, 20);
+		
+		if (this.isHovered) {
+			g.setColor(Color.YELLOW);
+			g.fillOval(calculatedX + 4, calculatedY + 4, 12, 12);
+			
+		}
+		
+		if (this.isNoted) {
+			g.setColor(Color.white);
+			g.fillOval(calculatedX + 8, calculatedY + 8, 4, 4);			
+		}
+		
+		
+		
+				
+	}
+	
+	public void placePiece(PieceType newPiece) {
+		this.piece = newPiece;		
+	}
+	
+	public boolean containsCoordinates(Point point) {
+		
+		int centerX = calculatedX + 10;
+		int centerY = calculatedY + 10;
+		
+		int radius = 10;
+		
+		if (calculatedX < point.x && calculatedX + 20 > point.x &&
+				calculatedY < point.y && calculatedY + 20 > point.y) {
+			return true;		
+		}
+		
+		if ((Math.pow(centerX + point.x,2) + Math.pow(centerY + point.y, 2)) 
+				< Math.pow(radius,2)) {
+			return true;
+		}
+		
+		return false;
+	}
+}
