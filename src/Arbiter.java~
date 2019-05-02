@@ -184,4 +184,3 @@ public class Arbiter {
   g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);  
  }
 }
-

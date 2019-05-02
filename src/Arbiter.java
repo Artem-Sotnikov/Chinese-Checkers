@@ -173,7 +173,7 @@ public class Arbiter {
  }
  
  public PieceType returnCurrentTeam() {
-  return this.moveOrder[teamToMove];
+	 return this.moveOrder[teamToMove];
  }
  
  public void displayTeamToMove(Graphics g) {

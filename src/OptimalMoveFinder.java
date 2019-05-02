@@ -137,7 +137,6 @@ public class OptimalMoveFinder {
         }
     }
 
-
     void prioritizeBack(MoveCode possibleMove) {
         int multiplier;
         // Determine how far back from the target the piece is and create a multiplier depending on that
