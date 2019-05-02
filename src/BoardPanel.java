@@ -132,6 +132,8 @@ public class BoardPanel extends JPanel{
   arbiter.determineGameResult(regions);
   if (arbiter.gameWinner != null) {
    gameFinished = true;
+  } else {
+   arbiter.registerMove();
   }
   
   for (int idx = 0; idx < notedSquares.size(); idx++) {
@@ -139,20 +141,13 @@ public class BoardPanel extends JPanel{
    squares[notedPosition.row][notedPosition.column].setNoted(false);
   }
   
-  arbiter.registerMove();    
+      
   
  }
  
  public void handleHovers(int i, int j, Graphics g) {
   
-  if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {
-   
-//   g.setColor(Color.BLACK);
-//   g.drawRect(10, 60, 360, 50);
-//   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 15));
-//   g.drawString("Hovered Coordinates are: (Row " + squares[i][j].boardLocation.row +
-//     ", Column " + squares[i][j].boardLocation.column + " )", 40, 90);
-//   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
+  if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {   
 	 this.currentHoverRow = i;
 	 this.currentHoverColumn = j;
 
@@ -264,16 +259,7 @@ public class BoardPanel extends JPanel{
         
        }       
       }
-     }
-     
-     if (gameFinished) {
-      g.setColor(Color.LIGHT_GRAY);
-      g.fillRect(400, 200, 200, 100);
-      g.setColor(Color.BLACK);
-      g.drawString("Game terminated with ", 400 + 40, 200 + 30);
-      g.drawString(arbiter.gameWinner + " victorious", 400 + 40, 200 + 70);
-     }
-     //repaint();
+     }     
     }
     
     public void configureInitialSetup() {
@@ -402,7 +388,13 @@ public class BoardPanel extends JPanel{
     		movePiece(tempMove);
     		eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
     	    		 regions[currentTeam.targetRegion][0], currentTeam.teamCode);
+    		arbiter.determineGameResult(regions);
+    		if (arbiter.gameWinner != null) {
+    			eval = 0;
+    			arbiter.gameWinner = null;
+    		}
     		evaluations[idx] = eval;
+    		
     		movePiece(reverse);
     	}
     	
@@ -421,8 +413,8 @@ public class BoardPanel extends JPanel{
 
     public void executeBestMove() {
         ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-        OptimalMoveFinder finder = new OptimalMoveFinder();
-        movePiece(finder.findBestMove(possibleMoves));
+        //OptimalMoveFinder finder = new OptimalMoveFinder();
+        //movePiece(finder.findBestMove(possibleMoves));
         terminateMove();
 
     }              

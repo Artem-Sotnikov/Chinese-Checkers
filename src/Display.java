@@ -32,42 +32,45 @@ public class Display extends JFrame {
     public void refresh() {
         sidePanel.repaint();
 
-        if (sidePanel.terminationPending) {
-            sidePanel.terminationHandled();
-            gameArea.terminateMove();
-        }
-
         if (sidePanel.exitPending) {
             exitFlag = true;
             setVisible(false);
             dispose();
         }
-
-        if (sidePanel.showPending) {
-            sidePanel.showHandled();
-            gameArea.displayPossibleMoves();
-            System.out.println("Possibilities handled");
-        }
-
-        if (sidePanel.executionPending) {
-            sidePanel.executionHandled();
-            gameArea.executeRandomMove();
-            System.out.println("Random Execution Done");
-        }
-
-        if (sidePanel.bestPending) {
-            sidePanel.bestHandled();
-            gameArea.executeBestMove();
-            System.out.println("Best Execution Done");
+        
+        if (!gameArea.gameFinished) {
+        
+	        if (sidePanel.terminationPending) {
+	            sidePanel.terminationHandled();
+	            gameArea.terminateMove();
+	        }        
+	
+	        if (sidePanel.showPending) {
+	            sidePanel.showHandled();
+	            gameArea.displayPossibleMoves();
+	            System.out.println("Possibilities handled");
+	        }
+	
+	        if (sidePanel.executionPending) {
+	            sidePanel.executionHandled();
+	            gameArea.executeRandomMove();
+	            System.out.println("Random Execution Done");
+	        }
+	
+	        if (sidePanel.bestPending) {
+	            sidePanel.bestHandled();
+	            gameArea.executeBestMove();
+	            System.out.println("Best Execution Done");
+	        }
+	        
+	        if (sidePanel.byEvalPending) {
+	        	sidePanel.byEvalHandled();
+	        	gameArea.executeByEval();
+	        	System.out.println("By eval execution done");
+	        }	        
         }
         
-        if (sidePanel.byEvalPending) {
-        	sidePanel.byEvalHandled();
-        	gameArea.executeByEval();
-        	System.out.println("By eval execution done");
-        }
-        
-        infoPanel.updateTurnInfo(gameArea.currentEvaluation, gameArea.arbiter.returnCurrentTeam());   
+        infoPanel.updateTurnInfo(gameArea.currentEvaluation, gameArea.arbiter.returnCurrentTeam(), gameArea.arbiter.numberOfMoves);   
         infoPanel.updateHoverData(gameArea.currentHoverRow, gameArea.currentHoverColumn);
         infoPanel.updateMouseData(gameArea.listener.getRectifiedPos().x, gameArea.listener.getRectifiedPos().y);
 

@@ -20,6 +20,7 @@ public class InfoPanel extends JPanel {
 	private int activeJ;
 	private int activeX;
 	private int activeY;
+	private int numMoves;
 	
 	InfoPanel() {
 		this.setPreferredSize(new Dimension((int)(300*Constants.scaleFactor),
@@ -41,9 +42,10 @@ public class InfoPanel extends JPanel {
 	}
 	
 	
-	public void updateTurnInfo(double eval, PieceType currentTeam) {
+	public void updateTurnInfo(double eval, PieceType currentTeam, int moveNumber) {
 		this.activeEval = eval;
 		this.activeTeam = currentTeam;
+		this.numMoves = moveNumber;
 				
 		this.repaint();
 	}
@@ -80,6 +82,9 @@ public class InfoPanel extends JPanel {
 		g.drawRect(5,5 + 200,290,90);	
 		g.drawString("Current True Mouse Coords are: ", 20, 40 + 200);
 		g.drawString("(X: " + activeX +  " Y: " + activeY + ")",20,65 + 200);
+		
+		g.drawRect(5, 5 + 300, 290, 90);
+		g.drawString("Number of moves: " + numMoves , 20, 40 + 300);
 					
 	}	
 }

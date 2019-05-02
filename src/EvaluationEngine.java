@@ -1,5 +1,6 @@
 
-public class EvaluationEngine {
+public class EvaluationEngine {	
+	
 	public double evaluateBasic(Square[] positions, ArrayCoordinate primePosition, int subjectCode) {
 		double score = 0;
 		
@@ -14,5 +15,7 @@ public class EvaluationEngine {
 		}
 		
 		return score;
-	}
+	}	
+	
+	
 }

@@ -7,7 +7,8 @@ public class Arbiter {
  private int teamToMove;
  public Square[][] squares;
  private boolean chainMoveInProgress;
- public String gameWinner;
+ public String gameWinner; 
+ public int numberOfMoves;
  
  public boolean isChainMoveInProgress() {
   return chainMoveInProgress;
@@ -144,6 +145,7 @@ public class Arbiter {
  
  public void registerMove() {
   this.teamToMove++;
+  this.numberOfMoves++;
   chainMoveInProgress = false;  
   
   if (teamToMove == 6) {
@@ -153,6 +155,8 @@ public class Arbiter {
   if (moveOrder[teamToMove] == null ) {
    teamToMove = 0;
   }
+  
+  
  }
   
  
@@ -181,7 +185,12 @@ public class Arbiter {
   g.fillRect(300 - 150,150,300,100);
   g.setColor(moveOrder[teamToMove].color);
   g.drawRect(310 - 150, 160, 280, 80);
-  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);  
+  if (gameWinner == null) {
+	  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);
+  } else {
+	  g.drawString("Game Terminated.", 310 - 150 + 40, 200);
+	  g.drawString("Team " + gameWinner + " is victorious", 310 - 150 + 40, 200 + 25);
+  }
  }
 }
 
