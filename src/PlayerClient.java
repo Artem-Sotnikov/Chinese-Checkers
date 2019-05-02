@@ -168,7 +168,9 @@ public class PlayerClient implements Runnable {
                         instructions = input.readLine().trim();
 
                         // Convert instructions into coordinates
-                        convertInstructions(instructions);
+                        if (instructions.length() > 9) {
+                            convertInstructions(instructions);
+                        }
                     }
 
                 } catch (IOException e) {
