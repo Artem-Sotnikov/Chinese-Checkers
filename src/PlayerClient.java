@@ -12,9 +12,14 @@ import java.io.PrintWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+/**
+ * PlayerClient
+ * This class connects the player to the server
+ */
 
 public class PlayerClient implements Runnable {
 
+    // Variables
     private static JFrame mainFrame;
     private static JPanel mainPanel;
     private static JButton joinGameButton, exitButton;
@@ -31,14 +36,20 @@ public class PlayerClient implements Runnable {
         connected = false;
     }
 
+    /**
+     * This method creates UI and starts the method to read messages from the server when it is connected
+     */
     public void run() {
         createGUI();
         do {
+            // Add a short delay
             try {
                 Thread.sleep(1000);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
+
+            // Start reading messages from the server if the client is connected
             if (connected) {
                 readMessagesFromServer();
             }
@@ -46,28 +57,36 @@ public class PlayerClient implements Runnable {
     }
 
     public void createGUI(){
+
+        // Create the main frame containing the UI to connect to the server
         mainFrame = new JFrame();
         mainFrame.setSize(500, 300);
 
+        // Create the panel containing the UI to connect to the server
         mainPanel = new JPanel();
         mainPanel.setSize(500, 300);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        ActionListener listener = new ButtonListener();
+        // Create buttons
         joinGameButton = new JButton("Join Game");
-
-        joinGameButton.addActionListener(listener);
-
         exitButton = new JButton("Exit");
+
+        // Add action listeners to the buttons
+        ActionListener listener = new ButtonListener();
+        joinGameButton.addActionListener(listener);
         exitButton.addActionListener(listener);
 
+        // Create labels to describe the input fields
         userNameLabel = new JLabel("Please enter your username");
-        userNameField = new JTextField();
-        addressLabel = new JLabel("Please enter your IP adress");
-        addressField = new JTextField();
         roomNameLabel = new JLabel("Please enter the room name");
-        roomNameField = new JTextField();
+        addressLabel = new JLabel("Please enter your IP adress");
 
+        // Create text fields to collect information from the user
+        userNameField = new JTextField();
+        roomNameField = new JTextField();
+        addressField = new JTextField();
+
+        // Add all UI components to the main panel
         mainPanel.add(userNameLabel);
         mainPanel.add(userNameField);
         mainPanel.add(roomNameLabel);
@@ -77,10 +96,10 @@ public class PlayerClient implements Runnable {
         mainPanel.add(joinGameButton);
         mainPanel.add(exitButton);
 
+        // Add main panel to the main frame and set the frame to visible
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
 
-       // connect(addressIP, 6666, userName, roomName);
     }//end of createGUI
 
 
@@ -88,48 +107,67 @@ public class PlayerClient implements Runnable {
         System.out.println("Attempting to make a connection..");
 
         try {
-            mySocket = new Socket(ip, port); //attempt socket connection (local address). This will wait until a connection is made
+            boolean roomExists = false;
+            boolean userNameAvailable = false;
+            boolean inputExists = false;
+            String connectionVerification;
 
-            InputStreamReader stream1= new InputStreamReader(mySocket.getInputStream()); //Stream for network input
-            input = new BufferedReader(stream1);
+            // Attempt to create a socket connection
+            mySocket = new Socket(ip, port);
+
+            // Create BufferedReader for input and PrintWriter for output
+            input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
             output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
 
+            // Communicate the room to join to the server
             output.println("JOINROOM " + roomName);
             output.flush();
+
+            // Check that the user can join the room
+            roomExists = checkRoom();
+
+            // Communicate the username of choice to the server
             output.println("CHOOSENAME " + userName);
             output.flush();
 
-            boolean retry = false;
+            if (roomExists) {
+                // Check that the username is usable
+                userNameAvailable = checkRoom();
 
-//            while (!connected && retry) {
-//                if (input.ready()) {
-//                    String connectionVerification = input.readLine();
-//                    if (connectionVerification.contains("OK")) {
-                        connected = true;
-//                    } else {
-//                        retry = true;
-//                    }
-//                }
-//            }
+                // State if the client can be connected or not
+                if (userNameAvailable && roomExists) {
+                    connected = true;
+                }
+            }
 
-        } catch (IOException e) {  //connection error occured
+
+
+        } catch (IOException e) {
             System.out.println("Connection to Server Failed");
             e.printStackTrace();
         }
         System.out.println("Connection made.");
-        return mySocket;
+
+        if (connected) {
+            return mySocket;
+        } else {
+            return null;
+        }
     }//end of connect
 
     public void readMessagesFromServer() {
 
 
-        while(running) {  // loop unit a message is received
+        while(running) {
                 try {
 
-                    if (input.ready()) { //check for an incoming messge
-                        System.out.println("found message");
+                    // Check for incoming messages
+                    if (input.ready()) {
+                        // Read the message
                         String instructions;
-                        instructions = input.readLine().trim(); //read the message
+                        instructions = input.readLine().trim();
+
+                        // Convert instructions into coordinates
                         convertInstructions(instructions);
                     }
 
@@ -138,7 +176,8 @@ public class PlayerClient implements Runnable {
                     e.printStackTrace();
                 }
         }
-        try {  //after leaving the main loop we need to close all the sockets
+        try {
+            // Close all the sockets
             input.close();
             output.close();
             mySocket.close();
@@ -148,39 +187,128 @@ public class PlayerClient implements Runnable {
 
     }
 
-    public void convertInstructions(String instructions) {
-        instructions = instructions.substring(10);
-        String[] splitString = instructions.replaceAll("[(),]", "").split(" ");
-        int[] splitIntegers = new int[splitString.length];
-        ArrayCoordinate[] coordinates = new ArrayCoordinate[splitIntegers.length/2];
-        for (int o = 0; o < splitString.length; o++) {
-            splitIntegers[o] = Integer.parseInt(splitString[o]);
+    public boolean checkRoom() {
+        boolean inputExists = false;
+        boolean roomExists = false;
+        String connectionVerification;
+        while (!inputExists) {
+            try {
+                if (input.ready()) {
+                    inputExists = true;
+                    connectionVerification = input.readLine();
+                    if (connectionVerification.contains("OK")) {
+                        roomExists = true;
+                    } else {
+                        roomExists = false;
+                    }
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
+        return roomExists;
+    }
+
+    public boolean checkName() {
+        boolean inputExists = false;
+        boolean userNameAvailable = false;
+        String connectionVerification;
+        while (!inputExists) {
+            try {
+                if (input.ready()) {
+                    inputExists = true;
+                    connectionVerification = input.readLine();
+                    if (connectionVerification.contains("OK")) {
+                        userNameAvailable = true;
+                    } else {
+                        userNameAvailable = false;
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return userNameAvailable;
+    }
+
+    public void convertInstructions(String instructions) {
+        System.out.println("converting instructions");
+        System.out.println(instructions);
+
+        // Trim the instructions received to just the coordinates
+        instructions = instructions.substring(10);
+
+        // Use regex to get rid of the brackets and commas for the brackets and store the individual numbers into an array
+        String[] splitString = instructions.replaceAll("[()]", "").replaceAll(",", " ").split(" ");
+
+        // Create an array of ints that is the same size as the array of Strings
+        int[] splitIntegers = new int[splitString.length];
+
+        // Create an array of ArrayCoordinates
+        ArrayCoordinate[] coordinates = new ArrayCoordinate[splitIntegers.length/2];
+
+        // Convert the Strings to ints
+        for (int o = 0; o < splitString.length; o++) {
+            try {
+                splitIntegers[o] = Integer.parseInt(splitString[o]);
+            } catch (NumberFormatException e) {
+                //e.printStackTrace();
+            }
+        }
+
+        // Store each pair of numbers as ArrayCoordinates
         for (int i = 0; i < coordinates.length; i ++) {
-            coordinates[i] = new ArrayCoordinate(splitIntegers[2 * i], splitIntegers[(2 * i) + 1]);
+            coordinates[i] = new ArrayCoordinate((splitIntegers[2 * i] - 1), (splitIntegers[(2 * i) + 1] - 1));
         }
         for (int k = 0; k < coordinates.length; k++) {
             coordinates[k].displayCoordinate();
         }
+
+        // Run the rest of the code to determine the best moves
+        findBestMove();
     }
 
-    public void sendMovesToServer() {
+    public void findBestMove(){
+//        Display disp = new Display();
+//        disp.refresh();
+//        System.out.println("executed");
+//        while (!disp.exitFlag) {
+//            disp.refresh();
+//        }\
+        BoardPanel tempBoard = new BoardPanel();
+        tempBoard.configureInitialSetup();
+        MoveCode moveToSend = tempBoard.executeBestMove();
+        sendMovesToServer(moveToSend);
 
+    }
+
+    public void sendMovesToServer(MoveCode move) {
+        System.out.println("sent move to server");
+        // Output the move we want
+        System.out.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        output.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        output.flush();
     }
 
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent press) {
             if (press.getSource() == joinGameButton) {
                 try {
+                    // Get information from the text boxes
                     userName = userNameField.getText();
                     addressIP = addressField.getText();
                     roomName = roomNameField.getText();
+
+                    // Check that all the fields are filled in
                     if ((!userName.equals(""))&&(!addressIP.equals(""))&&(!roomName.equals(""))){
                         //do something
                         System.out.print(userName+" "+addressIP+" "+roomName);
+                        // Empty the text fields
                         userNameField.setText("");
                         addressField.setText("");
                         roomNameField.setText("");
+
+                        // Attempt to connect
                         connect(addressIP, 6666, userName, roomName);
                     }
 //          } else { //if some fields are left blank

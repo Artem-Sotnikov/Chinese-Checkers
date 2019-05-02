@@ -1,3 +1,7 @@
+
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Arbiter { 
  private PieceType[] moveOrder;
  private int teamToMove;
@@ -40,8 +44,10 @@ public class Arbiter {
    if (squares[row][column].piece.team == moveOrder[teamToMove].team) {
     return true;    
    }
-  } 
+  }
+  
   return false;
+  
  }
  
  public boolean approvesMove(Square selected, int targetRow, int targetColumn, boolean executionActive) {
@@ -53,8 +59,8 @@ public class Arbiter {
    return false;
   }
   
-  int pastRow = selected.boardLocation.rowValue;
-  int pastColumn = selected.boardLocation.columnValue;
+  int pastRow = selected.boardLocation.row;
+  int pastColumn = selected.boardLocation.column;
   
   int deltaRow = (pastRow - targetRow);
   int deltaColumn = (pastColumn - targetColumn);
@@ -93,16 +99,16 @@ public class Arbiter {
    return false;
   }
   
-  int targetRow = move.targetPosition.rowValue;
-  int targetColumn = move.targetPosition.columnValue;
+  int targetRow = move.targetPosition.row;
+  int targetColumn = move.targetPosition.column;
   
   
   if (squares[targetRow][targetColumn].piece != null) {
    return false;
   }
   
-  int pastRow = move.startPosition.rowValue;
-  int pastColumn = move.startPosition.columnValue;  
+  int pastRow = move.startPosition.row;
+  int pastColumn = move.startPosition.column;  
   
   int deltaRow = (pastRow - targetRow);
   int deltaColumn = (pastColumn - targetColumn);
@@ -118,6 +124,9 @@ public class Arbiter {
     return true;
    }
   }
+  
+  
+  
    
   if (deltaRow < 3 && deltaRow > -3 && 
     deltaColumn < 3 && deltaColumn > -3 &&  
@@ -128,7 +137,8 @@ public class Arbiter {
      }
      return true;
     }
-  } 
+  }
+  
   return false;
  }
  
@@ -145,15 +155,33 @@ public class Arbiter {
   }
  }
   
+ 
  public void determineGameResult(ArrayCoordinate[][] regions) {
   gameWinner = moveOrder[teamToMove].team;
   int checkRegion = moveOrder[teamToMove].targetRegion;  
   for (int j = 0; j < 10; j++) {
    ArrayCoordinate checkCoordinate = regions[checkRegion][j];
-   if (squares[checkCoordinate.rowValue][checkCoordinate.columnValue].piece != moveOrder[teamToMove]) {
+   if (squares[checkCoordinate.row][checkCoordinate.column].piece != moveOrder[teamToMove]) {
     gameWinner = null;
     j = 10;
    }
   }     
- } //end of determineGameResult
-} //end of Arbiter
+ }
+ 
+ public int returnCurrentMoveCode() {
+  return this.teamToMove;
+ }
+ 
+ public PieceType returnCurrentTeam() {
+  return this.moveOrder[teamToMove];
+ }
+ 
+ public void displayTeamToMove(Graphics g) {
+  g.setColor(Color.BLACK);
+  g.fillRect(300 - 150,150,300,100);
+  g.setColor(moveOrder[teamToMove].color);
+  g.drawRect(310 - 150, 160, 280, 80);
+  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);  
+ }
+}
+
