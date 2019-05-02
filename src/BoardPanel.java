@@ -1,15 +1,17 @@
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
 public class BoardPanel extends JPanel{
  private Square[][] squares;
- CustomMouseListener listener;
  private ArrayCoordinate[][] regions;
  private ArrayList<ArrayCoordinate> notedSquares;
  
@@ -18,20 +20,25 @@ public class BoardPanel extends JPanel{
  private ArrayCoordinate selectedCoordinates;
  
  
- private Arbiter arbiter;
+ public CustomMouseListener listener;
+ public Arbiter arbiter;
+ 
  private PieceManager manager;
  private EvaluationEngine engine;
  
- public boolean gameFinished;
- public String gameWinner;
+ public double currentEvaluation;
+ public int currentHoverRow, currentHoverColumn; 
  
- private boolean graphicSetupComplete;
+ 
+ public boolean gameFinished;
+ public String gameWinner; 
+ 
  
  BoardPanel() {
-  Dimension boardSize = new Dimension (500,Toolkit.getDefaultToolkit().getScreenSize().height);
+  Dimension boardSize = new Dimension ((int) (925*Constants.scaleFactor),Toolkit.getDefaultToolkit().getScreenSize().height);
+  //Dimension boardSize = new Dimension ((int) 694,Toolkit.getDefaultToolkit().getScreenSize().height);
   this.setPreferredSize(boardSize);
-  this.setOpaque(false);   
-  graphicSetupComplete = false;
+  this.setOpaque(false);     
   
   this.squares = new Square[25][25];
   listener = new CustomMouseListener();
@@ -140,12 +147,14 @@ public class BoardPanel extends JPanel{
   
   if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {
    
-   g.setColor(Color.BLACK);
-   g.drawRect(10, 60, 360, 50);
-   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 15));
-   g.drawString("Hovered Coordinates are: (Row " + squares[i][j].boardLocation.row +
-     ", Column " + squares[i][j].boardLocation.column + " )", 40, 90);
-   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
+//   g.setColor(Color.BLACK);
+//   g.drawRect(10, 60, 360, 50);
+//   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 15));
+//   g.drawString("Hovered Coordinates are: (Row " + squares[i][j].boardLocation.row +
+//     ", Column " + squares[i][j].boardLocation.column + " )", 40, 90);
+//   g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
+	 this.currentHoverRow = i;
+	 this.currentHoverColumn = j;
 
    
    
@@ -233,16 +242,13 @@ public class BoardPanel extends JPanel{
    
      Graphics2D g2 = (Graphics2D) g;       
      g2.scale(Constants.scaleFactor, Constants.scaleFactor);
-       
-
-     
-     
+              
      g.setColor(Color.black);
      g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
  
   
      arbiter.displayTeamToMove(g);  
-     displayEvaluation(g);
+     updateEvaluation(g);     
      
      for (int i = 0; i < squares.length; i++) {
       for (int j = 0; j <= i; j++) {
@@ -368,15 +374,14 @@ public class BoardPanel extends JPanel{
      terminateMove();
     }
     
-    public void displayEvaluation(Graphics g) {
+    public void updateEvaluation(Graphics g) {
      double eval = 0;
      PieceType currentTeam = arbiter.returnCurrentTeam();
      
      eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
     		 regions[currentTeam.targetRegion][0], currentTeam.teamCode);
      Double.toString(eval);
-     
-     g.drawString("Evaluation: " + eval, 40, 40);
+     currentEvaluation = eval;         
     }
     
     public void executeByEval() {
@@ -420,6 +425,5 @@ public class BoardPanel extends JPanel{
         movePiece(finder.findBestMove(possibleMoves));
         terminateMove();
 
-    }
-   
+    }              
 }
