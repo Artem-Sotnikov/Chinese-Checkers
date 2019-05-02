@@ -28,8 +28,11 @@ public class EvaluationEngine {
 		if (subjectCode == 1 || subjectCode == 4) {
 			score -= 70;
 		}
+			
 		
-		
+		if (arbiter.hasWon(subjectCode)) {
+			score = 0;
+		}
 		
 		return score;
 	}	

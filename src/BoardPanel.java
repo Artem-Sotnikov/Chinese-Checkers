@@ -42,15 +42,15 @@ public class BoardPanel extends JPanel{
   this.squares = new Square[25][25];
   listener = new CustomMouseListener();
   this.addMouseMotionListener(listener);
-  this.addMouseListener(listener);
-  
-  this.arbiter = new Arbiter(squares,regions);
-  this.manager = new PieceManager(squares); 
-  this.engine = new EvaluationEngine();
+  this.addMouseListener(listener);    
   
   this.notedSquares = new ArrayList<ArrayCoordinate>(0);
   
   regions = new ArrayCoordinate[6][10];
+  
+  this.arbiter = new Arbiter(squares,regions);
+  this.manager = new PieceManager(squares); 
+  this.engine = new EvaluationEngine(arbiter);
   
   regions[0][0] = new ArrayCoordinate(8,4);
   regions[0][1] = new ArrayCoordinate(9,4);
