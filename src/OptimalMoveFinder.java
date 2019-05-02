@@ -2,7 +2,8 @@ import java.util.ArrayList;
 
 public class OptimalMoveFinder {    
     MoveCode findBestMove(ArrayList<MoveCode> possibleMoves) {
-        for (int i = 0; i < possibleMoves.size(); i++) {
+        for (int i = 0; i < possibleMoves.size(); i++) { // Go through all of the possible moves
+            // Check each of the important factors we created and change the priority of the move depending
             latitudeChecker(possibleMoves.get(i));
             enemyTerritoryChecker(possibleMoves.get(i));
             moveToCenter(possibleMoves.get(i));
@@ -13,7 +14,7 @@ public class OptimalMoveFinder {
         int highestPriority = -2147483648;
         int bestMove = 0;
         for (int k = 0; k < possibleMoves.size(); k++) {
-            if (possibleMoves.get(k).priority > highestPriority) {
+            if (possibleMoves.get(k).priority > highestPriority) { // Check if the priority of the current move being examined is higher than the highest priority encountered so far
                 highestPriority = possibleMoves.get(k).priority;
                 bestMove = k;
             }
@@ -130,6 +131,7 @@ public class OptimalMoveFinder {
 
     void prioritizeBack(MoveCode possibleMove) {
         int multiplier;
+        // Determine how far back from the target the piece is and create a multiplier depending on that
         multiplier = (24 - possibleMove.startPosition.row) * 5;
         possibleMove.multiplyPriority(multiplier);
     }

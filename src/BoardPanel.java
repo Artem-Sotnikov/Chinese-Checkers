@@ -148,8 +148,8 @@ public class BoardPanel extends JPanel{
  public void handleHovers(int i, int j, Graphics g) {
   
   if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {   
-	 this.currentHoverRow = i;
-	 this.currentHoverColumn = j;
+  this.currentHoverRow = i;
+  this.currentHoverColumn = j;
 
    
    
@@ -365,57 +365,62 @@ public class BoardPanel extends JPanel{
      PieceType currentTeam = arbiter.returnCurrentTeam();
      
      eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
-    		 regions[currentTeam.targetRegion][0], currentTeam.teamCode);
+       regions[currentTeam.targetRegion][0], currentTeam.teamCode);
      Double.toString(eval);
      currentEvaluation = eval;         
     }
     
     public void executeByEval() {
-    	ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-    	
-    	MoveCode tempMove;
-		MoveCode reverse;
-		
-		double evaluations[] = new double[possibleMoves.size()];
-		double eval;
-		
-		PieceType currentTeam = arbiter.returnCurrentTeam();
-    	
-    	for (int idx = 0; idx < possibleMoves.size(); idx++) {
-    		tempMove = possibleMoves.get(idx);
-    		reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
-    				tempMove.startPosition.row,tempMove.startPosition.column);;
-    		movePiece(tempMove);
-    		eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
-    	    		 regions[currentTeam.targetRegion][0], currentTeam.teamCode);
-    		arbiter.determineGameResult(regions);
-    		if (arbiter.gameWinner != null) {
-    			eval = 0;
-    			arbiter.gameWinner = null;
-    		}
-    		evaluations[idx] = eval;
-    		
-    		movePiece(reverse);
-    	}
-    	
-    	int highest = 0;
-    	
-    	for (int idx = 1; idx < evaluations.length; idx++) {
-    		if (evaluations[idx] > evaluations[highest]) {
-    			highest = idx;
-    		}
-    	}
-    	
-    	movePiece(possibleMoves.get(highest));
-    	terminateMove();
-    	
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     
+     MoveCode tempMove;
+  MoveCode reverse;
+  
+  double evaluations[] = new double[possibleMoves.size()];
+  double eval;
+  
+  PieceType currentTeam = arbiter.returnCurrentTeam();
+     
+     for (int idx = 0; idx < possibleMoves.size(); idx++) {
+      tempMove = possibleMoves.get(idx);
+      reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+        tempMove.startPosition.row,tempMove.startPosition.column);;
+      movePiece(tempMove);
+      eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
+            regions[currentTeam.targetRegion][0], currentTeam.teamCode);
+      arbiter.determineGameResult(regions);
+      if (arbiter.gameWinner != null) {
+       eval = 0;
+       arbiter.gameWinner = null;
+      }
+      evaluations[idx] = eval;
+      
+      movePiece(reverse);
+     }
+     
+     int highest = 0;
+     
+     for (int idx = 1; idx < evaluations.length; idx++) {
+      if (evaluations[idx] > evaluations[highest]) {
+       highest = idx;
+      }
+     }
+     
+     movePiece(possibleMoves.get(highest));
+     terminateMove();
+     
     }
 
-    public void executeBestMove() {
+    public MoveCode executeBestMove() {
+     System.out.println("creating possible moves");
         ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-        //OptimalMoveFinder finder = new OptimalMoveFinder();
+        System.out.println("create movefinder");
+        OptimalMoveFinder finder = new OptimalMoveFinder();
+        MoveCode chosenMove = finder.findBestMove(possibleMoves);
+        System.out.println("found best move");
         //movePiece(finder.findBestMove(possibleMoves));
-        terminateMove();
+        //terminateMove();
+        return chosenMove;
+    }
 
-    }              
 }
