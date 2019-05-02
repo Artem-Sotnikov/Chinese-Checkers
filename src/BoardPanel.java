@@ -419,11 +419,15 @@ public class BoardPanel extends JPanel{
     	
     }
 
-    public void executeBestMove() {
+    public MoveCode executeBestMove() {
+     System.out.println("creating possible moves");
         ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        System.out.println("create movefinder");
         OptimalMoveFinder finder = new OptimalMoveFinder();
-        movePiece(finder.findBestMove(possibleMoves));
-        terminateMove();
-
-    }              
+        MoveCode chosenMove = finder.findBestMove(possibleMoves);
+        System.out.println("found best move");
+        //movePiece(finder.findBestMove(possibleMoves));
+        //terminateMove();
+        return chosenMove;
+    }
 }

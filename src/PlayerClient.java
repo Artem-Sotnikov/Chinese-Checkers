@@ -232,12 +232,14 @@ public class PlayerClient implements Runnable {
     }
 
     public void convertInstructions(String instructions) {
+        System.out.println("converting instructions");
+        System.out.println(instructions);
 
         // Trim the instructions received to just the coordinates
         instructions = instructions.substring(10);
 
         // Use regex to get rid of the brackets and commas for the brackets and store the individual numbers into an array
-        String[] splitString = instructions.replaceAll("[(),]", "").split(" ");
+        String[] splitString = instructions.replaceAll("[()]", "").replaceAll(",", " ").split(" ");
 
         // Create an array of ints that is the same size as the array of Strings
         int[] splitIntegers = new int[splitString.length];
@@ -247,7 +249,11 @@ public class PlayerClient implements Runnable {
 
         // Convert the Strings to ints
         for (int o = 0; o < splitString.length; o++) {
-            splitIntegers[o] = Integer.parseInt(splitString[o]);
+            try {
+                splitIntegers[o] = Integer.parseInt(splitString[o]);
+            } catch (NumberFormatException e) {
+                //e.printStackTrace();
+            }
         }
 
         // Store each pair of numbers as ArrayCoordinates
@@ -263,17 +269,24 @@ public class PlayerClient implements Runnable {
     }
 
     public void findBestMove(){
-        Display disp = new Display();
-        disp.refresh();
-        System.out.println("executed");
-        while (!disp.exitFlag) {
-            disp.refresh();
-        }
+//        Display disp = new Display();
+//        disp.refresh();
+//        System.out.println("executed");
+//        while (!disp.exitFlag) {
+//            disp.refresh();
+//        }\
+        BoardPanel tempBoard = new BoardPanel();
+        tempBoard.configureInitialSetup();
+        MoveCode moveToSend = tempBoard.executeBestMove();
+        sendMovesToServer(moveToSend);
+
     }
 
-    public void sendMovesToServer() {
+    public void sendMovesToServer(MoveCode move) {
+        System.out.println("sent move to server");
         // Output the move we want
-        output.println("MOVE (" + "," + ") (" + "," + ")");
+        System.out.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        output.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
         output.flush();
     }
 
