@@ -32,7 +32,7 @@ public class Arbiter {
   teamToMove = 0;
   
   gameWinner = null;
- }
+ } 
  
  public boolean approvesSelection(int row, int column) {
   if (gameWinner != null) {
