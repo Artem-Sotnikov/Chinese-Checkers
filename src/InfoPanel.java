@@ -21,6 +21,7 @@ public class InfoPanel extends JPanel {
 	private int activeX;
 	private int activeY;
 	private int numMoves;
+	public double bestBranchEval;
 	
 	InfoPanel() {
 		this.setPreferredSize(new Dimension((int)(300*Constants.scaleFactor),
@@ -85,6 +86,11 @@ public class InfoPanel extends JPanel {
 		
 		g.drawRect(5, 5 + 300, 290, 90);
 		g.drawString("Number of moves: " + numMoves , 20, 40 + 300);
+		
+		g.drawRect(5, 5 + 400, 290, 90);
+		g.drawString("Best case evaluation: ", 20, 40 + 400);
+		g.drawString(Double.toString(bestBranchEval),20, 65 + 400);
+		
 					
 	}	
 }

@@ -65,14 +65,21 @@ public class Display extends JFrame {
 	        
 	        if (sidePanel.byEvalPending) {
 	        	sidePanel.byEvalHandled();
-	        	gameArea.executeByEval();
+	        	gameArea.executeByDepth();
 	        	System.out.println("By eval execution done");
-	        }	        
+	        }	  	        	       
+        }
+        
+        if (sidePanel.scenarioPending) {
+        	sidePanel.scenarioHandled();
+        	gameArea.configureEndScenario();
+        	System.out.println("Scenario setup sucessful");
         }
         
         infoPanel.updateTurnInfo(gameArea.currentEvaluation, gameArea.arbiter.returnCurrentTeam(), gameArea.arbiter.numberOfMoves);   
         infoPanel.updateHoverData(gameArea.currentHoverRow, gameArea.currentHoverColumn);
         infoPanel.updateMouseData(gameArea.listener.getRectifiedPos().x, gameArea.listener.getRectifiedPos().y);
+        infoPanel.bestBranchEval = gameArea.bestBranchEval;
 
         gameArea.repaint();
 
