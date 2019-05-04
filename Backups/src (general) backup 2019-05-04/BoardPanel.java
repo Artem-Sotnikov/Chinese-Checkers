@@ -276,7 +276,6 @@ public class BoardPanel extends JPanel{
     	
     	arbiter.moveOrder = new PieceType[6];
     	arbiter.moveOrder[0] = Constants.teamZeroPiece;
-    	manager = new PieceManager(squares);
     	
     	for (int i = 0; i < regions[0].length - 1; i++) {
     		squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
@@ -284,7 +283,6 @@ public class BoardPanel extends JPanel{
     	}  
     	
     	squares[20][10].placePiece(Constants.teamZeroPiece);
-    	
     	manager.piecePositionStorage[0][9] = squares[20][10];
     	
     }
@@ -439,7 +437,7 @@ public class BoardPanel extends JPanel{
      return evaluations[highest];     
     }        
 
-    public MoveCode executeByDepth() {
+    public void executeByDepth() {
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
@@ -455,12 +453,9 @@ public class BoardPanel extends JPanel{
          reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
            tempMove.startPosition.row,tempMove.startPosition.column);
          movePiece(tempMove); 
-         if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
-        	 eval = 100;
-        	 System.out.println("win in one move move, IDIOT!");
-         } else {
-        	 eval = depthEval(1);
-         }          
+         
+         eval = depthEval(2);
+                           
          evaluations[idx] = eval;
          
          movePiece(reverse);
@@ -474,23 +469,9 @@ public class BoardPanel extends JPanel{
          }
         }
         
-        MoveCode isolated = new MoveCode(
-        		possibleMoves.get(highest).startPosition.row,
-                possibleMoves.get(highest).startPosition.column,
-                possibleMoves.get(highest).targetPosition.row,
-                possibleMoves.get(highest).targetPosition.column
-        		);
-        
-        
-        possibleMoves.get(highest).startPosition.displayCoordinate();
-        possibleMoves.get(highest).targetPosition.displayCoordinate();
         this.bestBranchEval = evaluations[highest];
-        movePiece(possibleMoves.get(highest));        
-        terminateMove();  
-        
-        return isolated;
-        
-        
+        movePiece(possibleMoves.get(highest));
+        terminateMove();       
     }
     
     
@@ -514,11 +495,7 @@ public class BoardPanel extends JPanel{
 	         eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
 	               regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
          } else {
-        	 if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
-        		 eval = depth;
-        	 } else {
-        		 eval = depthEval(depth - 1);
-        	 }
+        	 eval = depthEval(depth - 1);
          }
          
          evaluations[idx] = eval;      
@@ -539,7 +516,7 @@ public class BoardPanel extends JPanel{
     
     public MoveCode executeBestMove() {
      System.out.println("creating possible moves");
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
         System.out.println("create movefinder");
         OptimalMoveFinder finder = new OptimalMoveFinder();
         MoveCode chosenMove = finder.findBestMove(possibleMoves);
@@ -547,5 +524,6 @@ public class BoardPanel extends JPanel{
         movePiece(finder.findBestMove(possibleMoves));
         terminateMove();
         return chosenMove;
-    }    
+    }
+
 }
