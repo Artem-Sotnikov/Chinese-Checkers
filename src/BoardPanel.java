@@ -33,7 +33,7 @@ public class BoardPanel extends JPanel{
  public boolean gameFinished;
  public String gameWinner; 
  
- 
+
  BoardPanel() {
   Dimension boardSize = new Dimension ((int) (925*Constants.scaleFactor),Toolkit.getDefaultToolkit().getScreenSize().height);
   this.setPreferredSize(boardSize);
@@ -284,11 +284,11 @@ public class BoardPanel extends JPanel{
     }
 
     public void setUpBoard(ArrayCoordinate[] existingPieces) {
-     for (int i = 0; i < existingPieces.length; i++) {
+     for (int i = 0; i < existingPieces.length - 1; i++) {
       System.out.println(existingPieces[i].row +","+existingPieces[i].column);
-      try {
        if (i < 10) {
         squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
+        manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
        } else if (i > 9 && i < 20) {
         squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
        } else if (i > 19 && i < 30) {
@@ -300,11 +300,10 @@ public class BoardPanel extends JPanel{
        } else if (i > 49 && i < 60) {
         squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFivePiece);
        }
-      } catch (IndexOutOfBoundsException e) {
-       e.printStackTrace();
-      }
      }
+
     }
+
     
     public void configureEndScenario() {
     	for (int i = 7; i < (7 + 14); i++) {

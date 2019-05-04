@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -29,7 +30,7 @@ public class PlayerClient implements Runnable {
     private static Socket mySocket;
     private static BufferedReader input;
     private static PrintWriter output;
-    private static boolean running, connected;
+    private static boolean running, connected, roomExists, userNameAvailable;
     private static BoardPanel tempBoard;
 
     PlayerClient() {
@@ -111,24 +112,26 @@ public class PlayerClient implements Runnable {
 
         try {
             System.out.println("making variables");
-            boolean roomExists = false;
-            boolean userNameAvailable = false;
             boolean inputExists = false;
             String connectionVerification;
 
             // Attempt to create a socket connection
-            System.out.println("created socket");
-            mySocket = new Socket(ip, port);
+            if (mySocket == null) {
+                System.out.println("created socket");
+                mySocket = new Socket(ip, port);
 
-            // Create BufferedReader for input and PrintWriter for output
-            input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
-            output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
+                // Create BufferedReader for input and PrintWriter for output
+                input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+                output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
+            }
 
             // Communicate the room to join to the server
 
-            // Check that the user can join the room
-            System.out.println("checking room existence");
-            roomExists = checkRoom(roomName);
+            if (!roomExists) {
+                // Check that the user can join the room
+                System.out.println("checking room existence");
+                roomExists = checkRoom(roomName);
+            }
 
             // Communicate the username of choice to the server
 
@@ -175,11 +178,11 @@ public class PlayerClient implements Runnable {
                         String instructions;
                         instructions = input.readLine().trim();
 
-                        if (instructions.contains("OK")) {
-                            System.out.println("accepted ok message");
-                        } else {
+                        if (instructions.contains("BOARD")) {
                             // Convert instructions into coordinates
                             convertInstructions(instructions);
+                        } else {
+                            System.out.println("accepted ok message");
                         }
                     }
 
@@ -233,6 +236,7 @@ public class PlayerClient implements Runnable {
         boolean userNameAvailable = false;
         String connectionVerification;
 
+        System.out.println("sent choosename message");
         output.println("CHOOSENAME " + userName);
         output.flush();
 
@@ -241,6 +245,7 @@ public class PlayerClient implements Runnable {
                 if (input.ready()) {
                     inputExists = true;
                     connectionVerification = input.readLine();
+                    System.out.println(connectionVerification);
                     if (connectionVerification.contains("OK")) {
                         userNameAvailable = true;
                     } else {
@@ -282,21 +287,19 @@ public class PlayerClient implements Runnable {
         for (int i = 0; i < coordinates.length; i ++) {
             coordinates[i] = new ArrayCoordinate((splitIntegers[2 * i] - 1), (splitIntegers[(2 * i) + 1] - 1));
         }
+        for (int i = 0; i < coordinates.length; i ++) {
+            coordinates[i].displayCoordinate();
+        }
 
-        tempBoard.cleanseBoard();
-        tempBoard.setUpBoard(coordinates);
 
         // Run the rest of the code to determine the best moves
-        findBestMove();
+        findBestMove(coordinates);
     }
 
-    public void findBestMove(){
-//        Display disp = new Display();
-//        disp.refresh();
-//        System.out.println("executed");
-//        while (!disp.exitFlag) {
-//            disp.refresh();
-//        }\
+    public void findBestMove(ArrayCoordinate[] coordinates){
+        System.out.println("cleanse + set up");
+        tempBoard.cleanseBoard();
+        tempBoard.setUpBoard(coordinates);
         MoveCode moveToSend = tempBoard.executeBestMove();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
         sendMovesToServer(moveToSend);
