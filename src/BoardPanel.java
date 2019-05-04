@@ -515,8 +515,8 @@ public class BoardPanel extends JPanel{
     }
     
     public MoveCode executeBestMove() {
-     System.out.println("creating possible moves");
-        ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     System.out.println("creating possible moves")
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
         System.out.println("create movefinder");
         OptimalMoveFinder finder = new OptimalMoveFinder();
         MoveCode chosenMove = finder.findBestMove(possibleMoves);
