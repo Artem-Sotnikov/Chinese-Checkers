@@ -9,7 +9,7 @@ public class Constants {
 	public static final PieceType teamFourPiece = new PieceType("four", Color.ORANGE,1,4);
 	public static final PieceType teamFivePiece = new PieceType("five", Color.GREEN,2,5);	
 	
-	public static final double scaleFactor = Toolkit.getDefaultToolkit().getScreenSize().height/1080;
+	public static final double scaleFactor = 0.75;
 	
 	
 }

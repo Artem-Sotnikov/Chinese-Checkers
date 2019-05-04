@@ -52,7 +52,6 @@ public class Square {
   isHovered = false;
      
  }
- 
 
  
  public void draw(Graphics g) {

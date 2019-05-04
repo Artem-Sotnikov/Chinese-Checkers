@@ -33,7 +33,7 @@ public class BoardPanel extends JPanel{
  public boolean gameFinished;
  public String gameWinner; 
  
- 
+
  BoardPanel() {
   Dimension boardSize = new Dimension ((int) (925*Constants.scaleFactor),Toolkit.getDefaultToolkit().getScreenSize().height);
   this.setPreferredSize(boardSize);
@@ -260,6 +260,50 @@ public class BoardPanel extends JPanel{
       }
      }     
     }
+
+    public void configureServerSetup() {
+       this.configureInitialSetup();
+       arbiter.moveOrder = new PieceType[6];
+       arbiter.moveOrder[0] = Constants.teamZeroPiece;
+    }
+
+    public void cleanseBoard() {
+      this.squares = new Square[25][25];
+
+     for (int i = 7; i < (7 + 14); i++) {
+      for (int j = 0; j < (i - 7); j++) {
+       squares[i][j + 4] = new Square(i,j + 4);
+      }
+     }
+
+     for (int i = 12; i < 25; i++) {
+      for (int j = 0; j < (25 - i); j++) {
+       squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+      }
+     }
+    }
+
+    public void setUpBoard(ArrayCoordinate[] existingPieces) {
+     for (int i = 0; i < existingPieces.length - 1; i++) {
+      System.out.println(existingPieces[i].row +","+existingPieces[i].column);
+       if (i < 10) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
+        manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
+       } else if (i > 9 && i < 20) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
+       } else if (i > 19 && i < 30) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamTwoPiece);
+       } else if (i > 29 && i < 40) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
+       } else if (i > 39 && i < 50) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFourPiece);
+       } else if (i > 49 && i < 60) {
+        squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFivePiece);
+       }
+     }
+
+    }
+
     
     public void configureEndScenario() {
     	for (int i = 7; i < (7 + 14); i++) {
@@ -538,14 +582,16 @@ public class BoardPanel extends JPanel{
     }
     
     public MoveCode executeBestMove() {
-     System.out.println("creating possible moves");
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-        System.out.println("create movefinder");
         OptimalMoveFinder finder = new OptimalMoveFinder();
         MoveCode chosenMove = finder.findBestMove(possibleMoves);
-        System.out.println("found best move");
-        movePiece(finder.findBestMove(possibleMoves));
+        MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
+        		chosenMove.targetPosition.row, chosenMove.targetPosition.column);
+        movePiece(chosenMove);
         terminateMove();
-        return chosenMove;
-    }    
+
+        return isolated;
+    }
+
+
 }
