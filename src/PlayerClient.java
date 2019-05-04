@@ -43,7 +43,7 @@ public class PlayerClient implements Runnable {
     public void run() {
         createGUI();
         tempBoard = new BoardPanel();
-        tempBoard.configureInitialSetup();
+        tempBoard.configureServerSetup();
         do {
             // Add a short delay
             try {
@@ -282,6 +282,9 @@ public class PlayerClient implements Runnable {
         for (int i = 0; i < coordinates.length; i ++) {
             coordinates[i] = new ArrayCoordinate((splitIntegers[2 * i] - 1), (splitIntegers[(2 * i) + 1] - 1));
         }
+
+        tempBoard.cleanseBoard();
+        tempBoard.setUpBoard(coordinates);
 
         // Run the rest of the code to determine the best moves
         findBestMove();

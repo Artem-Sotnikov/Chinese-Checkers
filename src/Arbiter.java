@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Arbiter { 
- private PieceType[] moveOrder;
+ public PieceType[] moveOrder;
  private int teamToMove;
  public Square[][] squares;
  private boolean chainMoveInProgress;
