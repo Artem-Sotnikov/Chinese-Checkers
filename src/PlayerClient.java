@@ -30,6 +30,7 @@ public class PlayerClient implements Runnable {
     private static BufferedReader input;
     private static PrintWriter output;
     private static boolean running, connected;
+    private static BoardPanel tempBoard;
 
     PlayerClient() {
         running = true;
@@ -41,6 +42,8 @@ public class PlayerClient implements Runnable {
      */
     public void run() {
         createGUI();
+        tempBoard = new BoardPanel();
+        tempBoard.configureInitialSetup();
         do {
             // Add a short delay
             try {
@@ -291,11 +294,8 @@ public class PlayerClient implements Runnable {
 //        while (!disp.exitFlag) {
 //            disp.refresh();
 //        }\
-        BoardPanel tempBoard = new BoardPanel();
-        tempBoard.configureInitialSetup();
         MoveCode moveToSend = tempBoard.executeBestMove();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
-
         sendMovesToServer(moveToSend);
 
     }
