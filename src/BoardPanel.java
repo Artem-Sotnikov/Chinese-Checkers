@@ -28,7 +28,7 @@ public class BoardPanel extends JPanel{
  
  public double currentEvaluation;
  public int currentHoverRow, currentHoverColumn; 
- 
+ public double bestBranchEval; 
  
  public boolean gameFinished;
  public String gameWinner; 
@@ -261,6 +261,32 @@ public class BoardPanel extends JPanel{
      }     
     }
     
+    public void configureEndScenario() {
+    	for (int i = 7; i < (7 + 14); i++) {
+    	      for (int j = 0; j < (i - 7); j++) {
+    	       squares[i][j + 4] = new Square(i,j + 4);
+    	      }
+    	     }
+    	     
+    	     for (int i = 12; i < 25; i++) {
+    	      for (int j = 0; j < (25 - i); j++) {
+    	       squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+    	      }
+    	     } 
+    	
+    	arbiter.moveOrder = new PieceType[6];
+    	arbiter.moveOrder[0] = Constants.teamZeroPiece;
+    	
+    	for (int i = 0; i < regions[0].length - 1; i++) {
+    		squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
+    	    manager.piecePositionStorage[0][i] = squares[regions[3][i].row][regions[3][i].column];
+    	}  
+    	
+    	squares[20][10].placePiece(Constants.teamZeroPiece);
+    	manager.piecePositionStorage[0][9] = squares[20][10];
+    	
+    }
+    
     public void configureInitialSetup() {
      
      for (int i = 7; i < (7 + 14); i++) {
@@ -324,15 +350,15 @@ public class BoardPanel extends JPanel{
     public boolean movePiece(MoveCode move) {
      Square selected = squares[move.startPosition.row][move.startPosition.column];
      
-     int damnRow = move.startPosition.row;
-     int damnCol = move.startPosition.column;
+     int transRow = move.startPosition.row;
+     int transCol = move.startPosition.column;
      
      selected.updateLocation(move.targetPosition);
           
      squares[move.targetPosition.row][move.targetPosition.column] = selected;
      
-     squares[damnRow][damnCol] 
-       = new Square(damnRow,damnCol);
+     squares[transRow][transCol] 
+       = new Square(transRow,transCol);
      
      selectedCoordinates = move.targetPosition;
                
@@ -363,36 +389,36 @@ public class BoardPanel extends JPanel{
      double eval = 0;
      PieceType currentTeam = arbiter.returnCurrentTeam();
      
-     eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
+     eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
        regions[currentTeam.targetRegion][0], currentTeam.teamCode);
      Double.toString(eval);
      currentEvaluation = eval;         
     }
     
-    public void executeByEval() {
+    public double executeByEval() {
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
      
      MoveCode tempMove;
-  MoveCode reverse;
+	 MoveCode reverse;
+	  
+	 double evaluations[] = new double[possibleMoves.size()];
+	 double eval;
   
-  double evaluations[] = new double[possibleMoves.size()];
-  double eval;
-  
-  PieceType currentTeam = arbiter.returnCurrentTeam();
+	 PieceType currentTeam = arbiter.returnCurrentTeam();
      
      for (int idx = 0; idx < possibleMoves.size(); idx++) {
       tempMove = possibleMoves.get(idx);
       reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
         tempMove.startPosition.row,tempMove.startPosition.column);;
       movePiece(tempMove);
-      eval = engine.evaluateBasic(manager.piecePositionStorage[currentTeam.teamCode],
+      eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
             regions[currentTeam.targetRegion][0], currentTeam.teamCode);
       arbiter.determineGameResult();
       if (arbiter.gameWinner != null) {
        eval = 0;
        arbiter.gameWinner = null;
       }
-      evaluations[idx] = eval;
+      evaluations[idx] = eval;      
       
       movePiece(reverse);
      }
@@ -408,8 +434,86 @@ public class BoardPanel extends JPanel{
      movePiece(possibleMoves.get(highest));
      terminateMove();
      
-    }
+     return evaluations[highest];     
+    }        
 
+    public void executeByDepth() {
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        
+     MoveCode tempMove;
+   	 MoveCode reverse;
+   	  
+   	 double evaluations[] = new double[possibleMoves.size()];
+   	 double eval;
+     
+   	 PieceType currentTeam = arbiter.returnCurrentTeam();
+        
+        for (int idx = 0; idx < possibleMoves.size(); idx++) {
+         tempMove = possibleMoves.get(idx);
+         reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+           tempMove.startPosition.row,tempMove.startPosition.column);
+         movePiece(tempMove); 
+         
+         eval = depthEval(2);
+                           
+         evaluations[idx] = eval;
+         
+         movePiece(reverse);
+        }
+        
+        int highest = 0;
+        
+        for (int idx = 1; idx < evaluations.length; idx++) {
+         if (evaluations[idx] > evaluations[highest]) {
+          highest = idx;
+         }
+        }
+        
+        this.bestBranchEval = evaluations[highest];
+        movePiece(possibleMoves.get(highest));
+        terminateMove();       
+    }
+    
+    
+    private double depthEval(int depth) {
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        
+     MoveCode tempMove;
+   	 MoveCode reverse;
+   	  
+   	 double evaluations[] = new double[possibleMoves.size()];
+   	 double eval;
+     
+   	 PieceType currentTeam = arbiter.returnCurrentTeam();
+   	 
+        for (int idx = 0; idx < possibleMoves.size(); idx++) {
+         tempMove = possibleMoves.get(idx);
+         reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+           tempMove.startPosition.row,tempMove.startPosition.column);
+         movePiece(tempMove);
+         if (depth == 1) {
+	         eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
+	               regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
+         } else {
+        	 eval = depthEval(depth - 1);
+         }
+         
+         evaluations[idx] = eval;      
+         
+         movePiece(reverse);
+        }
+        
+        int highest = 0;
+        
+        for (int idx = 1; idx < evaluations.length; idx++) {
+         if (evaluations[idx] > evaluations[highest]) {
+          highest = idx;
+         }
+        }
+         
+        return evaluations[highest];  
+    }
+    
     public MoveCode executeBestMove() {
      System.out.println("creating possible moves");
         ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());

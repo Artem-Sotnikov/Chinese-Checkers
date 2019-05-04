@@ -17,7 +17,8 @@ public class SidePanel extends JPanel {
  private final Rectangle showButton = new Rectangle(0,100,100,100);
  private final Rectangle executeButton = new Rectangle(0,200,100,100);
  private final Rectangle bestButton = new Rectangle(0,300,100,100);
- private final Rectangle byEvalButton = new Rectangle(0,400,100,100);
+ private final Rectangle byEvalButton = new Rectangle(0,400,100,100); 
+ private final Rectangle configScenarioButton = new Rectangle(0,500,100,100); 
  
  public boolean terminationPending;
  public boolean exitPending;
@@ -25,6 +26,7 @@ public class SidePanel extends JPanel {
  public boolean showPending;
  public boolean bestPending;
  public boolean byEvalPending;
+ public boolean scenarioPending;
 
   
  SidePanel() {
@@ -74,11 +76,11 @@ public class SidePanel extends JPanel {
   g.drawString("Move", 20, 275);  
   
   g.setColor(Color.PINK);
-    g.fillRect(5, 305, 90, 90);
-    g.setColor(Color.BLACK);
-    g.drawString("Execute", 20, 345);
-    g.drawString("Best", 20, 360);
-    g.drawString("Move", 20, 375);
+  g.fillRect(5, 305, 90, 90);
+  g.setColor(Color.BLACK);
+  g.drawString("Execute", 20, 345);
+  g.drawString("By", 20, 360);
+  g.drawString("Heuristic", 20, 375);
     
   g.setColor(Color.MAGENTA);
   g.fillRect(5, 405, 90, 90);
@@ -86,6 +88,15 @@ public class SidePanel extends JPanel {
   g.drawString("Execute", 20, 445);
   g.drawString("By", 20, 460);
   g.drawString("Eval", 20, 475);  
+  
+  g.setColor(Color.RED);
+  g.fillRect(5, 505, 90, 90);
+  g.setColor(Color.BLACK);
+  g.drawString("Configure", 20, 545);
+  g.drawString("Test", 20, 560);
+  g.drawString("Position", 20, 575); 
+  
+  
   
   
   if (listener2.clickPending()) {
@@ -115,6 +126,10 @@ public class SidePanel extends JPanel {
    if (byEvalButton.contains(listener2.getRectifiedClick())) {
 	   byEvalPending = true;
    }
+   
+   if (configScenarioButton.contains(listener2.getRectifiedClick())) {
+	   scenarioPending = true;
+   }
   }
   
  }
@@ -137,6 +152,10 @@ public class SidePanel extends JPanel {
  
  public void byEvalHandled() {
 	 this.byEvalPending = false;
+ }
+ 
+ public void scenarioHandled() {
+	 this.scenarioPending = false;
  }
  
  
