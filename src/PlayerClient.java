@@ -120,14 +120,14 @@ public class PlayerClient implements Runnable {
             output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
 
             // Communicate the room to join to the server
-            output.println("JOINROOM " + roomName);
+            output.println("JOINROOM" + " " + roomName);
             output.flush();
 
             // Check that the user can join the room
             roomExists = checkRoom();
 
             // Communicate the username of choice to the server
-            output.println("CHOOSENAME " + userName);
+            output.println("CHOOSENAME" + " " + userName);
             output.flush();
 
             if (roomExists) {
