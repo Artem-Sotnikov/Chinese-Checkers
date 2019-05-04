@@ -19,7 +19,7 @@ public class OptimalMoveFinder {
                 bestMove = k;
             }
         }
-
+        System.out.println("(" + possibleMoves.get(bestMove).startPosition.row + "," + possibleMoves.get(bestMove).startPosition.column + ") (" + possibleMoves.get(bestMove).targetPosition.row + "," + possibleMoves.get(bestMove).targetPosition.column + ")");
         return possibleMoves.get(bestMove);
     }
 

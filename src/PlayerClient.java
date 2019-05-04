@@ -107,12 +107,14 @@ public class PlayerClient implements Runnable {
         System.out.println("Attempting to make a connection..");
 
         try {
+            System.out.println("making variables");
             boolean roomExists = false;
             boolean userNameAvailable = false;
             boolean inputExists = false;
             String connectionVerification;
 
             // Attempt to create a socket connection
+            System.out.println("created socket");
             mySocket = new Socket(ip, port);
 
             // Create BufferedReader for input and PrintWriter for output
@@ -120,24 +122,28 @@ public class PlayerClient implements Runnable {
             output = new PrintWriter(mySocket.getOutputStream()); //assign printwriter to network stream
 
             // Communicate the room to join to the server
-            output.println("JOINROOM " + roomName);
-            output.flush();
 
             // Check that the user can join the room
-            roomExists = checkRoom();
+            System.out.println("checking room existence");
+            roomExists = checkRoom(roomName);
 
             // Communicate the username of choice to the server
-            output.println("CHOOSENAME " + userName);
-            output.flush();
 
             if (roomExists) {
+                System.out.println("room exists");
                 // Check that the username is usable
-                userNameAvailable = checkRoom();
+                System.out.println("checking name existence");
+                userNameAvailable = checkName(userName);
 
                 // State if the client can be connected or not
-                if (userNameAvailable && roomExists) {
+                if (userNameAvailable) {
+                    System.out.println("name available");
                     connected = true;
+                } else {
+                    System.out.println("name unavailable");
                 }
+            } else {
+                System.out.println("room does not exist");
             }
 
 
@@ -146,9 +152,9 @@ public class PlayerClient implements Runnable {
             System.out.println("Connection to Server Failed");
             e.printStackTrace();
         }
-        System.out.println("Connection made.");
 
         if (connected) {
+            System.out.println("Connection made.");
             return mySocket;
         } else {
             return null;
@@ -156,7 +162,6 @@ public class PlayerClient implements Runnable {
     }//end of connect
 
     public void readMessagesFromServer() {
-
 
         while(running) {
                 try {
@@ -167,8 +172,12 @@ public class PlayerClient implements Runnable {
                         String instructions;
                         instructions = input.readLine().trim();
 
-                        // Convert instructions into coordinates
-                        convertInstructions(instructions);
+                        if (instructions.contains("OK")) {
+                            System.out.println("accepted ok message");
+                        } else {
+                            // Convert instructions into coordinates
+                            convertInstructions(instructions);
+                        }
                     }
 
                 } catch (IOException e) {
@@ -187,18 +196,25 @@ public class PlayerClient implements Runnable {
 
     }
 
-    public boolean checkRoom() {
+    public boolean checkRoom(String roomName) {
         boolean inputExists = false;
         boolean roomExists = false;
         String connectionVerification;
+
+        System.out.println("sent joinroom message");
+        output.println("JOINROOM " + roomName);
+        output.flush();
+
         while (!inputExists) {
             try {
                 if (input.ready()) {
                     inputExists = true;
                     connectionVerification = input.readLine();
                     if (connectionVerification.contains("OK")) {
+                        System.out.println("ok");
                         roomExists = true;
                     } else {
+                        System.out.println("not ok");
                         roomExists = false;
                     }
                 }
@@ -209,10 +225,14 @@ public class PlayerClient implements Runnable {
         return roomExists;
     }
 
-    public boolean checkName() {
+    public boolean checkName(String userName) {
         boolean inputExists = false;
         boolean userNameAvailable = false;
         String connectionVerification;
+
+        output.println("CHOOSENAME " + userName);
+        output.flush();
+
         while (!inputExists) {
             try {
                 if (input.ready()) {
@@ -232,7 +252,6 @@ public class PlayerClient implements Runnable {
     }
 
     public void convertInstructions(String instructions) {
-        System.out.println("converting instructions");
         System.out.println(instructions);
 
         // Trim the instructions received to just the coordinates
@@ -260,9 +279,6 @@ public class PlayerClient implements Runnable {
         for (int i = 0; i < coordinates.length; i ++) {
             coordinates[i] = new ArrayCoordinate((splitIntegers[2 * i] - 1), (splitIntegers[(2 * i) + 1] - 1));
         }
-        for (int k = 0; k < coordinates.length; k++) {
-            coordinates[k].displayCoordinate();
-        }
 
         // Run the rest of the code to determine the best moves
         findBestMove();
@@ -278,6 +294,8 @@ public class PlayerClient implements Runnable {
         BoardPanel tempBoard = new BoardPanel();
         tempBoard.configureInitialSetup();
         MoveCode moveToSend = tempBoard.executeBestMove();
+        System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
+
         sendMovesToServer(moveToSend);
 
     }
