@@ -17,20 +17,26 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 public class BoardPanel extends JPanel{
-  private Square[][] squares;
-  private ArrayCoordinate[][] regions;
-  private ArrayList<ArrayCoordinate> notedSquares;
-  private GameState gameState;
-  private ArrayCoordinate selectedCoordinates;
-  public CustomMouseListener listener;
-  public Arbiter arbiter;
-  private PieceManager manager;
-  private EvaluationEngine engine;
-  public double currentEvaluation;
-  public int currentHoverRow, currentHoverColumn; 
-  public double bestBranchEval; 
-  public boolean gameFinished;
-  public String gameWinner; 
+
+ private Square[][] squares;
+ private ArrayCoordinate[][] regions;
+ private ArrayList<ArrayCoordinate> notedSquares;
+ 
+ private GameState gameState;
+ private ArrayCoordinate selectedCoordinates;
+ 
+ public CustomMouseListener listener;
+ public Arbiter arbiter;
+ 
+ private PieceManager manager;
+ private EvaluationEngine engine;
+ 
+ public double currentEvaluation;
+ public int currentHoverRow, currentHoverColumn; 
+ public double bestBranchEval; 
+ 
+ public boolean gameFinished;
+ public String gameWinner; 
   
   /** 
    * BoardPanel
@@ -318,43 +324,49 @@ public class BoardPanel extends JPanel{
       }
     }
   }
-  
-  /** 
-   * configureEndScenario
-   * ??????????????????????????????????????????????????????????
-   */
-  public void configureEndScenario() {
-    for (int i = 7; i < (7 + 14); i++) {
-      for (int j = 0; j < (i - 7); j++) {
-        squares[i][j + 4] = new Square(i,j + 4);
-      }
+    
+    //for (int i = 7; i < (7 + 14); i++) {
+    
+    public void configureEndScenario() {
+    	for (int i = 7; i < (7 + 14); i++) {
+    	      for (int j = 0; j < (i - 7); j++) {
+    	       squares[i][j + 4] = new Square(i,j + 4);
+    	      }
+    	     }
+    	     
+    	     for (int i = 12; i < 25; i++) {
+    	      for (int j = 0; j < (25 - i); j++) {
+    	       squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+    	      }
+    	     } 
+    	
+    	arbiter.moveOrder = new PieceType[6];
+    	arbiter.moveOrder[0] = Constants.teamZeroPiece;
+    	arbiter.teamToMove = 0;
+    	manager = new PieceManager(squares);
+    	
+    	for (int i = 0; i < regions[0].length - 1; i++) {
+    		squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
+    	    manager.piecePositionStorage[0][i] = squares[regions[3][i].row][regions[3][i].column];
+    	}  
+    	
+    	squares[20][10].placePiece(Constants.teamZeroPiece);
+    	
+    	manager.piecePositionStorage[0][9] = squares[20][10];
+    	
     }
     
-    for (int i = 12; i < 25; i++) {
-      for (int j = 0; j < (25 - i); j++) {
-        squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
-      }
-    } 
+    public void configureBottomPosition() {
+    	arbiter.teamToMove = 3;
+    }
     
-    arbiter.moveOrder = new PieceType[6];
-    arbiter.moveOrder[0] = Constants.teamZeroPiece;
-    
-    for (int i = 0; i < regions[0].length - 1; i++) {
-      squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
-      manager.piecePositionStorage[0][i] = squares[regions[3][i].row][regions[3][i].column];
-    }  
-    
-    squares[20][10].placePiece(Constants.teamZeroPiece);
-    manager.piecePositionStorage[0][9] = squares[20][10];
-  }
-  
-  /** 
+      /** 
    * configureInitialSetup
    * Set up all the initial team and pieces onto the board
    */
   public void configureInitialSetup() {
-    
-    for (int i = 7; i < (7 + 14); i++) {
+     
+     for (int i = 7; i < (7 + 14); i++) {
       for (int j = 0; j < (i - 7); j++) {
         squares[i][j + 4] = new Square(i,j + 4);
       }
@@ -372,9 +384,9 @@ public class BoardPanel extends JPanel{
      newSquares[i][j] = new Square(i,j);
      }
      }
-     */
-    
-    for (int i = 0; i < regions[0].length; i++) {
+     */      
+          
+     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[0][i].row][regions[0][i].column].placePiece(Constants.teamZeroPiece);
       manager.piecePositionStorage[0][i] = squares[regions[0][i].row][regions[0][i].column];
     }    
@@ -426,6 +438,10 @@ public class BoardPanel extends JPanel{
     Square selected = squares[move.startPosition.row][move.startPosition.column];
     int transRow = move.startPosition.row;
     int transCol = move.startPosition.column;
+     }
+     
+     //gameState = GameState.STATE_IDLE;
+     //this.configureBottomPosition();
     
     selected.updateLocation(move.targetPosition);
     
@@ -516,54 +532,119 @@ public class BoardPanel extends JPanel{
       if (evaluations[idx] > evaluations[highest]) {
         highest = idx;
       }
+     }
+     
+     movePiece(possibleMoves.get(highest));
+     terminateMove();
+     
+     return evaluations[highest];     
+    }        
+
+ /** 
+   * executeByDepth
+   * A best possible move is determined and executed by the algorithm's evaluation with depth
+   * @return MoveCode, a best possible move
+   */
+    public MoveCode executeByDepth() {
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        
+     MoveCode tempMove;
+   	 MoveCode reverse;
+   	  
+   	 double evaluations[] = new double[possibleMoves.size()];
+   	 double eval;
+     
+   	 PieceType currentTeam = arbiter.returnCurrentTeam();
+        
+        for (int idx = 0; idx < possibleMoves.size(); idx++) {
+         tempMove = possibleMoves.get(idx);
+         reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+           tempMove.startPosition.row,tempMove.startPosition.column);
+         movePiece(tempMove); 
+         if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
+        	 eval = 100;
+        	 System.out.println("win in one move move, IDIOT!");
+         } else {
+        	 eval = depthEval(1);
+         }          
+         evaluations[idx] = eval;
+         
+         movePiece(reverse);
+        }
+        
+        int highest = 0;
+        
+        for (int idx = 1; idx < evaluations.length; idx++) {
+         if (evaluations[idx] > evaluations[highest]) {
+          highest = idx;
+         }
+        }
+        
+        MoveCode isolated = new MoveCode(
+        		possibleMoves.get(highest).startPosition.row,
+                possibleMoves.get(highest).startPosition.column,
+                possibleMoves.get(highest).targetPosition.row,
+                possibleMoves.get(highest).targetPosition.column
+        		);
+        
+        
+        possibleMoves.get(highest).startPosition.displayCoordinate();
+        possibleMoves.get(highest).targetPosition.displayCoordinate();
+        this.bestBranchEval = evaluations[highest];
+        movePiece(possibleMoves.get(highest));        
+        terminateMove();  
+        
+        System.out.print("Start position of isolated:");
+        isolated.startPosition.displayCoordinate();
+        System.out.print("End position of isolated:");
+        isolated.targetPosition.displayCoordinate();
+        return isolated;
     }
     
     movePiece(possibleMoves.get(highest));
-    terminateMove();
-    
-    return evaluations[highest];     
+    terminateMove();    
   }        
   
-  /** 
-   * executeByDepth
-   * Determines an optimal move by looking through many depths
-   */
-  public void executeByDepth() {
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+  // /** 
+  //  * executeByDepth
+  //  * Determines an optimal move by looking through many depths
+  //  */
+  // public void executeByDepth() {
+  //   ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
     
-    MoveCode tempMove;
-    MoveCode reverse;
+  //   MoveCode tempMove;
+  //   MoveCode reverse;
     
-    double evaluations[] = new double[possibleMoves.size()];
-    double eval;
+  //   double evaluations[] = new double[possibleMoves.size()];
+  //   double eval;
     
-    PieceType currentTeam = arbiter.returnCurrentTeam();
+  //   PieceType currentTeam = arbiter.returnCurrentTeam();
     
-    for (int idx = 0; idx < possibleMoves.size(); idx++) {
-      tempMove = possibleMoves.get(idx);
-      reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
-                             tempMove.startPosition.row,tempMove.startPosition.column);
-      movePiece(tempMove); 
+  //   for (int idx = 0; idx < possibleMoves.size(); idx++) {
+  //     tempMove = possibleMoves.get(idx);
+  //     reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+  //                            tempMove.startPosition.row,tempMove.startPosition.column);
+  //     movePiece(tempMove); 
       
-      eval = depthEval(2);
+  //     eval = depthEval(2);
       
-      evaluations[idx] = eval;
+  //     evaluations[idx] = eval;
       
-      movePiece(reverse);
-    }
+  //     movePiece(reverse);
+  //   }
     
-    int highest = 0;
+  //   int highest = 0;
     
-    for (int idx = 1; idx < evaluations.length; idx++) {
-      if (evaluations[idx] > evaluations[highest]) {
-        highest = idx;
-      }
-    }
+  //   for (int idx = 1; idx < evaluations.length; idx++) {
+  //     if (evaluations[idx] > evaluations[highest]) {
+  //       highest = idx;
+  //     }
+  //   }
     
-    this.bestBranchEval = evaluations[highest];
-    movePiece(possibleMoves.get(highest));
-    terminateMove();       
-  }
+  //   this.bestBranchEval = evaluations[highest];
+  //   movePiece(possibleMoves.get(highest));
+  //   terminateMove();       
+  // }
   
   /** 
    * depthEval
@@ -622,4 +703,58 @@ public class BoardPanel extends JPanel{
     terminateMove();
     return isolated;
   }
+
+    private double depthEval(int depth) {
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        
+     MoveCode tempMove;
+   	 MoveCode reverse;
+   	  
+   	 double evaluations[] = new double[possibleMoves.size()];
+   	 double eval;
+     
+   	 PieceType currentTeam = arbiter.returnCurrentTeam();
+   	 
+        for (int idx = 0; idx < possibleMoves.size(); idx++) {
+         tempMove = possibleMoves.get(idx);
+         reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
+           tempMove.startPosition.row,tempMove.startPosition.column);
+         movePiece(tempMove);
+         if (depth == 1) {
+	         eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
+	               regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
+         } else {
+        	 if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
+        		 eval = depth;
+        	 } else {
+        		 eval = depthEval(depth - 1);
+        	 }
+         }
+         
+         evaluations[idx] = eval;      
+         
+         movePiece(reverse);
+        }
+        
+        int highest = 0;
+        
+        for (int idx = 1; idx < evaluations.length; idx++) {
+         if (evaluations[idx] > evaluations[highest]) {
+          highest = idx;
+         }
+        }
+         
+        return evaluations[highest];  
+    }
+    
+    public MoveCode executeBestMove() {
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        OptimalMoveFinder finder = new OptimalMoveFinder();
+        MoveCode chosenMove = finder.findBestMove(possibleMoves);
+        MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
+        		chosenMove.targetPosition.row, chosenMove.targetPosition.column);
+        movePiece(chosenMove);
+        terminateMove();
+        return isolated;
+    }
 }

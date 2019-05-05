@@ -27,8 +27,58 @@ public class Square {
     isSelected = false;
     isHovered = false;
     
-  }
-  
+// =======
+//  public ArrayCoordinate boardLocation;
+//  public PieceType piece; 
+//  private int calculatedX, calculatedY;
+ 
+//  private boolean isSelected, isHovered, isNoted;
+ 
+//  public boolean isNoted() {
+//   return isNoted;
+//  }
+
+//  public void setNoted(boolean isNoted) {
+//   this.isNoted = isNoted;
+//  }
+
+//  public boolean isHovered() {
+//   return isHovered;
+//  }
+
+//  public void setHovered(boolean isHovered) {
+//   this.isHovered = isHovered;
+//  }
+
+//  public boolean isSelected() {
+//   return isSelected;
+//  }
+
+//  public void setSelected(boolean isSelected) {
+//   this.isSelected = isSelected;
+//  }
+ 
+//  public void updateLocation(int row, int col) {
+//   this.boardLocation.row = row;
+//   this.boardLocation.column = col;
+//  }
+ 
+//  public void updateLocation(ArrayCoordinate update) {
+//   this.boardLocation.row = update.row;
+//   this.boardLocation.column = update.column;
+//  }
+
+//  Square() {};
+ 
+//  Square(int i, int j) {
+//   this.boardLocation = new ArrayCoordinate(i,j);
+//   this.piece = null;
+//   isSelected = false;
+//   isHovered = false;
+     
+//  }
+
+ 
   /** 
    * isNoted
    * Getter that determines whether or not the square has been noted

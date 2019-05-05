@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Arbiter { 
+
   //Class variables
   private ArrayCoordinate[][] regions;
   private boolean chainMoveInProgress;
