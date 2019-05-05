@@ -320,6 +320,7 @@ public class BoardPanel extends JPanel{
     	
     	arbiter.moveOrder = new PieceType[6];
     	arbiter.moveOrder[0] = Constants.teamZeroPiece;
+    	arbiter.teamToMove = 0;
     	manager = new PieceManager(squares);
     	
     	for (int i = 0; i < regions[0].length - 1; i++) {
@@ -331,6 +332,10 @@ public class BoardPanel extends JPanel{
     	
     	manager.piecePositionStorage[0][9] = squares[20][10];
     	
+    }
+    
+    public void configureBottomPosition() {
+    	arbiter.teamToMove = 3;
     }
     
     public void configureInitialSetup() {
@@ -345,15 +350,7 @@ public class BoardPanel extends JPanel{
       for (int j = 0; j < (25 - i); j++) {
        squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
       }
-     }  
-     
-     /*
-     for (int i = 0; i < newSquares.length; i++) {
-      for (int j = 0; j <= i; j++)      {
-       newSquares[i][j] = new Square(i,j);
-      }
-     }
-     */
+     }       
           
      for (int i = 0; i < regions[0].length; i++) {
       squares[regions[0][i].row][regions[0][i].column].placePiece(Constants.teamZeroPiece);
@@ -386,7 +383,8 @@ public class BoardPanel extends JPanel{
      }
      
      gameState = GameState.STATE_IDLE;
-
+     //this.configureBottomPosition();
+     
     }
     
     public boolean squareOccupied(ArrayCoordinate target) {
@@ -518,6 +516,8 @@ public class BoardPanel extends JPanel{
          }
         }
         
+        
+        
         MoveCode isolated = new MoveCode(
         		possibleMoves.get(highest).startPosition.row,
                 possibleMoves.get(highest).startPosition.column,
@@ -532,6 +532,10 @@ public class BoardPanel extends JPanel{
         movePiece(possibleMoves.get(highest));        
         terminateMove();  
         
+        System.out.print("Start position of isolated:");
+        isolated.startPosition.displayCoordinate();
+        System.out.print("End position of isolated:");
+        isolated.targetPosition.displayCoordinate();
         return isolated;
         
         

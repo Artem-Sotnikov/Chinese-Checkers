@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 public class Arbiter { 
  public PieceType[] moveOrder;
- private int teamToMove;
+ public int teamToMove;
  public Square[][] squares;
  private boolean chainMoveInProgress;
  public String gameWinner; 

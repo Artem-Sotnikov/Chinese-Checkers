@@ -300,7 +300,7 @@ public class PlayerClient implements Runnable {
         System.out.println("cleanse + set up");
         tempBoard.cleanseBoard();
         tempBoard.setUpBoard(coordinates);
-        MoveCode moveToSend = tempBoard.executeBestMove();
+        MoveCode moveToSend = tempBoard.executeByDepth();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
         sendMovesToServer(moveToSend);
 
