@@ -598,6 +598,7 @@ public class BoardPanel extends JPanel{
         isolated.startPosition.displayCoordinate();
         System.out.print("End position of isolated:");
         isolated.targetPosition.displayCoordinate();
+        
         return isolated;
     }
        

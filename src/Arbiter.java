@@ -175,8 +175,8 @@ public class Arbiter {
     this.numberOfMoves++; 
     chainMoveInProgress = false; //No more hops can be made, turn is over  
     
-    if (teamToMove == 6) { //Resets first team
-      teamToMove = 0;
+    if (this.teamToMove == 6) { //Resets first team
+      this.teamToMove = 0;
     }
     
     if (moveOrder[teamToMove] == null ) {

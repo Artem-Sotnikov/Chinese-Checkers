@@ -7,12 +7,18 @@
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import java.util.Timer; 
+import java.util.TimerTask;
 
 public class Display extends JFrame {
   private BoardPanel gameArea;
   private SidePanel sidePanel;
   private InfoPanel infoPanel;
   public boolean exitFlag;
+  
+  public CustomTimeManager timeManager;
+  public Timer timer;
+  private boolean timerFlag;
   
   /** 
    * Display
@@ -21,6 +27,9 @@ public class Display extends JFrame {
   Display() {
     this.setSize((int) (1025*Constants.scaleFactor), Toolkit.getDefaultToolkit().getScreenSize().height);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    
+    this.timer = new Timer();
+    this.timeManager = new CustomTimeManager();
     
     this.gameArea = new BoardPanel();
     this.gameArea.configureInitialSetup();        
@@ -75,10 +84,11 @@ public class Display extends JFrame {
         System.out.println("Best Execution Done");
       }
       
-      if (sidePanel.byEvalPending) {
+      if (sidePanel.byEvalPending || timerFlag) {
         sidePanel.byEvalHandled();
         gameArea.executeByDepth();
         System.out.println("By eval execution done");
+        timerFlag = false;
       }                    
     }
     
@@ -93,7 +103,12 @@ public class Display extends JFrame {
     infoPanel.updateMouseData(gameArea.listener.getRectifiedPos().x, gameArea.listener.getRectifiedPos().y);
     infoPanel.bestBranchEval = gameArea.bestBranchEval;
     
-    gameArea.repaint();
-    
+    gameArea.repaint();    
+  }
+  
+  private class CustomTimeManager extends TimerTask {
+	  public void run() {
+		  timerFlag = true;
+	  }
   }
 }

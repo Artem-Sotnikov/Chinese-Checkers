@@ -7,6 +7,7 @@
 public class CheckerMain {
   public static void main(String[] args) {
     Display disp = new Display();
+    disp.timer.schedule(disp.timeManager, 2000, 100);    
     disp.refresh();
     System.out.println("executed");
     while (!disp.exitFlag) {
