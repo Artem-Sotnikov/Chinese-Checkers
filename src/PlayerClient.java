@@ -182,7 +182,7 @@ public class PlayerClient implements Runnable {
                             // Convert instructions into coordinates
                             convertInstructions(instructions);
                         } else {
-                            System.out.println("accepted ok message");
+                            System.out.println(instructions);
                         }
                     }
 
