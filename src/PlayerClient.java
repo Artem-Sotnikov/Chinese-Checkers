@@ -39,6 +39,7 @@ public class PlayerClient implements Runnable {
     }
 
     /**
+     * run
      * This method creates UI and starts the method to read messages from the server when it is connected
      */
     public void run() {
@@ -65,6 +66,10 @@ public class PlayerClient implements Runnable {
         } while (!connected);
     }
 
+    /**
+     * createGUI
+     * This method creates all the UI for the user to input username, room name, and IP address
+     */
     public void createGUI(){
 
         // Create the main frame containing the UI to connect to the server
@@ -112,6 +117,15 @@ public class PlayerClient implements Runnable {
     }//end of createGUI
 
 
+    /**
+     * connect
+     * This method attempts to connect the client to the server
+     * @param ip The ip address of the server the client is attempting to connect to
+     * @param port The port of the server
+     * @param userName The username chosen by the client
+     * @param roomName The room that the client is trying to connect to
+     * @return The socket that connects to the server
+     */
     public Socket connect(String ip, int port, String userName, String roomName) {
         System.out.println("Attempting to make a connection..");
 
@@ -166,6 +180,10 @@ public class PlayerClient implements Runnable {
         }
     }//end of connect
 
+    /**
+     * readMessagesFromServer
+     * This method waits for input from the server and appropriately handles instructions from the server
+     */
     public void readMessagesFromServer() {
 
         while(running) {
@@ -201,6 +219,12 @@ public class PlayerClient implements Runnable {
 
     }
 
+    /**
+     * checkRoom
+     * This method checks if the room exists on the server
+     * @param roomName The name of the room the client is attempting to connect to
+     * @return A boolean value of whether the room exists or not
+     */
     public boolean checkRoom(String roomName) {
         boolean inputExists = false;
         boolean roomExists = false;
@@ -233,6 +257,12 @@ public class PlayerClient implements Runnable {
         return roomExists;
     }
 
+    /**
+     * checkName
+     * This method checks if the username is valid
+     * @param userName The username the client is trying to connect with
+     * @return A boolean value of whether or not the username can be used
+     */
     public boolean checkName(String userName) {
         boolean inputExists = false;
         boolean userNameAvailable = false;
@@ -264,6 +294,11 @@ public class PlayerClient implements Runnable {
         return userNameAvailable;
     }
 
+    /**
+     * convertInstructions
+     * This method converts the BOARD messages from the server to coordinates
+     * @param instructions The message given from the server
+     */
     public void convertInstructions(String instructions) {
         System.out.println(instructions);
 
@@ -300,6 +335,11 @@ public class PlayerClient implements Runnable {
         findBestMove(coordinates);
     }
 
+    /**
+     * findBestMove
+     * This method finds the best move based off the coordinates given by the server
+     * @param coordinates The converted coordinates of all the pieces on the board
+     */
     public void findBestMove(ArrayCoordinate[] coordinates){
 
         // Set up the board according to the instructions given by the server
@@ -316,6 +356,11 @@ public class PlayerClient implements Runnable {
 
     }
 
+    /**
+     * sendMovesToServer
+     * This method outputs the move the client wants to make to the server
+     * @param move
+     */
     public void sendMovesToServer(MoveCode move) {
         System.out.println("sent move to server");
         // Output the desired move to the server
@@ -324,7 +369,17 @@ public class PlayerClient implements Runnable {
         output.flush();
     }
 
+    /**
+     * ButtonListener
+     * This class gives the buttons in the UI functionality
+     */
     private class ButtonListener implements ActionListener {
+
+        /**
+         * actionPerformed
+         * This method determines which button was pressed and performs actions accordingly
+         * @param press the button that was pressed
+         */
         public void actionPerformed(ActionEvent press) {
             if (press.getSource() == joinGameButton) {
                 try {
