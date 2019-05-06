@@ -438,7 +438,7 @@ public class BoardPanel extends JPanel{
     Square selected = squares[move.startPosition.row][move.startPosition.column];
     int transRow = move.startPosition.row;
     int transCol = move.startPosition.column;
-     }
+     
      
      //gameState = GameState.STATE_IDLE;
      //this.configureBottomPosition();
@@ -600,10 +600,7 @@ public class BoardPanel extends JPanel{
         isolated.targetPosition.displayCoordinate();
         return isolated;
     }
-    
-    movePiece(possibleMoves.get(highest));
-    terminateMove();    
-  }        
+       
   
   // /** 
   //  * executeByDepth
@@ -652,57 +649,6 @@ public class BoardPanel extends JPanel{
    * @param int depth, the depth to evaluate to
    * @return double, an evaluation 
    */
-  private double depthEval(int depth) {
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-    
-    MoveCode tempMove;
-    MoveCode reverse;
-    
-    double evaluations[] = new double[possibleMoves.size()];
-    double eval;
-    
-    PieceType currentTeam = arbiter.returnCurrentTeam();
-    
-    for (int idx = 0; idx < possibleMoves.size(); idx++) {
-      tempMove = possibleMoves.get(idx);
-      reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
-                             tempMove.startPosition.row,tempMove.startPosition.column);
-      movePiece(tempMove);
-      if (depth == 1) {
-        eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
-                                      regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
-      } else {
-        eval = depthEval(depth - 1);
-      }
-      
-      evaluations[idx] = eval;      
-      
-      movePiece(reverse);
-    }
-    
-    int highest = 0;
-    
-    for (int idx = 1; idx < evaluations.length; idx++) {
-      if (evaluations[idx] > evaluations[highest]) {
-        highest = idx;
-      }
-    }
-    
-    return evaluations[highest];  
-  }
-  
-  public MoveCode executeBestMove() {
-    
-    System.out.println("creating possible moves");
-    
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-    OptimalMoveFinder finder = new OptimalMoveFinder();
-    MoveCode chosenMove = finder.findBestMove(possibleMoves);
-    MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,chosenMove.targetPosition.row, chosenMove.targetPosition.column);
-    movePiece(chosenMove);
-    terminateMove();
-    return isolated;
-  }
 
     private double depthEval(int depth) {
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());

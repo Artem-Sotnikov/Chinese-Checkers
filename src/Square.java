@@ -26,6 +26,7 @@ public class Square {
     this.piece = null;
     isSelected = false;
     isHovered = false;
+  }
     
 // =======
 //  public ArrayCoordinate boardLocation;

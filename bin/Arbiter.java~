@@ -3,18 +3,22 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Arbiter { 
- private PieceType[] moveOrder;
+ public PieceType[] moveOrder;
  private int teamToMove;
  public Square[][] squares;
  private boolean chainMoveInProgress;
- public String gameWinner;
+ public String gameWinner; 
+ public int numberOfMoves;
+ 
+ private ArrayCoordinate[][] regions;
  
  public boolean isChainMoveInProgress() {
   return chainMoveInProgress;
  }
 
- Arbiter(Square[][] source) {
+ Arbiter(Square[][] source, ArrayCoordinate[][] srcRegions) {
   squares = source;
+  regions = srcRegions;
   
   
   moveOrder = new PieceType[6];
@@ -28,7 +32,7 @@ public class Arbiter {
   teamToMove = 0;
   
   gameWinner = null;
- }
+ } 
  
  public boolean approvesSelection(int row, int column) {
   if (gameWinner != null) {
@@ -144,6 +148,7 @@ public class Arbiter {
  
  public void registerMove() {
   this.teamToMove++;
+  this.numberOfMoves++;
   chainMoveInProgress = false;  
   
   if (teamToMove == 6) {
@@ -153,10 +158,11 @@ public class Arbiter {
   if (moveOrder[teamToMove] == null ) {
    teamToMove = 0;
   }
- }
   
- 
- public void determineGameResult(ArrayCoordinate[][] regions) {
+  
+ }
+   
+ public void determineGameResult() {
   gameWinner = moveOrder[teamToMove].team;
   int checkRegion = moveOrder[teamToMove].targetRegion;  
   for (int j = 0; j < 10; j++) {
@@ -166,6 +172,19 @@ public class Arbiter {
     j = 10;
    }
   }     
+ }
+ 
+ public boolean hasWon(int override) {	 
+  int checkRegion = moveOrder[override].targetRegion;  
+  
+  for (int j = 0; j < 10; j++) {
+	  ArrayCoordinate checkCoordinate = regions[checkRegion][j];
+	  if (squares[checkCoordinate.row][checkCoordinate.column].piece != moveOrder[teamToMove]) {
+		  return false;
+	  }
+  } 
+  
+  return true;
  }
  
  public int returnCurrentMoveCode() {
@@ -181,6 +200,12 @@ public class Arbiter {
   g.fillRect(300 - 150,150,300,100);
   g.setColor(moveOrder[teamToMove].color);
   g.drawRect(310 - 150, 160, 280, 80);
-  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);  
+  if (gameWinner == null) {
+	  g.drawString("Team to move is: " + moveOrder[teamToMove].team, 310 - 150 + 40, 200);
+  } else {
+	  g.drawString("Game Terminated.", 310 - 150 + 40, 200);
+	  g.drawString("Team " + gameWinner + " is victorious", 310 - 150 + 40, 200 + 25);
+  }
  }
 }
+

@@ -11,9 +11,9 @@ import java.awt.Graphics;
 public class Arbiter { 
 
   //Class variables
-  private ArrayCoordinate[][] regions;
+  public ArrayCoordinate[][] regions;
   private boolean chainMoveInProgress;
-  private int teamToMove;
+  public int teamToMove;
   public PieceType[] moveOrder;
   public Square[][] squares;
   public String gameWinner; 
