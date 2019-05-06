@@ -673,4 +673,6 @@ public class BoardPanel extends JPanel{
         terminateMove();
         return isolated;
     }
+    
+    
 }

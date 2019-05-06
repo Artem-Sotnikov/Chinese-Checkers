@@ -81,11 +81,14 @@ public class PieceManager {
     }
     
     if (isFirstMove) {
+      
       for (int i = sRow - 1; i < sRow + 1 && i >= 0 && i < 25; i++) {
         for (int j = sCol - 1; j < sCol + 1 && j >= 0 && j < 25; j++) {
           if (overallBoard[i][j] != null) {
             if (overallBoard[i][j].piece == null) {
-              rootPosition.branches.add(new MoveNode(i,j));
+            	if (!violatesEnemyTerritory(i,j)) {
+            		rootPosition.branches.add(new MoveNode(i,j));
+            	}
             }
           }
         }
@@ -95,7 +98,9 @@ public class PieceManager {
         if (sRow + 1 < 25 && sRow + 1 >= 0) {
           if (overallBoard[sRow + 1][i] != null) {
             if (overallBoard[sRow + 1][i].piece == null) {
-              rootPosition.branches.add(new MoveNode(sRow + 1,i));
+            	if (!violatesEnemyTerritory(sRow + 1,i)) {
+            		rootPosition.branches.add(new MoveNode(sRow + 1,i));
+            	}
             }
           }
         }
@@ -103,7 +108,9 @@ public class PieceManager {
       
       if (sCol + 1 >= 0 && sCol + 1 < 25) {
         if (overallBoard[sRow][sCol + 1] != null && overallBoard[sRow][sCol + 1].piece == null) {
-          rootPosition.branches.add(new MoveNode(sRow,sCol + 1));
+        	if (!violatesEnemyTerritory(sRow, sCol + 1)) {
+        		rootPosition.branches.add(new MoveNode(sRow,sCol + 1));
+        	}
         }
       }
     } 
@@ -116,8 +123,10 @@ public class PieceManager {
           if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column].piece == null &&
               overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece != null) {
             if (overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece.team != null) {
-              rootPosition.branches.add(generateMoves(new ArrayCoordinate(
-                                                                          sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column), false));
+            	if (!violatesEnemyTerritory(sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column)) {
+	              rootPosition.branches.add(generateMoves(new ArrayCoordinate(
+	                 sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column), false));
+            	}
             }
           } 
         }
@@ -135,5 +144,31 @@ public class PieceManager {
       overallBoard[bufferCoords.get(i).row][bufferCoords.get(i).column].piece = null;
     }
     bufferCoords.clear();
+  }
+  
+  public boolean violatesEnemyTerritory(int targetRow, int targetColumn) {
+      if ((targetRow > 11) && (targetRow) < 16 && (targetColumn < 4)) {
+          return true;
+      } else if (targetRow > 16 && targetRow < 21 && targetColumn > 12) {
+          return true;
+      } else if (targetRow == 12 && targetColumn > 8) {
+          return true;
+      } else if (targetRow == 13 && targetColumn > 9) {
+          return true;
+      } else if (targetRow == 14 && targetColumn > 10) {
+          return true;
+      } else if (targetRow == 15 && targetColumn > 11) {
+          return true;
+      } else if (targetRow == 17 && targetColumn < 5) {
+          return true;
+      } else if (targetRow == 18 && targetColumn < 6) {
+          return true;
+      } else if (targetRow == 19 && targetColumn < 7) {
+          return true;
+      } else if (targetRow == 20 && targetColumn < 8) {
+          return true;
+      }
+      
+      return false;
   }
 }
