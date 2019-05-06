@@ -140,6 +140,10 @@ public class Arbiter {
       return false;
     }
     
+    if (!this.enemyTerritoryChecker(targetRow, targetColumn)) {
+    	return false;
+    }
+    
     int pastRow = move.startPosition.row;
     int pastColumn = move.startPosition.column;  
     
@@ -251,6 +255,32 @@ public class Arbiter {
       g.drawString("Game Terminated.", 310 - 150 + 40, 200);
       g.drawString("Team " + gameWinner + " is victorious", 310 - 150 + 40, 200 + 25);
     }
+  }
+  
+  public boolean enemyTerritoryChecker(int targetRow, int targetColumn) {
+      if ((targetRow > 11) && (targetRow) < 16 && (targetColumn < 4)) {
+          return false;
+      } else if (targetRow > 16 && targetRow < 21 && targetColumn > 12) {
+          return false;
+      } else if (targetRow == 12 && targetColumn > 8) {
+          return false;
+      } else if (targetRow == 13 && targetColumn > 9) {
+          return false;
+      } else if (targetRow == 14 && targetColumn > 10) {
+          return false;
+      } else if (targetRow == 15 && targetColumn > 11) {
+          return false;
+      } else if (targetRow == 17 && targetColumn < 5) {
+          return false;
+      } else if (targetRow == 18 && targetColumn < 6) {
+          return false;
+      } else if (targetRow == 19 && targetColumn < 7) {
+          return false;
+      } else if (targetRow == 20 && targetColumn < 8) {
+          return false;
+      }
+      
+      return true;
   }
 }
 

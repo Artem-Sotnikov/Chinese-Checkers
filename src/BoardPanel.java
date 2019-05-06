@@ -602,48 +602,7 @@ public class BoardPanel extends JPanel{
         return isolated;
     }
        
-  
-  // /** 
-  //  * executeByDepth
-  //  * Determines an optimal move by looking through many depths
-  //  */
-  // public void executeByDepth() {
-  //   ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
     
-  //   MoveCode tempMove;
-  //   MoveCode reverse;
-    
-  //   double evaluations[] = new double[possibleMoves.size()];
-  //   double eval;
-    
-  //   PieceType currentTeam = arbiter.returnCurrentTeam();
-    
-  //   for (int idx = 0; idx < possibleMoves.size(); idx++) {
-  //     tempMove = possibleMoves.get(idx);
-  //     reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
-  //                            tempMove.startPosition.row,tempMove.startPosition.column);
-  //     movePiece(tempMove); 
-      
-  //     eval = depthEval(2);
-      
-  //     evaluations[idx] = eval;
-      
-  //     movePiece(reverse);
-  //   }
-    
-  //   int highest = 0;
-    
-  //   for (int idx = 1; idx < evaluations.length; idx++) {
-  //     if (evaluations[idx] > evaluations[highest]) {
-  //       highest = idx;
-  //     }
-  //   }
-    
-  //   this.bestBranchEval = evaluations[highest];
-  //   movePiece(possibleMoves.get(highest));
-  //   terminateMove();       
-  // }
-  
   /** 
    * depthEval
    * Checks multiple depths and comes up with an evaluation for a best move
