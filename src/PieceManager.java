@@ -14,6 +14,8 @@ public class PieceManager {
   private ArrayList<ArrayCoordinate> bufferCoords;
   ArrayCoordinate[] deltaOpts = new ArrayCoordinate[6];
   
+  private boolean jumpEnable;
+  
   /** 
    * PieceManager
    * Constructor that sets up initial information
@@ -31,6 +33,8 @@ public class PieceManager {
     deltaOpts[5] = new ArrayCoordinate(0, -2);
     
     bufferCoords = new ArrayList<ArrayCoordinate>(0);
+    
+    jumpEnable = false;
   }
   
   /** 
@@ -127,23 +131,24 @@ public class PieceManager {
       }
     } 
     
-    
-    for (int idx = 0; idx < 6; idx++) {
-      if (sRow + deltaOpts[idx].row >= 0 && sCol + deltaOpts[idx].column >= 0 && sRow + deltaOpts[idx].row < 25 && sCol + deltaOpts[idx].column < 25) {
-        if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column] != null &&
-            overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2] != null) {
-          if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column].piece == null &&
-              overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece != null) {
-            if (overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece.team != null) {
-            	if (!violatesEnemyTerritory(sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column,subjectCode)) {
-	              rootPosition.branches.add(generateMoves(new ArrayCoordinate(
-	                 sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column), false, subjectCode));
-            	}
-            }
-          } 
-        }
-      }
-    }  
+    if (jumpEnable) {
+	    for (int idx = 0; idx < 6; idx++) {
+	      if (sRow + deltaOpts[idx].row >= 0 && sCol + deltaOpts[idx].column >= 0 && sRow + deltaOpts[idx].row < 25 && sCol + deltaOpts[idx].column < 25) {
+	        if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column] != null &&
+	            overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2] != null) {
+	          if (overallBoard[sRow + deltaOpts[idx].row][sCol + deltaOpts[idx].column].piece == null &&
+	              overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece != null) {
+	            if (overallBoard[sRow + (deltaOpts[idx].row)/2][sCol + (deltaOpts[idx].column)/2].piece.team != null) {
+	            	if (!violatesEnemyTerritory(sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column,subjectCode)) {
+		              rootPosition.branches.add(generateMoves(new ArrayCoordinate(
+		                 sRow + deltaOpts[idx].row, sCol + deltaOpts[idx].column), false, subjectCode));
+	            	}
+	            }
+	          } 
+	        }
+	      }
+	    }  
+    }
     return rootPosition;
   }
   

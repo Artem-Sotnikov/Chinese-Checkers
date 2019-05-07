@@ -567,9 +567,8 @@ public class BoardPanel extends JPanel{
          movePiece(tempMove); 
          if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
         	 eval = 100;
-        	 System.out.println("win in one move move, IDIOT!");
          } else {
-        	 eval = depthEval(1);
+        	 eval = depthEval(3);
          }          
          evaluations[idx] = eval;
          

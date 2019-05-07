@@ -5,6 +5,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Array;
 import java.net.Socket;
@@ -22,6 +24,7 @@ public class PlayerClient implements Runnable {
 
     // Variables
     private static JFrame mainFrame;
+    private static JFrame display;
     private static JPanel mainPanel;
     private static JButton joinGameButton, exitButton;
     private static JLabel userNameLabel, addressLabel, roomNameLabel;
@@ -35,7 +38,7 @@ public class PlayerClient implements Runnable {
 
     PlayerClient() {
         running = true;
-        connected = false;
+        connected = false;        
     }
 
     /**
@@ -50,6 +53,11 @@ public class PlayerClient implements Runnable {
         // Create the board to determine the best moves
         tempBoard = new BoardPanel();
         tempBoard.configureServerSetup();
+        this.display = new JFrame();
+        this.display.setMinimumSize(new Dimension((int) (600*Constants.scaleFactor),
+        		Toolkit.getDefaultToolkit().getScreenSize().height));
+        this.display.add(tempBoard);
+        this.display.setVisible(true);
 
         do {
             // Add a short delay
@@ -347,10 +355,13 @@ public class PlayerClient implements Runnable {
         tempBoard.cleanseBoard();
         tempBoard.setUpBoard(coordinates);
 
+        tempBoard.repaint();
+        
         // Find the best move
         MoveCode moveToSend = tempBoard.executeByDepth();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
-
+               
+        
         // Send the best move to the server
         sendMovesToServer(moveToSend);
 
