@@ -304,23 +304,37 @@ public class BoardPanel extends JPanel{
    * @param ArrayCoordinate[] existingPieces, an array of coordinates keeping track of all the pieces on the board
    */
   public void setUpBoard(ArrayCoordinate[] existingPieces) {
-    for (int i = 0; i < existingPieces.length-1; i++) {
+    for (int i = 0; i < existingPieces.length; i++) {
       System.out.println(existingPieces[i].row +","+existingPieces[i].column);
       try {
         //Set up for all six teams
         if (i < 10) { // Create the user's team and add the manager to manage the pieces
-          squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
-          manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
+        	//squares[existingPieces[i].row][existingPieces[i].column] = new Square(existingPieces[i].row , existingPieces[i].column);
+        	squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
+        	
+            manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
+            System.out.println("placed:");
+            existingPieces[i].displayCoordinate();
+
         } else if (i > 9 && i < 20) { // Add the second team
-          squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
+        	
+        	squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
+            manager.piecePositionStorage[3][i-10] = squares[existingPieces[i].row][existingPieces[i].column];
+            System.out.println("placed:");
+            existingPieces[i].displayCoordinate();
+            
         } else if (i > 19 && i < 30) { // Add the third team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamTwoPiece);
+            manager.piecePositionStorage[2][i-20] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 29 && i < 40) { // Add the fourth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
+            manager.piecePositionStorage[3][i-30] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 39 && i < 50) { // Add the fifth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFourPiece);
+            manager.piecePositionStorage[4][i-40] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 49 && i < 60) { // Add the sixth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFivePiece);
+            manager.piecePositionStorage[5][i-50] = squares[existingPieces[i].row][existingPieces[i].column];
         }
       } catch (IndexOutOfBoundsException e) {
         e.printStackTrace();
@@ -328,40 +342,72 @@ public class BoardPanel extends JPanel{
     }
   }
     
-    //for (int i = 7; i < (7 + 14); i++) {
+    
     
     public void configureEndScenario() {
-    	for (int i = 7; i < (7 + 14); i++) {
-    	      for (int j = 0; j < (i - 7); j++) {
-    	       squares[i][j + 4] = new Square(i,j + 4);
-    	      }
-    	     }
-    	     
-    	     for (int i = 12; i < 25; i++) {
-    	      for (int j = 0; j < (25 - i); j++) {
-    	       squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
-    	      }
-    	     } 
-    	
-    	arbiter.moveOrder = new PieceType[6];
-    	arbiter.moveOrder[0] = Constants.teamZeroPiece;
-    	arbiter.teamToMove = 0;
-    	manager.piecePositionStorage = new Square[6][10];
-    	
-    	for (int i = 0; i < regions[0].length - 1; i++) {
-    		squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
-    	    manager.piecePositionStorage[0][i] = squares[regions[3][i].row][regions[3][i].column];
-    	}  
-    	
-    	squares[20][10].placePiece(Constants.teamZeroPiece);
-    	
-    	manager.piecePositionStorage[0][9] = squares[20][10];
-    	
+     for (int i = 7; i < (7 + 14); i++) {
+           for (int j = 0; j < (i - 7); j++) {
+            squares[i][j + 4] = new Square(i,j + 4);
+           }
+          }
+          
+          for (int i = 12; i < 25; i++) {
+           for (int j = 0; j < (25 - i); j++) {
+            squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+           }
+          } 
+     
+     arbiter.moveOrder = new PieceType[6];
+     arbiter.moveOrder[0] = Constants.teamZeroPiece;
+     arbiter.teamToMove = 0;
+     manager.piecePositionStorage = new Square[6][10];
+     
+     for (int i = 0; i < regions[0].length - 1; i++) {
+      squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
+         manager.piecePositionStorage[0][i] = squares[regions[3][i].row][regions[3][i].column];
+     }  
+     
+     squares[20][10].placePiece(Constants.teamZeroPiece);
+     
+     manager.piecePositionStorage[0][9] = squares[20][10];
+     
     }
     
+
+    
     public void configureBottomPosition() {
-    	arbiter.teamToMove = 3;
+     arbiter.teamToMove = 3;
     }
+    
+    
+    public void configureServerScenario() {
+    	for (int i = 7; i < (7 + 14); i++) {
+            for (int j = 0; j < (i - 7); j++) {
+             squares[i][j + 4] = new Square(i,j + 4);
+            }
+           }
+           
+           for (int i = 12; i < 25; i++) {
+            for (int j = 0; j < (25 - i); j++) {
+             squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
+            }
+           } 
+      
+      arbiter.moveOrder = new PieceType[6];
+      arbiter.moveOrder[0] = Constants.teamZeroPiece;
+      arbiter.moveOrder[1] = Constants.teamTwoPiece;
+      arbiter.teamToMove = 0;
+      manager.piecePositionStorage = new Square[6][10];
+      
+      for (int i = 0; i < regions[0].length; i++) {
+    	  squares[regions[0][i].row][regions[0][i].column].placePiece(Constants.teamZeroPiece);
+          manager.piecePositionStorage[0][i] = squares[regions[0][i].row][regions[0][i].column];
+          
+          squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
+          manager.piecePositionStorage[3][i] = squares[regions[3][i].row][regions[3][i].column];
+      }                   
+    }
+    
     
       /** 
    * configureInitialSetup
@@ -418,6 +464,7 @@ public class BoardPanel extends JPanel{
       squares[regions[5][i].row][regions[5][i].column].placePiece(Constants.teamFivePiece);
       manager.piecePositionStorage[5][i] = squares[regions[5][i].row][regions[5][i].column];
     }  
+    
     gameState = GameState.STATE_IDLE; //Initially, no pieces can be selected so it is set to idle
   }
   
@@ -478,11 +525,13 @@ public class BoardPanel extends JPanel{
    * executeRandomMove
    * Random move is made for a player when called
    */
-  public void executeRandomMove() {
+  public MoveCode executeRandomMove() {
     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
     MoveCode randomMove = possibleMoves.get((int) (Math.random()*possibleMoves.size())); 
     movePiece(randomMove);
     terminateMove();
+    
+    return randomMove;
   }
   
   /** 
@@ -505,7 +554,7 @@ public class BoardPanel extends JPanel{
    * A best possible move is determined and executed by the algorithm's evaluation
    * @return a double number that represents the best possible move
    */
-  public double executeByEval() {
+  public MoveCode executeByEval() {
     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());   
     MoveCode tempMove;
     MoveCode reverse;
@@ -538,10 +587,13 @@ public class BoardPanel extends JPanel{
       }
      }
      
-     movePiece(possibleMoves.get(highest));
-     terminateMove();
+    
+    
+     //movePiece(possibleMoves.get(highest));
+     //terminateMove();
      
-     return evaluations[highest];     
+     return possibleMoves.get(highest);
+     //return evaluations[highest];     
     }        
 
  /** 
@@ -553,12 +605,12 @@ public class BoardPanel extends JPanel{
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
-   	 MoveCode reverse;
-   	  
-   	 double evaluations[] = new double[possibleMoves.size()];
-   	 double eval;
+     MoveCode reverse;
+      
+     double evaluations[] = new double[possibleMoves.size()];
+     double eval;
      
-   	 PieceType currentTeam = arbiter.returnCurrentTeam();
+     PieceType currentTeam = arbiter.returnCurrentTeam();
         
         for (int idx = 0; idx < possibleMoves.size(); idx++) {
          tempMove = possibleMoves.get(idx);
@@ -566,9 +618,9 @@ public class BoardPanel extends JPanel{
            tempMove.startPosition.row,tempMove.startPosition.column);
          movePiece(tempMove); 
          if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
-        	 eval = 100;
+          eval = 100;
          } else {
-        	 eval = depthEval(2);
+          eval = depthEval(2);
          }          
          evaluations[idx] = eval;
          
@@ -587,18 +639,18 @@ public class BoardPanel extends JPanel{
         possibleMoves.get(highest).targetPosition.displayCoordinate();
         
         MoveCode isolated = new MoveCode(
-        		possibleMoves.get(highest).startPosition.row,
+          possibleMoves.get(highest).startPosition.row,
                 possibleMoves.get(highest).startPosition.column,
                 possibleMoves.get(highest).targetPosition.row,
                 possibleMoves.get(highest).targetPosition.column
-        		);
+          );
         
         
         possibleMoves.get(highest).startPosition.displayCoordinate();
         possibleMoves.get(highest).targetPosition.displayCoordinate();
         this.bestBranchEval = evaluations[highest];
-        movePiece(possibleMoves.get(highest));        
-        terminateMove();  
+        movePiece(possibleMoves.get(highest));
+        terminateMove();
         
         System.out.print("Start position of isolated:");
         isolated.startPosition.displayCoordinate();
@@ -620,27 +672,27 @@ public class BoardPanel extends JPanel{
      ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
-   	 MoveCode reverse;
-   	  
-   	 double evaluations[] = new double[possibleMoves.size()];
-   	 double eval;
+     MoveCode reverse;
+      
+     double evaluations[] = new double[possibleMoves.size()];
+     double eval;
      
-   	 PieceType currentTeam = arbiter.returnCurrentTeam();
-   	 
+     PieceType currentTeam = arbiter.returnCurrentTeam();
+     
         for (int idx = 0; idx < possibleMoves.size(); idx++) {
          tempMove = possibleMoves.get(idx);
          reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
            tempMove.startPosition.row,tempMove.startPosition.column);
          movePiece(tempMove);
          if (depth == 1) {
-	         eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
-	               regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
+          eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
+                regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
          } else {
-        	 if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
-        		 eval = depth;
-        	 } else {
-        		 eval = depthEval(depth - 1);
-        	 }
+          if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
+           eval = depth;
+          } else {
+           eval = depthEval(depth - 1);
+          }
          }
          
          evaluations[idx] = eval;      
@@ -664,7 +716,7 @@ public class BoardPanel extends JPanel{
         OptimalMoveFinder finder = new OptimalMoveFinder();
         MoveCode chosenMove = finder.findBestMove(possibleMoves);
         MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
-        		chosenMove.targetPosition.row, chosenMove.targetPosition.column);
+          chosenMove.targetPosition.row, chosenMove.targetPosition.column);
         movePiece(chosenMove);
         terminateMove();
         return isolated;
