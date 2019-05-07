@@ -306,24 +306,18 @@ public class BoardPanel extends JPanel{
       System.out.println(existingPieces[i].row +","+existingPieces[i].column);
       try {
         //Set up for all six teams
-        if (i < 10) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        if (i < 10) { // Create the user's team and add the manager to manage the pieces
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
             manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
-        } else if (i > 9 && i < 20) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        } else if (i > 9 && i < 20) { // Add the second team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
-        } else if (i > 19 && i < 30) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        } else if (i > 19 && i < 30) { // Add the third team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamTwoPiece);
-        } else if (i > 29 && i < 40) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        } else if (i > 29 && i < 40) { // Add the fourth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
-        } else if (i > 39 && i < 50) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        } else if (i > 39 && i < 50) { // Add the fifth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFourPiece);
-        } else if (i > 49 && i < 60) {
-            //System.out.println("(" + existingPieces[i].row + "," + existingPieces[i].column + ")");
+        } else if (i > 49 && i < 60) { // Add the sixth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFivePiece);
         }
       } catch (IndexOutOfBoundsException e) {
