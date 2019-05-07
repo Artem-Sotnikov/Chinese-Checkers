@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="953f370b-bee3-4650-a843-d3eed9dddf0d" name="Default" comment="" />
+    <list default="true" id="953f370b-bee3-4650-a843-d3eed9dddf0d" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/ArrayCoordinate.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/ArrayCoordinate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/BoardPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/BoardPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/BoardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/BoardPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/Display$CustomTimeManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/Display$CustomTimeManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/Display.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/Display.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/MoveCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/MoveCode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/MoveNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/MoveNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/PieceManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/PieceManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/PlayerClient$ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/PlayerClient$ButtonListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/PlayerClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/PlayerClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Chinese-Checkers/SidePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Chinese-Checkers/SidePanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BoardPanel.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,8 +29,11 @@
       <file leaf-file-name="PlayerClient.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/PlayerClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-595">
-              <caret line="35" column="20" lean-forward="true" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
+            <state relative-caret-position="255">
+              <caret line="356" lean-forward="true" selection-start-line="356" selection-end-line="356" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -24,8 +41,8 @@
       <file leaf-file-name="BoardPanel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/BoardPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4778">
-              <caret line="319" column="60" selection-start-line="319" selection-start-column="60" selection-end-line="319" selection-end-column="60" />
+            <state relative-caret-position="361">
+              <caret line="314" column="50" lean-forward="true" selection-start-line="314" selection-start-column="50" selection-end-line="314" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -81,8 +98,8 @@
         <option value="$PROJECT_DIR$/src/Constants.java" />
         <option value="$PROJECT_DIR$/src/Arbiter.java" />
         <option value="$PROJECT_DIR$/src/Square.java" />
-        <option value="$PROJECT_DIR$/src/BoardPanel.java" />
         <option value="$PROJECT_DIR$/src/PlayerClient.java" />
+        <option value="$PROJECT_DIR$/src/BoardPanel.java" />
       </list>
     </option>
   </component>
@@ -219,17 +236,18 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49926794" weight="0.32884902" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.32884902" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.16591929" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21076234" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2510981" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2510981" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -242,7 +260,6 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49926794" weight="0.32884902" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -250,7 +267,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -279,6 +296,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -314,6 +334,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -528,6 +551,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -563,6 +589,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="53" column="2" selection-start-line="53" selection-start-column="2" selection-end-line="53" selection-end-column="2" />
+          <folding>
+            <element signature="e#1937#1938#0" expanded="true" />
+            <element signature="e#1967#1968#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -575,15 +605,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BoardPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4778">
-          <caret line="319" column="60" selection-start-line="319" selection-start-column="60" selection-end-line="319" selection-end-column="60" />
+        <state relative-caret-position="361">
+          <caret line="314" column="50" lean-forward="true" selection-start-line="314" selection-start-column="50" selection-end-line="314" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/PlayerClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-595">
-          <caret line="35" column="20" lean-forward="true" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
+        <state relative-caret-position="255">
+          <caret line="356" lean-forward="true" selection-start-line="356" selection-end-line="356" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

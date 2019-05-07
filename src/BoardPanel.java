@@ -304,23 +304,32 @@ public class BoardPanel extends JPanel{
    * @param ArrayCoordinate[] existingPieces, an array of coordinates keeping track of all the pieces on the board
    */
   public void setUpBoard(ArrayCoordinate[] existingPieces) {
-    for (int i = 0; i < existingPieces.length-1; i++) {
+    for (int i = 0; i < existingPieces.length; i++) {
       System.out.println(existingPieces[i].row +","+existingPieces[i].column);
       try {
         //Set up for all six teams
         if (i < 10) { // Create the user's team and add the manager to manage the pieces
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
             manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
+            System.out.println("placed:");
+            existingPieces[i].displayCoordinate();
         } else if (i > 9 && i < 20) { // Add the second team
-          squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
+          squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
+            manager.piecePositionStorage[3][i-10] = squares[existingPieces[i].row][existingPieces[i].column];
+            System.out.println("placed:");
+            existingPieces[i].displayCoordinate();
         } else if (i > 19 && i < 30) { // Add the third team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamTwoPiece);
+            manager.piecePositionStorage[2][i-20] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 29 && i < 40) { // Add the fourth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamThreePiece);
+            manager.piecePositionStorage[3][i-30] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 39 && i < 50) { // Add the fifth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFourPiece);
+            manager.piecePositionStorage[4][i-40] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 49 && i < 60) { // Add the sixth team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamFivePiece);
+            manager.piecePositionStorage[5][i-50] = squares[existingPieces[i].row][existingPieces[i].column];
         }
       } catch (IndexOutOfBoundsException e) {
         e.printStackTrace();
@@ -597,8 +606,8 @@ public class BoardPanel extends JPanel{
         possibleMoves.get(highest).startPosition.displayCoordinate();
         possibleMoves.get(highest).targetPosition.displayCoordinate();
         this.bestBranchEval = evaluations[highest];
-        movePiece(possibleMoves.get(highest));        
-        terminateMove();  
+//        movePiece(possibleMoves.get(highest));
+//        terminateMove();
         
         System.out.print("Start position of isolated:");
         isolated.startPosition.displayCoordinate();
