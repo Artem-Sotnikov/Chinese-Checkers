@@ -17,12 +17,13 @@ public class SidePanel extends JPanel {
   private CustomMouseListener listener2;
   private final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
   private final Rectangle endTurnButton = new Rectangle(0,0,100,100);
-  private final Rectangle exitButton = new Rectangle(0,1000 - 100, 100, 100);
+  private final Rectangle exitButton = new Rectangle(0,900, 100, 100);
   private final Rectangle showButton = new Rectangle(0,100,100,100);
   private final Rectangle executeButton = new Rectangle(0,200,100,100);
   private final Rectangle bestButton = new Rectangle(0,300,100,100);
   private final Rectangle byEvalButton = new Rectangle(0,400,100,100); 
   private final Rectangle configScenarioButton = new Rectangle(0,500,100,100); 
+  private final Rectangle timeTriggerButton = new Rectangle(0,600,100,100);
   
   public boolean terminationPending;
   public boolean exitPending;
@@ -31,6 +32,7 @@ public class SidePanel extends JPanel {
   public boolean bestPending;
   public boolean byEvalPending;
   public boolean scenarioPending;
+  public boolean timeTriggerPending;
   
   /** 
    * SidePanel
@@ -107,6 +109,11 @@ public class SidePanel extends JPanel {
     g.drawString("Test", 20, 560);
     g.drawString("Position", 20, 575); 
     
+    g.setColor(Color.lightGray);
+    g.fillRect(5, 605, 90, 90);
+    g.setColor(Color.BLACK);
+    g.drawString("Run Auto", 20, 645);
+    
     if (listener2.clickPending()) {
       listener2.clickHandled();
       
@@ -136,6 +143,10 @@ public class SidePanel extends JPanel {
       
       if (configScenarioButton.contains(listener2.getRectifiedClick())) {
         scenarioPending = true;
+      }
+      
+      if (timeTriggerButton.contains(listener2.getRectifiedClick())) {
+    	  timeTriggerPending = true;
       }
     }
   }

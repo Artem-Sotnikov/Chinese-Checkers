@@ -19,6 +19,7 @@ public class Display extends JFrame {
   public CustomTimeManager timeManager;
   public Timer timer;
   private boolean timerFlag;
+  private boolean timerEnable;
   
   /** 
    * Display
@@ -30,6 +31,8 @@ public class Display extends JFrame {
     
     this.timer = new Timer();
     this.timeManager = new CustomTimeManager();
+    
+    this.timerEnable = false;
     
     this.gameArea = new BoardPanel();
     this.gameArea.configureInitialSetup();        
@@ -84,12 +87,16 @@ public class Display extends JFrame {
         System.out.println("Best Execution Done");
       }
       
-      if (sidePanel.byEvalPending || timerFlag) {
+      if (sidePanel.byEvalPending || (timerFlag && timerEnable)) {
         sidePanel.byEvalHandled();
         gameArea.executeByDepth();
         System.out.println("By eval execution done");
         timerFlag = false;
-      }                    
+      }                   
+      
+      if (sidePanel.timeTriggerPending) {
+    	  this.timerEnable = true;
+      }
     }
     
     if (sidePanel.scenarioPending) {
