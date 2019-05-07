@@ -310,7 +310,7 @@ public class BoardPanel extends JPanel{
         //Set up for all six teams
         if (i < 10) { // Create the user's team and add the manager to manage the pieces
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamZeroPiece);
-            manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
+          manager.piecePositionStorage[0][i] = squares[existingPieces[i].row][existingPieces[i].column];
         } else if (i > 9 && i < 20) { // Add the second team
           squares[existingPieces[i].row][existingPieces[i].column].placePiece(Constants.teamOnePiece);
         } else if (i > 19 && i < 30) { // Add the third team
@@ -346,7 +346,7 @@ public class BoardPanel extends JPanel{
     	arbiter.moveOrder = new PieceType[6];
     	arbiter.moveOrder[0] = Constants.teamZeroPiece;
     	arbiter.teamToMove = 0;
-    	manager = new PieceManager(squares);
+    	manager.piecePositionStorage = new Square[6][10];
     	
     	for (int i = 0; i < regions[0].length - 1; i++) {
     		squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamZeroPiece);
@@ -568,7 +568,7 @@ public class BoardPanel extends JPanel{
          if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
         	 eval = 100;
          } else {
-        	 eval = depthEval(3);
+        	 eval = depthEval(2);
          }          
          evaluations[idx] = eval;
          

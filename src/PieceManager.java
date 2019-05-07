@@ -34,7 +34,7 @@ public class PieceManager {
     
     bufferCoords = new ArrayList<ArrayCoordinate>(0);
     
-    jumpEnable = false;
+    jumpEnable = true;
   }
   
   /** 
