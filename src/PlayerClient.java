@@ -356,11 +356,22 @@ public class PlayerClient implements Runnable {
         tempBoard.setUpBoard(coordinates);
 
         tempBoard.repaint();
-        
+//        try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
         // Find the best move
-        MoveCode moveToSend = tempBoard.executeByDepth();
+        MoveCode moveToSend = tempBoard.executeByDepth(); 
+        
+        //tempBoard.executeRandomMove();
+        
+        //tempBoard.executeByEval();
+        //new MoveCode(0,0,0,0);
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
-               
+           
+        tempBoard.repaint();
         
         // Send the best move to the server
         sendMovesToServer(moveToSend);
@@ -375,8 +386,13 @@ public class PlayerClient implements Runnable {
     public void sendMovesToServer(MoveCode move) {
         System.out.println("sent move to server");
         // Output the desired move to the server
-        System.out.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
-        output.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        //System.out.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        
+//        output.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ")"
+//        		+ " (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
+        
+        System.out.println(move.stringPath);
+        output.println("MOVE " + move.stringPath);
         output.flush();
     }
 

@@ -284,6 +284,8 @@ public class BoardPanel extends JPanel{
    */
   public void cleanseBoard() {
     this.squares = new Square[25][25];
+    this.manager.overallBoard = this.squares;
+    this.arbiter.squares = this.squares;
     
     for (int i = 7; i < (7 + 14); i++) {
       for (int j = 0; j < (i - 7); j++) {
@@ -484,23 +486,26 @@ public class BoardPanel extends JPanel{
    * @param MoveCode move, instructions for how to move
    * @return boolean, true for if piece has been moved
    */
-  public boolean movePiece(MoveCode move) {
-    Square selected = squares[move.startPosition.row][move.startPosition.column];
-    int transRow = move.startPosition.row;
-    int transCol = move.startPosition.column;
+  public boolean movePiece(MoveCode move) {    
+    int startRow = move.startPosition.row;
+    int startCol = move.startPosition.column;
+    int targetRow = move.targetPosition.row;
+    int targetCol = move.targetPosition.column;
+    
+    Square selected = squares[startRow][startCol];
      
      
      //gameState = GameState.STATE_IDLE;
      //this.configureBottomPosition();
     
-    selected.updateLocation(move.targetPosition);
+    selected.updateLocation(new ArrayCoordinate(targetRow, targetCol));
     
-    squares[move.targetPosition.row][move.targetPosition.column] = selected;
+    squares[targetRow][targetCol] = selected;
     
-    squares[transRow][transCol] = new Square(transRow,transCol);
+    squares[startRow][startCol] = new Square(startRow,startCol);
     
-    selectedCoordinates = move.targetPosition;
-    move.startPosition = new ArrayCoordinate(transRow,transCol);
+    selectedCoordinates = new ArrayCoordinate(targetRow, targetCol);
+    move.startPosition = new ArrayCoordinate(startRow,startCol);
     
     return true;              
   }
@@ -587,12 +592,23 @@ public class BoardPanel extends JPanel{
       }
      }
      
+      MoveCode isolated = new MoveCode(
+    		possibleMoves.get(highest).startPosition.row,
+            possibleMoves.get(highest).startPosition.column,
+            possibleMoves.get(highest).targetPosition.row,
+            possibleMoves.get(highest).targetPosition.column
+      );
     
     
-     //movePiece(possibleMoves.get(highest));
-     //terminateMove();
+     movePiece(possibleMoves.get(highest));
+     terminateMove();
      
-     return possibleMoves.get(highest);
+     System.out.print("Start position of isolated:");
+     isolated.startPosition.displayCoordinate();
+     System.out.print("End position of isolated:");
+     isolated.targetPosition.displayCoordinate();
+     
+     return isolated;
      //return evaluations[highest];     
     }        
 
@@ -602,7 +618,7 @@ public class BoardPanel extends JPanel{
    * @return MoveCode, a best possible move
    */
     public MoveCode executeByDepth() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
         
      MoveCode tempMove;
      MoveCode reverse;
@@ -639,12 +655,13 @@ public class BoardPanel extends JPanel{
         possibleMoves.get(highest).targetPosition.displayCoordinate();
         
         MoveCode isolated = new MoveCode(
-          possibleMoves.get(highest).startPosition.row,
+        		possibleMoves.get(highest).startPosition.row,
                 possibleMoves.get(highest).startPosition.column,
                 possibleMoves.get(highest).targetPosition.row,
                 possibleMoves.get(highest).targetPosition.column
           );
         
+        isolated.stringPath = possibleMoves.get(highest).stringPath;
         
         possibleMoves.get(highest).startPosition.displayCoordinate();
         possibleMoves.get(highest).targetPosition.displayCoordinate();

@@ -73,7 +73,7 @@ public class EvaluationEngine {
     
     if (arbiter.hasWon(subjectCode)) {
       score = 0;
-      //System.out.println("Victory!");
+      System.out.println("Victory!");
     }
     return score;
   }

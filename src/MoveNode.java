@@ -70,8 +70,13 @@ class MoveNode {
 	  }    
 	  
 	  for (int idx = 0; idx < returnList.size(); idx++) {
-	  returnList.get(idx).additionalInfo = "(" + Integer.toString(this.position.row) + " " 
-			   + Integer.toString(this.position.column) + ") " + returnList.get(idx).additionalInfo;
+		  if (returnList.get(idx).additionalInfo != null) {
+			  returnList.get(idx).additionalInfo = "(" + Integer.toString(this.position.row + 1) + " " 
+					  + Integer.toString(this.position.column  + 1) + ") " + returnList.get(idx).additionalInfo;
+		  } else {
+			  returnList.get(idx).additionalInfo = "(" + Integer.toString(this.position.row + 1) + " " 
+					  + Integer.toString(this.position.column + 1) + ") ";
+		  }
 	  }
 	  	  
 	  return returnList;	 
