@@ -63,7 +63,7 @@ public class Arbiter {
       return false;
     }
     
-    if (chainMoveInProgress) { //Checkes if someone is still in the middle of making a move
+    if (chainMoveInProgress) { //Checks if someone is still in the middle of making a move
       return false;
     }
     

@@ -1,3 +1,11 @@
+/**
+ * PlayerClient
+ * This class connects the player to the server
+ * Creators: Artem, Joyce, Shi Han
+ * Date: 2019-05-04
+ */
+
+// Imports
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,17 +16,11 @@ import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
-
-/**
- * PlayerClient
- * This class connects the player to the server
- */
 
 public class PlayerClient implements Runnable {
 
@@ -29,13 +31,16 @@ public class PlayerClient implements Runnable {
     private static JButton joinGameButton, exitButton;
     private static JLabel userNameLabel, addressLabel, roomNameLabel;
     private static JTextField userNameField, addressField, roomNameField;
-    private static String userName, addressIP, roomName;
     private static Socket mySocket;
     private static BufferedReader input;
     private static PrintWriter output;
     private static boolean running, connected, roomExists, userNameAvailable;
     private static BoardPanel tempBoard;
 
+    /**
+     * PlayerClient
+     * A constructor that creates PlayerClient objects
+     */
     PlayerClient() {
         running = true;
         connected = false;        
@@ -55,7 +60,7 @@ public class PlayerClient implements Runnable {
         tempBoard.configureServerSetup();
         this.display = new JFrame();
         this.display.setMinimumSize(new Dimension((int) (600*Constants.scaleFactor),
-        		Toolkit.getDefaultToolkit().getScreenSize().height));
+                Toolkit.getDefaultToolkit().getScreenSize().height));
         this.display.add(tempBoard);
         this.display.setVisible(true);
 
@@ -78,7 +83,7 @@ public class PlayerClient implements Runnable {
      * createGUI
      * This method creates all the UI for the user to input username, room name, and IP address
      */
-    public void createGUI(){
+    private void createGUI(){
 
         // Create the main frame containing the UI to connect to the server
         mainFrame = new JFrame();
@@ -128,20 +133,19 @@ public class PlayerClient implements Runnable {
     /**
      * connect
      * This method attempts to connect the client to the server
-     * @param ip The ip address of the server the client is attempting to connect to
-     * @param port The port of the server
-     * @param userName The username chosen by the client
-     * @param roomName The room that the client is trying to connect to
+     * @param ip, the ip address of the server the client is attempting to connect to
+     * @param userName, the username chosen by the client
+     * @param roomName, the room that the client is trying to connect to
      * @return The socket that connects to the server
      */
-    public Socket connect(String ip, int port, String userName, String roomName) {
+    private Socket connect(String ip, String userName, String roomName) {
         System.out.println("Attempting to make a connection..");
 
         try {
 
             // Attempt to create a socket connection
             if (mySocket == null) {
-                mySocket = new Socket(ip, port);
+                mySocket = new Socket(ip, 6666);
 
                 // Create BufferedReader for input and PrintWriter for output
                 input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
@@ -173,8 +177,6 @@ public class PlayerClient implements Runnable {
                 System.out.println("room does not exist");
             }
 
-
-
         } catch (IOException e) {
             System.out.println("Connection to Server Failed");
             e.printStackTrace();
@@ -189,51 +191,12 @@ public class PlayerClient implements Runnable {
     }//end of connect
 
     /**
-     * readMessagesFromServer
-     * This method waits for input from the server and appropriately handles instructions from the server
-     */
-    public void readMessagesFromServer() {
-
-        while(running) {
-                try {
-
-                    // Check for incoming messages
-                    if (input.ready()) {
-                        // Read the message
-                        String instructions;
-                        instructions = input.readLine().trim();
-
-                        if (instructions.contains("BOARD")) {
-                            // Convert instructions into coordinates
-                            convertInstructions(instructions);
-                        } else {
-                            System.out.println(instructions);
-                        }
-                    }
-
-                } catch (IOException e) {
-                    System.out.println("Failed to receive msg from the server");
-                    e.printStackTrace();
-                }
-        }
-        try {
-            // Close the input, output, and sockets
-            input.close();
-            output.close();
-            mySocket.close();
-        }catch (Exception e) {
-            System.out.println("Failed to close socket");
-        }
-
-    }
-
-    /**
      * checkRoom
      * This method checks if the room exists on the server
-     * @param roomName The name of the room the client is attempting to connect to
+     * @param roomName, the name of the room the client is attempting to connect to
      * @return A boolean value of whether the room exists or not
      */
-    public boolean checkRoom(String roomName) {
+    private boolean checkRoom(String roomName) {
         boolean inputExists = false;
         boolean roomExists = false;
         String connectionVerification;
@@ -271,7 +234,7 @@ public class PlayerClient implements Runnable {
      * @param userName The username the client is trying to connect with
      * @return A boolean value of whether or not the username can be used
      */
-    public boolean checkName(String userName) {
+    private boolean checkName(String userName) {
         boolean inputExists = false;
         boolean userNameAvailable = false;
         String connectionVerification;
@@ -291,8 +254,6 @@ public class PlayerClient implements Runnable {
                     // Check if the username was accepted
                     if (connectionVerification.contains("OK")) {
                         userNameAvailable = true;
-                    } else {
-                        userNameAvailable = false;
                     }
                 }
             } catch (Exception e) {
@@ -303,11 +264,50 @@ public class PlayerClient implements Runnable {
     }
 
     /**
+     * readMessagesFromServer
+     * This method waits for input from the server and appropriately handles instructions from the server
+     */
+    private void readMessagesFromServer() {
+
+        while(running) {
+            try {
+
+                // Check for incoming messages
+                if (input.ready()) {
+                    // Read the message
+                    String instructions;
+                    instructions = input.readLine().trim();
+
+                    if (instructions.contains("BOARD")) {
+                        // Convert instructions into coordinates
+                        convertInstructions(instructions);
+                    } else {
+                        System.out.println(instructions);
+                    }
+                }
+
+            } catch (IOException e) {
+                System.out.println("Failed to receive msg from the server");
+                e.printStackTrace();
+            }
+        }
+        try {
+            // Close the input, output, and sockets
+            input.close();
+            output.close();
+            mySocket.close();
+        }catch (Exception e) {
+            System.out.println("Failed to close socket");
+        }
+
+    }
+
+    /**
      * convertInstructions
      * This method converts the BOARD messages from the server to coordinates
-     * @param instructions The message given from the server
+     * @param instructions, the message given from the server
      */
-    public void convertInstructions(String instructions) {
+    private void convertInstructions(String instructions) {
         System.out.println(instructions);
 
         // Trim the instructions received to just the coordinates
@@ -346,9 +346,9 @@ public class PlayerClient implements Runnable {
     /**
      * findBestMove
      * This method finds the best move based off the coordinates given by the server
-     * @param coordinates The converted coordinates of all the pieces on the board
+     * @param coordinates, the converted coordinates of all the pieces on the board
      */
-    public void findBestMove(ArrayCoordinate[] coordinates){
+    private void findBestMove(ArrayCoordinate[] coordinates){
 
         // Set up the board according to the instructions given by the server
         System.out.println("cleanse + set up");
@@ -363,14 +363,10 @@ public class PlayerClient implements Runnable {
 //			e.printStackTrace();
 //		}
         // Find the best move
-        MoveCode moveToSend = tempBoard.executeByDepth(); 
-        
-        //tempBoard.executeRandomMove();
-        
-        //tempBoard.executeByEval();
-        //new MoveCode(0,0,0,0);
+        MoveCode moveToSend = tempBoard.executeByDepth();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");
-           
+
+        // Update the BoardPanel
         tempBoard.repaint();
         
         // Send the best move to the server
@@ -381,17 +377,12 @@ public class PlayerClient implements Runnable {
     /**
      * sendMovesToServer
      * This method outputs the move the client wants to make to the server
-     * @param move
+     * @param move, the move to send to the server
      */
-    public void sendMovesToServer(MoveCode move) {
+    private void sendMovesToServer(MoveCode move) {
         System.out.println("sent move to server");
-        // Output the desired move to the server
-        //System.out.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ") (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
-        
-//        output.println("MOVE (" + (move.startPosition.row + 1) + "," + (move.startPosition.column + 1) + ")"
-//        		+ " (" + (move.targetPosition.row + 1) + "," + (move.targetPosition.column + 1) + ")");
-        
         System.out.println(move.stringPath);
+        // Send the move to the server
         output.println("MOVE " + move.stringPath);
         output.flush();
     }
@@ -405,15 +396,15 @@ public class PlayerClient implements Runnable {
         /**
          * actionPerformed
          * This method determines which button was pressed and performs actions accordingly
-         * @param press the button that was pressed
+         * @param press, the button that was pressed
          */
         public void actionPerformed(ActionEvent press) {
             if (press.getSource() == joinGameButton) {
                 try {
                     // Get information from the text boxes
-                    userName = userNameField.getText();
-                    addressIP = addressField.getText();
-                    roomName = roomNameField.getText();
+                    String userName = userNameField.getText();
+                    String addressIP = addressField.getText();
+                    String roomName = roomNameField.getText();
 
                     // Check that all the fields are filled in
                     if ((!userName.equals(""))&&(!addressIP.equals(""))&&(!roomName.equals(""))){
@@ -425,15 +416,12 @@ public class PlayerClient implements Runnable {
                         roomNameField.setText("");
 
                         // Attempt to connect
-                        connect(addressIP, 6666, userName, roomName);
+                        connect(addressIP, userName, roomName);
+                    } else {
+                        System.out.println("Not all fields are filled!");
                     }
-//          } else { //if some fields are left blank
-//            warningBox.setSize(100,200);
-//            JOptionPane.showMessageDialog(warningBox, "Not all of the fields were filled!", "Error!", JOptionPane.ERROR_MESSAGE);
-//          }
-                } catch (NumberFormatException e) { //warning for improper data entry
-//            warningBox.setSize(100, 200);
-//            JOptionPane.showMessageDialog(warningBox, "Numbers were not entered properly!", "Error!", JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             } else if (press.getSource() == exitButton) {
                 System.exit(0);
