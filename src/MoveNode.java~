@@ -1,4 +1,4 @@
-/* MoveNode.java
+/* MoveNode.java //Finish commenting
  * Purpose: A class that creates ArrayCoordinate objects that contain the coordinates of a piece on the game board
  * Creators: Artem, Joyce, Shi Han
  * Date: 2019-05-04
@@ -91,12 +91,10 @@ class MoveNode {
             returnList.add(this.position);
         }
 
-        // Add all the branches to the ArrayList
         for (int i = 0; i < branches.size(); i++) {
             returnList.addAll(branches.get(i).returnAsArray(true));
         }
 
-        // Add the path of the move in String format
         for (int idx = 0; idx < returnList.size(); idx++) {
             if (returnList.get(idx).additionalInfo != null) {
                 returnList.get(idx).additionalInfo = "(" + Integer.toString(this.position.row + 1) + " "
@@ -120,7 +118,6 @@ class MoveNode {
         ArrayList<ArrayCoordinate> finalCoords = this.returnAsArray(true);
         ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 
-        // Add all MoveCodes to the array
         for (int idx = 0; idx < finalCoords.size(); idx++) {
             returnList.add(new MoveCode(this.position, finalCoords.get(idx)));
             returnList.get(idx).stringPath = finalCoords.get(idx).additionalInfo;
