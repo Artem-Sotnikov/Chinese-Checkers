@@ -531,7 +531,7 @@ public class BoardPanel extends JPanel{
    * Random move is made for a player when called
    */
   public MoveCode executeRandomMove() {
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
+    ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
     MoveCode randomMove = possibleMoves.get((int) (Math.random()*possibleMoves.size())); 
     movePiece(randomMove);
     terminateMove();
@@ -560,7 +560,7 @@ public class BoardPanel extends JPanel{
    * @return a double number that represents the best possible move
    */
   public MoveCode executeByEval() {
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());   
+    ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
     MoveCode tempMove;
     MoveCode reverse;
     double evaluations[] = new double[possibleMoves.size()];
@@ -618,7 +618,7 @@ public class BoardPanel extends JPanel{
    * @return MoveCode, a best possible move
    */
     public MoveCode executeByDepth() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
         
      MoveCode tempMove;
      MoveCode reverse;
@@ -686,7 +686,7 @@ public class BoardPanel extends JPanel{
    */
 
     private double depthEval(int depth) {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
      MoveCode reverse;
@@ -727,17 +727,5 @@ public class BoardPanel extends JPanel{
          
         return evaluations[highest];  
     }
-    
-    public MoveCode executeBestMove() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-        OptimalMoveFinder finder = new OptimalMoveFinder();
-        MoveCode chosenMove = finder.findBestMove(possibleMoves);
-        MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
-          chosenMove.targetPosition.row, chosenMove.targetPosition.column);
-        movePiece(chosenMove);
-        terminateMove();
-        return isolated;
-    }
-    
     
 }

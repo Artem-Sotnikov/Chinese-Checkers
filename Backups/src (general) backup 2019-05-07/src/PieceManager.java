@@ -50,7 +50,7 @@ public class PieceManager {
   }
   
   //??????????????????????????????????????
-  public ArrayList<MoveCode> ReturnAllMoveCodes(int teamCode) {
+  public ArrayList<MoveCode> returnAllMoveCodes(int teamCode) {
     MoveNode[] returnNodes = this.returnAllTeamMoves(teamCode);
     ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
     
@@ -60,7 +60,7 @@ public class PieceManager {
     return returnList;
   }
   
-  public ArrayList<MoveCode> ReturnAllMoveCodes(int teamCode, boolean updateOverload) {
+  public ArrayList<MoveCode> returnAllMoveCodes(int teamCode, boolean updateOverload) {
 	    MoveNode[] returnNodes = this.returnAllTeamMoves(teamCode);
 	    ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 	    

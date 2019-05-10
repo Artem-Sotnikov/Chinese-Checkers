@@ -24,7 +24,6 @@ public class SidePanel extends JPanel {
  public boolean exitPending;
  public boolean executionPending;
  public boolean showPending;
- public boolean bestPending;
  public boolean byEvalPending;
  public boolean scenarioPending;
 

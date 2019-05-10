@@ -378,7 +378,7 @@ public class BoardPanel extends JPanel{
     }
     
     public void executeRandomMove() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
      MoveCode randomMove = possibleMoves.get((int) (Math.random()*possibleMoves.size()));
      
      movePiece(randomMove);
@@ -396,7 +396,7 @@ public class BoardPanel extends JPanel{
     }
     
     public double executeByEval() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
      
      MoveCode tempMove;
 	 MoveCode reverse;
@@ -438,7 +438,7 @@ public class BoardPanel extends JPanel{
     }        
 
     public void executeByDepth() {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
    	 MoveCode reverse;
@@ -476,7 +476,7 @@ public class BoardPanel extends JPanel{
     
     
     private double depthEval(int depth) {
-     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+     ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
         
      MoveCode tempMove;
    	 MoveCode reverse;
@@ -516,7 +516,7 @@ public class BoardPanel extends JPanel{
     
     public MoveCode executeBestMove() {
      System.out.println("creating possible moves");
-        ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+        ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
         System.out.println("create movefinder");
         OptimalMoveFinder finder = new OptimalMoveFinder();
         MoveCode chosenMove = finder.findBestMove(possibleMoves);

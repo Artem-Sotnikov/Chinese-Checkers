@@ -17,6 +17,14 @@ class MoveNode {
 
     /**
      * MoveNode
+     * Constructor in the case that there are no parameters
+     */
+    MoveNode() {
+        branches = new ArrayList<MoveNode>(0);
+    }
+
+    /**
+     * MoveNode
      * Constructor that sets the starting point for branching out
      * @param source, the starting point for the move
      */
@@ -33,26 +41,6 @@ class MoveNode {
     MoveNode(int row, int col) {
         this.position = new ArrayCoordinate(row, col);
         branches = new ArrayList<MoveNode>(0);
-    }
-
-    ;
-
-    MoveNode() {
-        branches = new ArrayList<MoveNode>(0);
-    }
-
-    ;
-
-    /**
-     * concat
-     * @param first
-     * @param second
-     * @return
-     */
-    public static ArrayCoordinate[] concat(ArrayCoordinate[] first, ArrayCoordinate[] second) {
-        ArrayCoordinate[] result = Arrays.copyOf(first, first.length + second.length);
-        System.arraycopy(second, 0, result, first.length, second.length);
-        return result;
     }
 
     /**
@@ -93,7 +81,7 @@ class MoveNode {
     /**
      * returnAsArray
      * This method returns branches as an array
-     * @param updateOverload
+     * @param updateOverload, temporary boolean to separate from the other returnAsArray method
      * @return ArrayList<MoveCode>, all the MoveCodes
      */
     public ArrayList<ArrayCoordinate> returnAsArray(boolean updateOverload) {
@@ -123,7 +111,7 @@ class MoveNode {
     /**
      * toMoveCodes
      * This method returns coordinates as MoveCodes
-     * @param updateOverload,
+     * @param updateOverload, temporary boolean to separate from the other toMoveCodes method
      * @return ArrayList<MoveCode>, all the MoveCodes
      */
     public ArrayList<MoveCode> toMoveCodes(boolean updateOverload) {

@@ -23,7 +23,6 @@ public class SidePanel extends JPanel {
     private final Rectangle exitButton = new Rectangle(0, 900, 100, 100);
     private final Rectangle showButton = new Rectangle(0, 100, 100, 100);
     private final Rectangle executeButton = new Rectangle(0, 200, 100, 100);
-    private final Rectangle bestButton = new Rectangle(0, 300, 100, 100);
     private final Rectangle byEvalButton = new Rectangle(0, 400, 100, 100);
     private final Rectangle configScenarioButton = new Rectangle(0, 500, 100, 100);
     private final Rectangle timeTriggerButton = new Rectangle(0, 600, 100, 100);
@@ -33,7 +32,6 @@ public class SidePanel extends JPanel {
     public boolean exitPending;
     public boolean executionPending;
     public boolean showPending;
-    public boolean bestPending;
     public boolean byEvalPending;
     public boolean scenarioPending;
     public boolean timeTriggerPending;
@@ -150,10 +148,6 @@ public class SidePanel extends JPanel {
                 executionPending = true;
             }
 
-            if (bestButton.contains(listener2.getRectifiedClick())) {
-                bestPending = true;
-            }
-
             if (byEvalButton.contains(listener2.getRectifiedClick())) {
                 byEvalPending = true;
             }
@@ -190,14 +184,6 @@ public class SidePanel extends JPanel {
      */
     public void showHandled() {
         this.showPending = false;
-    }
-
-    /**
-     * bestHandled
-     * Allows best move to be handled
-     */
-    public void bestHandled() {
-        this.bestPending = false;
     }
 
     /**

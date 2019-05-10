@@ -354,14 +354,8 @@ public class PlayerClient implements Runnable {
         System.out.println("cleanse + set up");
         tempBoard.cleanseBoard();
         tempBoard.setUpBoard(coordinates);
-
         tempBoard.repaint();
-//        try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
         // Find the best move
         MoveCode moveToSend = tempBoard.executeByDepth();
         System.out.println("(" + moveToSend.startPosition.row + "," + moveToSend.startPosition.column + ") (" + moveToSend.targetPosition.row + "," + moveToSend.targetPosition.column + ")");

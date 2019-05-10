@@ -63,7 +63,7 @@ public class PieceManager {
      * @param teamCode, the team number
      * @return ArrayList<MoveCode>, an ArrayList with all possible moves
      */
-    public ArrayList<MoveCode> ReturnAllMoveCodes(int teamCode) {
+    public ArrayList<MoveCode> returnAllMoveCodes(int teamCode) {
         MoveNode[] returnNodes = this.returnAllTeamMoves(teamCode);
         ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 
@@ -73,7 +73,14 @@ public class PieceManager {
         return returnList;
     }
 
-    public ArrayList<MoveCode> ReturnAllMoveCodes(int teamCode, boolean updateOverload) {
+    /**
+     * returnAllMoveCodes
+     * Return all the possible move codes
+     * @param teamCode, the team number
+     * @param updateOverload, temporary boolean to separate from the other returnAllMoveCodes method
+     * @return ArrayList<MoveCode>, an ArrayList with all possible moves
+     */
+    public ArrayList<MoveCode> returnAllMoveCodes(int teamCode, boolean updateOverload) {
         MoveNode[] returnNodes = this.returnAllTeamMoves(teamCode);
         ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 
@@ -182,32 +189,6 @@ public class PieceManager {
         bufferCoords.clear();
     }
 
-    public boolean violatesEnemyTerritory(int targetRow, int targetColumn) {
-        if ((targetRow > 11) && (targetRow) < 16 && (targetColumn < 4)) {
-            return true;
-        } else if (targetRow > 16 && targetRow < 21 && targetColumn > 12) {
-            return true;
-        } else if (targetRow == 12 && targetColumn > 8) {
-            return true;
-        } else if (targetRow == 13 && targetColumn > 9) {
-            return true;
-        } else if (targetRow == 14 && targetColumn > 10) {
-            return true;
-        } else if (targetRow == 15 && targetColumn > 11) {
-            return true;
-        } else if (targetRow == 17 && targetColumn < 5) {
-            return true;
-        } else if (targetRow == 18 && targetColumn < 6) {
-            return true;
-        } else if (targetRow == 19 && targetColumn < 7) {
-            return true;
-        } else if (targetRow == 20 && targetColumn < 8) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * violatesEnemyTerritory
      * @param targetRow, the row of the position the piece may want to move to
@@ -230,7 +211,7 @@ public class PieceManager {
             if (team < 6) {
                 // Check if the final position of the piece is in enemy territory
                 for (int idx = 0; idx < 10; idx++) {
-                    if ((regions[team][idx].row == targetRow) && (regions[team][idx].column == targetColumn) {
+                    if ((regions[team][idx].row == targetRow) && (regions[team][idx].column == targetColumn)) {
                         return true;
                     }
                 }

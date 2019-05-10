@@ -345,7 +345,7 @@ public class BoardPanel extends JPanel{
     }
     
     public void executeRandomMove() {
-    	ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+    	ArrayList<MoveCode> possibleMoves = manager.returnAllMoveCodes(arbiter.returnCurrentMoveCode());
     	MoveCode randomMove = possibleMoves.get((int) (Math.random()*possibleMoves.size()));
     	
     	movePiece(randomMove);

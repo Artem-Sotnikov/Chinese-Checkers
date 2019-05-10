@@ -81,12 +81,6 @@ public class Display extends JFrame {
         System.out.println("Random Execution Done");
       }
       
-      if (sidePanel.bestPending) {
-        sidePanel.bestHandled();
-        gameArea.executeBestMove();
-        System.out.println("Best Execution Done");
-      }
-      
       if (sidePanel.byEvalPending || (timerFlag && timerEnable)) {
         sidePanel.byEvalHandled();
         gameArea.executeByDepth();

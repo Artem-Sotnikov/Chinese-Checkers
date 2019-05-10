@@ -33,7 +33,7 @@ public class PieceManager {
 		return returnNodes;
 	}
 	
-	public ArrayList<MoveCode> ReturnAllMoveCodes(int teamCode) {
+	public ArrayList<MoveCode> returnAllMoveCodes(int teamCode) {
 		MoveNode[] returnNodes = this.returnAllTeamMoves(teamCode);
 		ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 		

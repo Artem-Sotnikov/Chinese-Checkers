@@ -5,6 +5,8 @@
  */
 
 // Imports
+
+// Imports
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -15,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InfoPanel extends JPanel {
-    private JLabel currentTurnLabel;
     private PieceType activeTeam;
     private double activeEval;
     private int activeI;
