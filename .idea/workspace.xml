@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="953f370b-bee3-4650-a843-d3eed9dddf0d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InfoPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/InfoPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MoveCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MoveCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MoveNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MoveNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PieceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PieceManager.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InfoPanel.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InfoPanel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InfoPanel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
@@ -64,14 +61,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PieceManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PieceManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/PieceManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1343">
-              <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
+            <state relative-caret-position="-294">
+              <caret line="159" column="76" selection-start-line="159" selection-start-column="76" selection-end-line="159" selection-end-column="76" />
               <folding>
                 <element signature="e#0#7308#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EvaluationEngine.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/EvaluationEngine.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -109,22 +115,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Square.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Square.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="235" lean-forward="true" selection-start-line="235" selection-end-line="235" />
-              <folding>
-                <element signature="e#0#5585#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MoveNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MoveNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
+            <state relative-caret-position="1930">
               <caret line="134" column="23" lean-forward="true" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
               <folding>
                 <element signature="e#0#3066#0" expanded="true" />
@@ -186,12 +180,12 @@
         <option value="$PROJECT_DIR$/src/SidePanel.java" />
         <option value="$PROJECT_DIR$/src/Square.java" />
         <option value="$PROJECT_DIR$/src/PlayerClient.java" />
-        <option value="$PROJECT_DIR$/src/PieceManager.java" />
         <option value="$PROJECT_DIR$/src/OptimalMoveFinder.java" />
         <option value="$PROJECT_DIR$/src/MoveNode.java" />
         <option value="$PROJECT_DIR$/src/MoveCode.java" />
         <option value="$PROJECT_DIR$/src/InfoPanel.java" />
         <option value="$PROJECT_DIR$/src/GameState.java" />
+        <option value="$PROJECT_DIR$/src/PieceManager.java" />
       </list>
     </option>
   </component>
@@ -555,13 +549,6 @@
     <entry file="file://$PROJECT_DIR$/src/Square.class">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/EvaluationEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CheckerMain.class">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -658,32 +645,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/PieceManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#7308#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/OptimalMoveFinder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1981">
           <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MoveNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="134" column="23" lean-forward="true" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#3066#0" expanded="true" />
-            <element signature="e#917#918#0" expanded="true" />
-            <element signature="e#970#971#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -704,6 +669,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/InfoPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#3531#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -714,13 +690,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InfoPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/EvaluationEngine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        <state relative-caret-position="34">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MoveNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1930">
+          <caret line="134" column="23" lean-forward="true" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
           <folding>
-            <element signature="e#0#3531#0" expanded="true" />
-            <element signature="imports" expanded="true" />
+            <element signature="e#0#3066#0" expanded="true" />
+            <element signature="e#917#918#0" expanded="true" />
+            <element signature="e#970#971#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PieceManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-294">
+          <caret line="159" column="76" selection-start-line="159" selection-start-column="76" selection-end-line="159" selection-end-column="76" />
+          <folding>
+            <element signature="e#0#7308#0" expanded="true" />
           </folding>
         </state>
       </provider>
