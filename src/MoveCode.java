@@ -15,10 +15,10 @@ public class MoveCode {
   /** 
    * MoveCode
    * Constructor that will create a MoveCode instruction for start and end coordinates
-   * @param int a, start row value
-   * @param int b, start column value
-   * @param int p, end row value
-   * @param int q, end column value
+   * @param a, start row value
+   * @param b, start column value
+   * @param p, end row value
+   * @param q, end column value
    */
   MoveCode(int a, int b, int p, int q) {
     this.startPosition = new ArrayCoordinate(a,b);
@@ -28,8 +28,8 @@ public class MoveCode {
   /** 
    * MoveCode
    * Constructor with start and end coordinates
-   * @param ArrayCoordinate start, the original coordinate/position
-   * @param ArrayCoordinate end, the ending coordinate piece is to travel to
+   * @param start, the original coordinate/position
+   * @param end, the ending coordinate piece is to travel to
    */
   MoveCode(ArrayCoordinate start, ArrayCoordinate end) {
     this.startPosition = start;
@@ -39,7 +39,7 @@ public class MoveCode {
   /** 
    * setPriority
    * Assigns a priority for the ArrayCoordinate
-   * @param int priority, the priority to be set
+   * @param priority, the priority to be set
    */
   public void setPriority(int priority){
     this.priority += priority;
@@ -48,7 +48,7 @@ public class MoveCode {
   /** 
    * multiplyPriority
    * Multiplies priority is by a given factor
-   * @param int priority, the factor the curretn priority is to be multiplied by
+   * @param priority, the factor the curretn priority is to be multiplied by
    */
   public void multiplyPriority(int priority) {
     this.priority *= priority;

@@ -43,12 +43,23 @@ class MoveNode {
 
     ;
 
+    /**
+     * concat
+     * @param first
+     * @param second
+     * @return
+     */
     public static ArrayCoordinate[] concat(ArrayCoordinate[] first, ArrayCoordinate[] second) {
         ArrayCoordinate[] result = Arrays.copyOf(first, first.length + second.length);
         System.arraycopy(second, 0, result, first.length, second.length);
         return result;
     }
 
+    /**
+     * returnAsArray
+     * This method returns branches as an array
+     * @return ArrayList<ArryCoordinate>, the branches as an array
+     */
     public ArrayList<ArrayCoordinate> returnAsArray() {
         ArrayList<ArrayCoordinate> returnList = new ArrayList<ArrayCoordinate>(0);
 
@@ -56,22 +67,35 @@ class MoveNode {
             returnList.add(this.position);
         }
 
+        // Add all branches to array
         for (int i = 0; i < branches.size(); i++) {
             returnList.addAll(branches.get(i).returnAsArray());
         }
         return returnList;
     }
 
+    /**
+     * toMoveCodes
+     * This method returns coordinates as MoveCodes
+     * @return ArrayList<MoveCode>, all the MoveCodes
+     */
     public ArrayList<MoveCode> toMoveCodes() {
         ArrayList<ArrayCoordinate> finalCoords = this.returnAsArray();
         ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
 
+        // Add all the MoveCodes to the ArrayList
         for (int idx = 0; idx < finalCoords.size(); idx++) {
             returnList.add(new MoveCode(this.position, finalCoords.get(idx)));
         }
         return returnList;
     }
 
+    /**
+     * returnAsArray
+     * This method returns branches as an array
+     * @param updateOverload
+     * @return ArrayList<MoveCode>, all the MoveCodes
+     */
     public ArrayList<ArrayCoordinate> returnAsArray(boolean updateOverload) {
         ArrayList<ArrayCoordinate> returnList = new ArrayList<ArrayCoordinate>(0);
 
@@ -96,6 +120,12 @@ class MoveNode {
         return returnList;
     }
 
+    /**
+     * toMoveCodes
+     * This method returns coordinates as MoveCodes
+     * @param updateOverload,
+     * @return ArrayList<MoveCode>, all the MoveCodes
+     */
     public ArrayList<MoveCode> toMoveCodes(boolean updateOverload) {
         ArrayList<ArrayCoordinate> finalCoords = this.returnAsArray(true);
         ArrayList<MoveCode> returnList = new ArrayList<MoveCode>();
