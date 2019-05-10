@@ -1,12 +1,11 @@
 /* EvaluationEngine.java
- * Purpose: Generates the algorithm for games
+ * Purpose: Generates a basic algorithm for moves
  * Creators: Artem, Joyce, Shi Han
  * Date: 2019-05-04
  */
 
 public class EvaluationEngine { 
-  //Variable declaration
-  private ArrayCoordinate[][] regions; //Stores locations of each of the teams and their pieces
+  private ArrayCoordinate[][] regions;
   private Square[][] source;
   private Square[][] storage;
   private Arbiter arbiter;

@@ -6,6 +6,7 @@
 
 public class Client {
   public static void main(String[] args) {
+    //Create a client that will connect to the server and join a game
     PlayerClient client = new PlayerClient();
     client.run();
   }
