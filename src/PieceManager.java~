@@ -88,7 +88,6 @@ public class PieceManager {
      * Create the possible move for a piece
      * @param position, the original coordinate/position
      * @param isFirstMove, true for if it is the first move, false for if it is not
-     * @param subjectCode, the team number
      * @return MoveNode, a MoveNode with instructions on how to move
      */
     public MoveNode generateMoves(ArrayCoordinate position, boolean isFirstMove, int subjectCode) {

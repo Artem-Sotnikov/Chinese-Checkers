@@ -145,7 +145,7 @@ public class Arbiter {
     
     //Check that piece doesn't move to enemy territory to aviod errors from server
     if (!this.enemyTerritoryChecker(targetRow, targetColumn)) {
-     return false;
+      return false;
     }
     
     //Store the location of the original position
@@ -252,7 +252,7 @@ public class Arbiter {
   /** 
    * displayTeamToMove
    * Displays the details of the team's move
-   * @param Graphics g
+   * @param g, the Graphics component
    */
   public void displayTeamToMove(Graphics g) {
     //Draw a rectangle for a display panel
@@ -276,27 +276,28 @@ public class Arbiter {
    * @param targetColumn, the column value of the position the piece wants to move to
    */
   public boolean enemyTerritoryChecker(int targetRow, int targetColumn) {
-      if ((targetRow > 11) && (targetRow) < 16 && (targetColumn < 4)) {
-          return false;
-      } else if (targetRow > 16 && targetRow < 21 && targetColumn > 12) {
-          return false;
-      } else if (targetRow == 12 && targetColumn > 8) {
-          return false;
-      } else if (targetRow == 13 && targetColumn > 9) {
-          return false;
-      } else if (targetRow == 14 && targetColumn > 10) {
-          return false;
-      } else if (targetRow == 15 && targetColumn > 11) {
-          return false;
-      } else if (targetRow == 17 && targetColumn < 5) {
-          return false;
-      } else if (targetRow == 18 && targetColumn < 6) {
-          return false;
-      } else if (targetRow == 19 && targetColumn < 7) {
-          return false;
-      } else if (targetRow == 20 && targetColumn < 8) {
-          return false;
-      }  
-      return true;
+    //Check all regions
+    if ((targetRow > 11) && (targetRow < 16) && (targetColumn < 4)) {
+      return false;
+    } else if (targetRow > 16 && targetRow < 21 && targetColumn > 12) {
+      return false;
+    } else if (targetRow == 12 && targetColumn > 8) {
+      return false;
+    } else if (targetRow == 13 && targetColumn > 9) {
+      return false;
+    } else if (targetRow == 14 && targetColumn > 10) {
+      return false;
+    } else if (targetRow == 15 && targetColumn > 11) {
+      return false;
+    } else if (targetRow == 17 && targetColumn < 5) {
+      return false;
+    } else if (targetRow == 18 && targetColumn < 6) {
+      return false;
+    } else if (targetRow == 19 && targetColumn < 7) {
+      return false;
+    } else if (targetRow == 20 && targetColumn < 8) {
+      return false;
+    }  
+    return true;
   }
 }

@@ -13,8 +13,8 @@ public class ArrayCoordinate {
   /** 
    * ArrayCoordinate
    * Constructor that sets up the row and column value for the ArrayCoordinate
-   * @param a, the value to be set for the row
-   * @param b, the value to be set for the column
+   * @param int a, the value to be set for the row
+   * @param int b, the value to be set for the column
    */
   public ArrayCoordinate(int a, int b) {
     this.row = a;

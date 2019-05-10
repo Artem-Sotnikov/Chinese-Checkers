@@ -18,8 +18,8 @@ import java.awt.Font;
 
 public class BoardPanel extends JPanel{
   //Variables
-  private Square[][] squares;
-  private ArrayCoordinate[][] regions;
+  private Square[][] squares; 
+  private ArrayCoordinate[][] regions; 
   private ArrayList<ArrayCoordinate> notedSquares;
   private GameState gameState;
   private ArrayCoordinate selectedCoordinates;
@@ -46,10 +46,12 @@ public class BoardPanel extends JPanel{
     
     this.squares = new Square[25][25]; //Generates 2D array that will store the board and the spaces
     
+    //Set up a mouse listener for user
     listener = new CustomMouseListener();
     this.addMouseMotionListener(listener);
     this.addMouseListener(listener);    
     
+    //Squares where a move can possibly be made
     this.notedSquares = new ArrayList<ArrayCoordinate>(0);
     
     regions = new ArrayCoordinate[6][10]; //6 regions, with 10 pieces each
@@ -60,6 +62,7 @@ public class BoardPanel extends JPanel{
     this.engine = new EvaluationEngine(arbiter);
     
     //Assign regions for each team to occupy
+    //Team 1
     regions[0][0] = new ArrayCoordinate(8,4);
     regions[0][1] = new ArrayCoordinate(9,4);
     regions[0][2] = new ArrayCoordinate(9,5);
@@ -70,7 +73,7 @@ public class BoardPanel extends JPanel{
     regions[0][7] = new ArrayCoordinate(11,5);
     regions[0][8] = new ArrayCoordinate(11,6);
     regions[0][9] = new ArrayCoordinate(11,7);
-    
+    //Team 2
     regions[1][0] = new ArrayCoordinate(12,12);  
     regions[1][1] = new ArrayCoordinate(12,10);
     regions[1][2] = new ArrayCoordinate(12,11);
@@ -81,7 +84,7 @@ public class BoardPanel extends JPanel{
     regions[1][7] = new ArrayCoordinate(14,11);
     regions[1][8] = new ArrayCoordinate(14,12);
     regions[1][9] = new ArrayCoordinate(15,12);
-    
+    //Team 3
     regions[2][0] = new ArrayCoordinate(20,16);  
     regions[2][1] = new ArrayCoordinate(18,13);
     regions[2][2] = new ArrayCoordinate(18,14);
@@ -92,7 +95,7 @@ public class BoardPanel extends JPanel{
     regions[2][7] = new ArrayCoordinate(20,14);
     regions[2][8] = new ArrayCoordinate(20,15);
     regions[2][9] = new ArrayCoordinate(17,13);
-    
+    //Team 4
     regions[3][0] = new ArrayCoordinate(24,12);
     regions[3][1] = new ArrayCoordinate(21,10);
     regions[3][2] = new ArrayCoordinate(21,11);
@@ -103,8 +106,7 @@ public class BoardPanel extends JPanel{
     regions[3][7] = new ArrayCoordinate(23,11);
     regions[3][8] = new ArrayCoordinate(23,12);
     regions[3][9] = new ArrayCoordinate(21,9);
-    
-    
+    //Team 5
     regions[4][0] = new ArrayCoordinate(20,4);
     regions[4][1] = new ArrayCoordinate(18,4);
     regions[4][2] = new ArrayCoordinate(18,5);
@@ -115,7 +117,7 @@ public class BoardPanel extends JPanel{
     regions[4][7] = new ArrayCoordinate(20,5);
     regions[4][8] = new ArrayCoordinate(20,6);
     regions[4][9] = new ArrayCoordinate(20,7);
-    
+    //Team 6
     regions[5][0] = new ArrayCoordinate(12,0);
     regions[5][1] = new ArrayCoordinate(12,1);
     regions[5][2] = new ArrayCoordinate(12,2);
@@ -127,6 +129,7 @@ public class BoardPanel extends JPanel{
     regions[5][8] = new ArrayCoordinate(14,3);
     regions[5][9] = new ArrayCoordinate(15,3);
     
+    //Set the manager to store the newly created regions
     this.manager.regions = this.regions;
   }
   
@@ -135,19 +138,23 @@ public class BoardPanel extends JPanel{
    * Informs that a move has ended, no more hops are to be made
    */
   public void terminateMove() {
+    //Unselect a move to terminate the move
     if (selectedCoordinates != null) {
       squares[selectedCoordinates.row][selectedCoordinates.column].setSelected(false);
     }
     
-    gameState = GameState.STATE_IDLE; //Set to idle to signify get rid of selection and move on
+    //Set to idle to signify get rid of selection and move on
+    gameState = GameState.STATE_IDLE; 
     arbiter.determineGameResult();
     
-    if (arbiter.gameWinner != null) { //Determine end of game
+    //Determine end of game
+    if (arbiter.gameWinner != null) { 
       gameFinished = true;
     } else {
       arbiter.registerMove(); //Otherwise, register the move as regular and proceed
     }
     
+    //Remove notes on previously noted squares to end move
     for (int idx = 0; idx < notedSquares.size(); idx++) {
       ArrayCoordinate notedPosition = notedSquares.get(idx);
       squares[notedPosition.row][notedPosition.column].setNoted(false);
@@ -157,9 +164,9 @@ public class BoardPanel extends JPanel{
   /** 
    * handleHovers
    * Controls what to do as mouse hovers over something 
-   * @param int i, tbe row coordinate of piece being hovered over by
-   * @param int j, the column coordinate of the piece being hovered over
-   * @param Graphics g
+   * @param i, tbe row coordinate of piece being hovered over by
+   * @param j, the column coordinate of the piece being hovered over
+   * @param g, the Graphics component
    */
   public void handleHovers(int i, int j, Graphics g) {
     if (squares[i][j].containsCoordinates(listener.getRectifiedPos())) {   
@@ -192,8 +199,8 @@ public class BoardPanel extends JPanel{
   /** 
    * handleClicks
    * Controls what to do as mouse clicks something 
-   * @param int i, tbe row coordinate of piece being clicked
-   * @param int j, the column coordinate of the piece being clicked
+   * @param i, tbe row coordinate of piece being clicked
+   * @param j, the column coordinate of the piece being clicked
    */
   public void handleClicks(int i, int j) {
     if (squares[i][j].containsCoordinates(listener.getRectifiedClick())) {
@@ -214,15 +221,16 @@ public class BoardPanel extends JPanel{
             MoveCode move = new MoveCode(selectedCoordinates,new ArrayCoordinate(i,j));
             movePiece(move); //Make a move
             
-            if (!arbiter.isChainMoveInProgress()) { //Check to make sure move with consecutive hops is not in progress
+            //Check to make sure move with consecutive hops is not in progress
+            if (!arbiter.isChainMoveInProgress()) { 
               this.terminateMove();
             } 
             
           } else if (arbiter.approvesSelection(i, j)) {          
             listener.clickHandled();
-            
+            //Deselect the square to move on
             squares[selectedCoordinates.row][selectedCoordinates.column].setSelected(false);
-            
+            //New location is set as the selected
             squares[i][j].setSelected(true);
             selectedCoordinates = new ArrayCoordinate(i,j);
           }
@@ -235,7 +243,7 @@ public class BoardPanel extends JPanel{
   /** 
    * paintComponent
    * Paints graphics for the panel
-   * @param Graphics g
+   * @param g, the Graphics component
    */
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -244,19 +252,21 @@ public class BoardPanel extends JPanel{
     Graphics2D g2 = (Graphics2D) g;       
     g2.scale(Constants.scaleFactor, Constants.scaleFactor); //Scale the size of the frame
     
+    //Set design characteristics
     g.setColor(Color.black);
     g.setFont(new Font("TrilliumWeb",Font.PLAIN, 20));
     
+    //Display progression of game
     arbiter.displayTeamToMove(g);  
     updateEvaluation(g);     
     
+    //Check for clicks and hovers and paint accordingly
     for (int i = 0; i < squares.length; i++) {
       for (int j = 0; j <= i; j++) {
-        if (squares[i][j] != null) {
-          
-          this.handleHovers(i,j,g);
+        if (squares[i][j] != null) {         
+          this.handleHovers(i,j,g); //Hovered over squares have an extra rim painted
           if (listener.clickPending()) {
-            this.handleClicks(i,j);
+            this.handleClicks(i,j); //Clicked squares have a small circle inside
           }   
           squares[i][j].draw(g);    
         }       
@@ -269,7 +279,7 @@ public class BoardPanel extends JPanel{
    * Set up the initial values and state of our team as soon as we join server
    */
   public void configureServerSetup() {
-    this.configureInitialSetup();
+    this.configureInitialSetup(); //Call configuration set up
     arbiter.moveOrder = new PieceType[6]; //Always six player
     arbiter.moveOrder[0] = Constants.teamZeroPiece;
   }
@@ -279,16 +289,19 @@ public class BoardPanel extends JPanel{
    * Resets up the board
    */
   public void cleanseBoard() {
+    //Set up and declare values to be used later
     this.squares = new Square[25][25];
     this.manager.overallBoard = this.squares;
     this.arbiter.squares = this.squares;
     
+    //Clear the board by placing new empty squares
     for (int i = 7; i < (7 + 14); i++) {
       for (int j = 0; j < (i - 7); j++) {
         squares[i][j + 4] = new Square(i,j + 4);
       }
     }
     
+    //Clear the board by placing new empty squares
     for (int i = 12; i < 25; i++) {
       for (int j = 0; j < (25 - i); j++) {
         squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
@@ -299,7 +312,7 @@ public class BoardPanel extends JPanel{
   /** 
    * setUpBoard
    * Set up all the regions and team's pieces to corresponding places
-   * @param ArrayCoordinate[] existingPieces, an array of coordinates keeping track of all the pieces on the board
+   * @param existingPieces, an array of coordinates keeping track of all the pieces on the board
    */
   public void setUpBoard(ArrayCoordinate[] existingPieces) {
     for (int i = 0; i < existingPieces.length; i++) {
@@ -340,15 +353,17 @@ public class BoardPanel extends JPanel{
     }
   }
   
-  
-  
+  /** 
+   * configureEndScenario
+   * Runs actions that have to happen at the end of a game
+   */
   public void configureEndScenario() {
+    //Clear squares
     for (int i = 7; i < (7 + 14); i++) {
       for (int j = 0; j < (i - 7); j++) {
         squares[i][j + 4] = new Square(i,j + 4);
       }
     }
-    
     for (int i = 12; i < 25; i++) {
       for (int j = 0; j < (25 - i); j++) {
         squares[i][j + (i - 12)] = new Square(i,j + (i - 12));
@@ -367,17 +382,22 @@ public class BoardPanel extends JPanel{
     
     squares[20][10].placePiece(Constants.teamZeroPiece);
     
-    manager.piecePositionStorage[0][9] = squares[20][10];
-    
+    manager.piecePositionStorage[0][9] = squares[20][10]; 
   }
   
   
-  
+  /** 
+   * configureBottomPosition
+   * When it gets to the bottom of the board, set it to team 3's turn
+   */
   public void configureBottomPosition() {
     arbiter.teamToMove = 3;
   }
   
-  
+  /** 
+   * configureServerScenario
+   * Runs actions that have to happen when communicating with server
+   */
   public void configureServerScenario() {
     for (int i = 7; i < (7 + 14); i++) {
       for (int j = 0; j < (i - 7); j++) {
@@ -432,32 +452,32 @@ public class BoardPanel extends JPanel{
      }
      }
      */      
-    
+    //Set up team 1's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[0][i].row][regions[0][i].column].placePiece(Constants.teamZeroPiece);
       manager.piecePositionStorage[0][i] = squares[regions[0][i].row][regions[0][i].column];
     }    
-    
+    //Set up team 2's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[1][i].row][regions[1][i].column].placePiece(Constants.teamOnePiece);
       manager.piecePositionStorage[1][i] = squares[regions[1][i].row][regions[1][i].column];
     }
-    
+    //Set up team 3's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[2][i].row][regions[2][i].column].placePiece(Constants.teamTwoPiece);
       manager.piecePositionStorage[2][i] = squares[regions[2][i].row][regions[2][i].column];
     }
-    
+    //Set up team 4's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[3][i].row][regions[3][i].column].placePiece(Constants.teamThreePiece);
       manager.piecePositionStorage[3][i] = squares[regions[3][i].row][regions[3][i].column];
     }
-    
+    //Set up team 5's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[4][i].row][regions[4][i].column].placePiece(Constants.teamFourPiece);
       manager.piecePositionStorage[4][i] = squares[regions[4][i].row][regions[4][i].column];
     }
-    
+    //Set up team 6's pieces
     for (int i = 0; i < regions[0].length; i++) {
       squares[regions[5][i].row][regions[5][i].column].placePiece(Constants.teamFivePiece);
       manager.piecePositionStorage[5][i] = squares[regions[5][i].row][regions[5][i].column];
@@ -479,7 +499,7 @@ public class BoardPanel extends JPanel{
   /** 
    * movePiece
    * Moves a piece
-   * @param MoveCode move, instructions for how to move
+   * @param move, instructions for how to move
    * @return boolean, true for if piece has been moved
    */
   public boolean movePiece(MoveCode move) {    
@@ -490,16 +510,17 @@ public class BoardPanel extends JPanel{
     
     Square selected = squares[startRow][startCol];
     
-    
     //gameState = GameState.STATE_IDLE;
     //this.configureBottomPosition();
     
+    //Update locations
     selected.updateLocation(new ArrayCoordinate(targetRow, targetCol));
     
+    //Set move destination to be selected
     squares[targetRow][targetCol] = selected;
-    
+    //Keep track/the original position
     squares[startRow][startCol] = new Square(startRow,startCol);
-    
+    //Store new information
     selectedCoordinates = new ArrayCoordinate(targetRow, targetCol);
     move.startPosition = new ArrayCoordinate(startRow,startCol);
     
@@ -511,10 +532,13 @@ public class BoardPanel extends JPanel{
    * Displays all the possible places to move
    */
   public void displayPossibleMoves() {
-    MoveNode[] moves = manager.returnAllTeamMoves(arbiter.returnCurrentMoveCode()); //An array of possible moves is made
+    //An array of possible moves is made
+    MoveNode[] moves = manager.returnAllTeamMoves(arbiter.returnCurrentMoveCode()); 
+    //Iterate through all possible moves
     for (int idx = 0; idx < moves.length; idx++) {
       ArrayList<ArrayCoordinate> possibilityArray =  moves[idx].returnAsArray();
       for (int idx2 = 0; idx2 < possibilityArray.size(); idx2++) {
+        //Find and store possible moves
         ArrayCoordinate notedPosition = possibilityArray.get(idx2);
         squares[notedPosition.row][notedPosition.column].setNoted(true);
         notedSquares.add(notedPosition);
@@ -525,8 +549,10 @@ public class BoardPanel extends JPanel{
   /** 
    * executeRandomMove
    * Random move is made for a player when called
+   * @return randomMove, a random move
    */
   public MoveCode executeRandomMove() {
+    //Look at possible move paths and choose a random one
     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
     MoveCode randomMove = possibleMoves.get((int) (Math.random()*possibleMoves.size())); 
     movePiece(randomMove);
@@ -538,14 +564,13 @@ public class BoardPanel extends JPanel{
   /** 
    * updateEvaluation
    * Updates predictions for next best move based on moves that have been made
-   * @param Graphics g
+   * @param g, the Graphics component
    */
   public void updateEvaluation(Graphics g) {
     double eval = 0;
-    PieceType currentTeam = arbiter.returnCurrentTeam();
-    
-    eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
-                                  regions[currentTeam.targetRegion][0], currentTeam.teamCode);
+    PieceType currentTeam = arbiter.returnCurrentTeam(); //Find current team up to move
+    //Find a numerical evaluation for the move
+    eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode], regions[currentTeam.targetRegion][0], currentTeam.teamCode);
     Double.toString(eval);
     currentEvaluation = eval;         
   }
@@ -565,23 +590,26 @@ public class BoardPanel extends JPanel{
     
     for (int idx = 0; idx < possibleMoves.size(); idx++) {
       tempMove = possibleMoves.get(idx);
+      //Store the reverse move
       reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
                              tempMove.startPosition.row,tempMove.startPosition.column);;
+      //Move the piece with the temporary move, and see how the evaluation is
       movePiece(tempMove);
+      //Find the move's evaluation
       eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
                                     regions[currentTeam.targetRegion][0], currentTeam.teamCode);
-      arbiter.determineGameResult();
+      arbiter.determineGameResult(); //Find how the move affects the game
       if (arbiter.gameWinner != null) {
         eval = 0;
         arbiter.gameWinner = null;
       }
       evaluations[idx] = eval;      
       
-      movePiece(reverse);
+      movePiece(reverse); //Undo the move
     }
     
     int highest = 0;
-    
+    //Find the most optimal move
     for (int idx = 1; idx < evaluations.length; idx++) {
       if (evaluations[idx] > evaluations[highest]) {
         highest = idx;
@@ -594,8 +622,7 @@ public class BoardPanel extends JPanel{
                                      possibleMoves.get(highest).targetPosition.row,
                                      possibleMoves.get(highest).targetPosition.column
                                     );
-    
-    
+    //Actually move the most optimal move
     movePiece(possibleMoves.get(highest));
     terminateMove();
     
@@ -615,38 +642,42 @@ public class BoardPanel extends JPanel{
    */
   public MoveCode executeByDepth() {
     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode(),true);
-    
+    //Set up a potential move and its reverse move
     MoveCode tempMove;
     MoveCode reverse;
     
+    //Store evaluations for each move
     double evaluations[] = new double[possibleMoves.size()];
     double eval;
     
+    //Determine current team
     PieceType currentTeam = arbiter.returnCurrentTeam();
     
+    //Iterate 
     for (int idx = 0; idx < possibleMoves.size(); idx++) {
+      //Set up the potential move and its reverse
       tempMove = possibleMoves.get(idx);
       reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
                              tempMove.startPosition.row,tempMove.startPosition.column);
-      movePiece(tempMove); 
+      movePiece(tempMove); //Try the temp move 
       if (arbiter.hasWon(arbiter.returnCurrentMoveCode())) {
         eval = 100;
       } else {
-        eval = depthEval(2);
+        eval = depthEval(2); //Find and evaluate to the next depth
       }          
       evaluations[idx] = eval;
-      
-      movePiece(reverse);
+      movePiece(reverse); //Undo the test move
     }
     
     int highest = 0;
-    
+    //Find the most optimal move
     for (int idx = 1; idx < evaluations.length; idx++) {
       if (evaluations[idx] > evaluations[highest]) {
         highest = idx;
       }
     }
     
+    //Display coordinates
     possibleMoves.get(highest).startPosition.displayCoordinate();
     possibleMoves.get(highest).targetPosition.displayCoordinate();
     
@@ -659,6 +690,7 @@ public class BoardPanel extends JPanel{
     
     isolated.stringPath = possibleMoves.get(highest).stringPath;
     
+    //Use the highest evaluation
     possibleMoves.get(highest).startPosition.displayCoordinate();
     possibleMoves.get(highest).targetPosition.displayCoordinate();
     this.bestBranchEval = evaluations[highest];
@@ -677,26 +709,28 @@ public class BoardPanel extends JPanel{
   /** 
    * depthEval
    * Checks multiple depths and comes up with an evaluation for a best move
-   * @param int depth, the depth to evaluate to
+   * @param depth, the depth to evaluate to
    * @return double, an evaluation 
    */
   
   private double depthEval(int depth) {
     ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-    
+    //Set up a potential move and its reverse
     MoveCode tempMove;
     MoveCode reverse;
-    
+    //Find all numerical evaluations
     double evaluations[] = new double[possibleMoves.size()];
     double eval;
-    
+    //Dtermine the team up to move
     PieceType currentTeam = arbiter.returnCurrentTeam();
     
+    //Iterate through all possible moves
     for (int idx = 0; idx < possibleMoves.size(); idx++) {
+      //Set the potential move and its reverse move
       tempMove = possibleMoves.get(idx);
       reverse = new MoveCode(tempMove.targetPosition.row,tempMove.targetPosition.column,
                              tempMove.startPosition.row,tempMove.startPosition.column);
-      movePiece(tempMove);
+      movePiece(tempMove); //Temporarily try the move
       if (depth == 1) {
         eval = engine.evaluateComplex(manager.piecePositionStorage[currentTeam.teamCode],
                                       regions[currentTeam.targetRegion][0], currentTeam.teamCode);         
@@ -707,33 +741,31 @@ public class BoardPanel extends JPanel{
           eval = depthEval(depth - 1);
         }
       }
-      
+      //
       evaluations[idx] = eval;      
       
       movePiece(reverse);
     }
     
     int highest = 0;
-    
+    //Find highest evaluation
     for (int idx = 1; idx < evaluations.length; idx++) {
       if (evaluations[idx] > evaluations[highest]) {
         highest = idx;
       }
     }
-    
+    //Return highest evalution
     return evaluations[highest];  
   }
   
-  public MoveCode executeBestMove() {
-    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
-    OptimalMoveFinder finder = new OptimalMoveFinder();
-    MoveCode chosenMove = finder.findBestMove(possibleMoves);
-    MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
-                                     chosenMove.targetPosition.row, chosenMove.targetPosition.column);
-    movePiece(chosenMove);
-    terminateMove();
-    return isolated;
-  }
-  
-  
+//  public MoveCode executeBestMove() {
+//    ArrayList<MoveCode> possibleMoves = manager.ReturnAllMoveCodes(arbiter.returnCurrentMoveCode());
+//    OptimalMoveFinder finder = new OptimalMoveFinder();
+//    MoveCode chosenMove = finder.findBestMove(possibleMoves);
+//    MoveCode isolated = new MoveCode(chosenMove.startPosition.row, chosenMove.startPosition.column,
+//                                     chosenMove.targetPosition.row, chosenMove.targetPosition.column);
+//    movePiece(chosenMove);
+//    terminateMove();
+//    return isolated;
+//  }
 }

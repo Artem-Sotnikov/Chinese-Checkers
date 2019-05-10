@@ -27,24 +27,26 @@ public class EvaluationEngine {
   /** 
    * evaluateBasic
    * Performs a basic algorithm to generate a possible move
-   * @param Square[] positions, the array containing locations of pieces on the board
-   * @param ArrayCoordinate primePosition, a location the team is aiming toward
-   * @param int subjectCode, the team number
+   * @param positions, the array containing locations of pieces on the board
+   * @param primePosition, a location the team is aiming toward
+   * @param subjectCode, the team number
    * @return double score, a number representing the value of an evaluation
    */
   public double evaluateBasic(Square[] positions, ArrayCoordinate primePosition, int subjectCode) {
     double score = 0;
     
+    //Iterate through the pieces
     for (int idx = 0; idx < 10; idx++) {
       double tempDeltaRow = Math.abs(primePosition.row - positions[idx].boardLocation.row);  
       double tempDeltaCol = Math.abs(primePosition.column - positions[idx].boardLocation.column);
+      //Score is simply based how far a piece advances
       score = score - (tempDeltaRow + tempDeltaCol);
     }
-    
+    //Edit score depending on the team
     if ((subjectCode == 1) || (subjectCode == 4)) {
       score -= 70;
     }
-    
+    //Determine winner (if any) and edit score
     if (arbiter.hasWon(subjectCode)) {
       score = 0;
     }
@@ -54,24 +56,27 @@ public class EvaluationEngine {
   /** 
    * evaluateComplex
    * Performs a complex algorithm to generate a possible move
-   * @param Square[] positions, the array containing locations of pieces on the board
-   * @param ArrayCoordinate primePosition, a location the team is aiming toward
-   * @param int subjectCode, the team number
+   * @param positions, the array containing locations of pieces on the board
+   * @param primePosition, a location the team is aiming toward
+   * @param subjectCode, the team number
    * @return double score, a number representing the value of an evaluation
    */
   public double evaluateComplex(Square[] positions, ArrayCoordinate primePosition, int subjectCode) {
     double score = 0;
     
     for (int idx = 0; idx < 10; idx++) {
+      //Calculate score based on delta values
       double tempDeltaRow = Math.abs(primePosition.row - positions[idx].boardLocation.row);  
       double tempDeltaCol = Math.abs(primePosition.column - positions[idx].boardLocation.column);
       score = score - (Math.pow(tempDeltaRow,2) + Math.pow(tempDeltaCol,2)); 
     }
-    //System.out.println(score);
-    if (subjectCode == 1 || subjectCode == 4) {
+    
+    //Edit score depending on team
+    if ((subjectCode == 1) || (subjectCode == 4)) {
       score -= 70;
     }
     
+    //Find winner
     if (arbiter.hasWon(subjectCode)) {
       score = 0;
       System.out.println("Victory!");
